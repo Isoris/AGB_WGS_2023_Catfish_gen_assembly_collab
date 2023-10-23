@@ -1,0 +1,25 @@
+samples:
+  CGAF:
+    outputs: {}
+    sex: female
+    species: Clarias_gariepinus
+  CGAM:
+    outputs: {}
+    sex: male
+    species: Clarias_gariepinus
+  CHAF:
+    outputs: {}
+    sex: female
+    species: Clarias_hybrid
+  CHAM:
+    outputs: {}
+    sex: male
+    species: Clarias_hybrid
+  CMAF:
+    outputs: {}
+    sex: female
+    species: Clarias_macrocephalus
+  CMAM:
+    outputs: {}
+    sex: male
+    species: Clarias_macrocephalus

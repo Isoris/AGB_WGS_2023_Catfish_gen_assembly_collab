@@ -1,0 +1,23 @@
+species_short	method	prefix	orientation	path	files	description	coverage_X	sex	species
+CGAF	Illumina_PE	L3	R1	~/catfish_illumina/CGAF/	CGAF_FDSW220159412-1r_HYH2VDSX2_L3_1.fq.gz	Forward read files from illumina seq for Clarias gariepinus female with a 30X coverage	30	female	Clarias_gariepinus
+CGAF	Illumina_PE	L3	R2	~/catfish_illumina/CGAF/	CGAF_FDSW220159412-1r_HYH2VDSX2_L3_2.fq.gz	Reverse read files from illumina seq for Clarias gariepinus female with a 30X coverage	30	female	Clarias_gariepinus
+CGAF	Illumina_PE	L4	R1	~/catfish_illumina/CGAF/	CGAF_FDSW220159412-1r_HYNCNDSX2_L4_1.fq.gz	Forward read files from illumina seq for Clarias gariepinus female with a 30X coverage	30	female	Clarias_gariepinus
+CGAF	Illumina_PE	L4	R2	~/catfish_illumina/CGAF/	CGAF_FDSW220159412-1r_HYNCNDSX2_L4_2.fq.gz	Reverse read files from illumina seq for Clarias gariepinus female with a 30X coverage	30	female	Clarias_gariepinus
+CMAF	Illumina_PE	L1	R1	~/catfish_illumina/CMAF/	CMAF_FDSW220157896-1r_HJCYWDSX3_L1_1.fq.gz	Forward read files from illumina seq for Clarias macrocephalus femaile with a coverage of 30X	30	female	Clarias_macrocephalus
+CMAF	Illumina_PE	L1	R2	~/catfish_illumina/CMAF/	CMAF_FDSW220157896-1r_HJCYWDSX3_L1_2.fq.gz	Reverse read files from illumina seq for  Clarias macrocephalus femaile with a coverage of 30X	30	female	Clarias_macrocephalus
+CMAF	Illumina_PE	L2	R1	~/catfish_illumina/CMAF/	CMAF_FDSW220157896-1r_HYJY5DSX2_L3_1.fq.gz	Forward read files from illumina seq for Clarias macrocephalus femaile with a coverage of 30X	30	female	Clarias_macrocephalus
+CMAF	Illumina_PE	L2	R2	~/catfish_illumina/CMAF/	CMAF_FDSW220157896-1r_HYJY5DSX2_L3_2.fq.gz	Reverse read files from illumina seq for  Clarias macrocephalus femaile with a coverage of 30X	30	female	Clarias_macrocephalus
+CHAF	Illumina_PE		R1		R1	Forward read files from illumina seq for Clarias hybrid female with a coverage of 30X	30	female	Clarias_hybrid
+CHAF	Illumina_PE		R2		R2	Reverse read files from illumina seq for Claris hybrid female with a coverage of 30X	30	female	Clarias_hybrid
+CHAM	Illumina_PE		R1		R1	Forward read files from illumina seq for Clarias hybrid male with a coverage of 30X	30	male	Clarias_hybrid
+CHAM	Illumina_PE		R2		R2	Reverse read files from illumina seq for Clarias hybrid male with a coverage of 30X	30	male	Clarias_hybrid
+CGAM	Illumina_PE	L2	R1	~/catfish_illumina/CGAM/	CGAM_FDSW220157897-1r_HYJYHDSX2_L2_1.fq.gz	Forward read files from illumina seq for Clarias gariepinus male with a coverage of 90X 	90	male	Clarias_gariepinus
+CGAM	Illumina_PE	L2	R2	~/catfish_illumina/CGAM/	CGAM_FDSW220157897-1r_HYJYHDSX2_L2_2.fq.gz	Reverse read files from illumina seq for Clarias gariepinus male with a coverage of 90X 	90	male	Clarias_gariepinus
+CGAM	HiC				R1	HiC reads for Clarias gariepinus male 	NA	male	Clarias_gariepinus
+CGAM	Nanopore				R1	nanopore reads for Clarias gariepinus male with a coverage of 25X	25	male	Clarias_gariepinus
+CGAM	PacBio				R1	pacbio reads for Clarias gariepinus male with a coverage of 40X	40	male	Clarias_gariepinus
+CMAM	Illumina_PE	L3	R1	~/catfish_illumina/CMAM1/	CMAM1_FDSW220159411-1r_HYH2VDSX2_L3_1.fq.gz	Forward read files from illumina seq for Clarias macrocephalus male with a 90X coverage	90	male	Clarias_macrocephalus
+CMAM	Illumina_PE	L3	R2	~/catfish_illumina/CMAM1/	CMAM1_FDSW220159411-1r_HYH2VDSX2_L3_2.fq.gz	Reverse read files from illumina seq for Clarias macrocephalus male with a 90X coverage	90	male	Clarias_macrocephalus
+CMAM	HiC				R1	HiC reads for Clarias macrocephalus male 	NA	male	Clarias_macrocephalus
+CMAM	Nanopore				R1	nanopore reads for Clarias macrocephalus male with a coverage of 25X	25	male	Clarias_macrocephalus
+CMAM	PacBio				R1	pacbio reads for Clarias macrocephalus male with a coverage of 40X	40	male	Clarias_macrocephalus

@@ -1,4 +1,132 @@
-# Main entrypoint of the workflow. 
-# Please follow the best practices: 
-# https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
-# in particular regarding the standardized folder structure mentioned there. 
+##### setup config and report #####
+
+configfile: "config/config.yaml"
+report: "report/workflow.rst"
+
+##### load rules #####
+
+include: "rules/denovo.smk"
+include: "rules/mapping.smk"
+include: "rules/pangenomes.smk"
+include: "rules/plots.smk"
+include: "rules/quality_control.smk"
+include: "rules/reference.smk"
+include: "rules/trimming.smk"
+include: "rules/variant_calling.smk"
+
+##### target rules #####
+
+rule all:
+    input:
+        # Define your final outputs here
+        ...
+        
+rule run_falcon:
+    output:
+        haplotype1 = "path/to/haplotype1",
+        haplotype2 = "path/to/haplotype2"
+    shell:
+        """
+        # Run falcon and generate outputs
+        """
+    # Update config dynamically after the rule execution
+    run:
+        sample = "Sample1"  # replace with actual sample name
+        config['samples'][sample]['outputs']['falcon_haplotype1'] = "path/to/haplotype1"
+        config['samples'][sample]['outputs']['falcon_haplotype2'] = "path/to/haplotype2"
+        
+# More rules ...
+
+##### Snakemake rules to generate and combine the yaml files #####
+
+# Rule to generate config_samples.yaml
+rule generate_config_samples:
+    output:
+        "../../config/config_samples.yaml"
+    shell:
+        """
+        python generate_config_samples.py
+        """
+
+# Rule to concatenate the yaml files
+rule combine_yaml_configs:
+    input:
+        samples = rules.generate_config_samples.output,
+        reference = "../config/config_reference_genomes.yaml"
+        params="../config/params.yaml"
+    output:
+        "../config/config.yaml"
+    shell:
+        """
+        cat {input.samples} {input.reference} {input.params} > {output}
+        """
+
+##### Main rule to orchestrate the workflow #####
+
+rule all:
+    depends:
+        "some_output_file",
+        "another_output_file",
+        rules.combine_yaml_configs.output
+    input:
+        expand("fastqc/{sample}_{read_type}_fastqc.zip", sample=config["samples"].keys(), read_type=["reads1", "reads2"]),
+        expand("fastqc/{sample}_{read_type}_trimmed_fastqc.zip", sample=config["trimmed_samples"].keys(), read_type=["reads1", "reads2"])
+    
+
+
+#rule all:
+#    input:
+#        get_final_output(),    
+      
+        
+rule all:
+    input:
+        expand("{path_prefix_reads_trimmed}{sample}_trimmed_R1.fastq.gz", 
+               path_prefix_reads_trimmed=config['path_prefix_reads_trimmed'], 
+               sample=config['shortNames']),
+        expand("{path_prefix_reads_trimmed}{sample}_trimmed_R2.fastq.gz", 
+               path_prefix_reads_trimmed=config['path_prefix_reads_trimmed'], 
+               sample=config['shortNames']),
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+##### setup singularity #####
+
+
+# this container defines the underlying OS for each job when using the workflow
+# with --use-conda --use-singularity
+# container: "docker://continuumio/miniconda3"
+
+
+
+    
+#rule all:
+#    input:
+#        "plots/quals.svg"
+#
+#### SAMPLES = ["A", "B"]
+
+
+# rom snakemake.utils import min_version
+
+##### set minimum snakemake version #####
+# min_version("6.4.1")
+
+        
+        
+        
+      
