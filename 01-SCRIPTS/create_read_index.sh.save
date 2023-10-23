@@ -1,0 +1,16 @@
+#!/bin/bash
+
+declare -A index_array
+
+while IFS=$'\t' read -r species_short method prefix orientation path files description coverage_x sex species; do
+    key="${species_short}_${method}_${prefix}_${orientation}"
+    value="${path}${files}"
+    index_array["$key"]=$value
+done < <(tail -n +2 data.txt)  # Skip the header line
+
+# Save array to file for later use
+declare -p index_array > index_array_file.txt
+
+# Test to see if it's working
+# Uncomment the line below to print a specific key
+# echo ${index_array["CGAF_Illumina_PE_L3_R1"]}
