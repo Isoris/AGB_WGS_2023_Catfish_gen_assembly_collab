@@ -1,12 +1,14 @@
-##### setup config and report #####
+import subprocess
 
-configfile: "config/config.yaml"
+
+##### setup config and report #####
+configfile: "../config/config.yaml"
 report: "report/workflow.rst"
 
 ##### load rules #####
 
 include: "rules/denovo.smk"
-include: "rules/mapping.smk"
+include: "rules/mapping_illumina.smk"
 include: "rules/pangenomes.smk"
 include: "rules/plots.smk"
 include: "rules/quality_control.smk"
@@ -25,12 +27,13 @@ rule run_falcon:
     output:
         haplotype1 = "path/to/haplotype1",
         haplotype2 = "path/to/haplotype2"
-    shell:
-        """
-        # Run falcon and generate outputs
-        """
-    # Update config dynamically after the rule execution
     run:
+        # Run falcon and generate outputs using subprocess
+        subprocess.run("""
+        # Your shell commands here
+        """, shell=True)
+
+        # Update config dynamically after the rule execution
         sample = "Sample1"  # replace with actual sample name
         config['samples'][sample]['outputs']['falcon_haplotype1'] = "path/to/haplotype1"
         config['samples'][sample]['outputs']['falcon_haplotype2'] = "path/to/haplotype2"
@@ -52,7 +55,7 @@ rule generate_config_samples:
 rule combine_yaml_configs:
     input:
         samples = rules.generate_config_samples.output,
-        reference = "../config/config_reference_genomes.yaml"
+        reference = "../config/config_reference_genomes.yaml",
         params="../config/params.yaml"
     output:
         "../config/config.yaml"
@@ -64,15 +67,10 @@ rule combine_yaml_configs:
 ##### Main rule to orchestrate the workflow #####
 
 rule all:
-    depends:
-        "some_output_file",
-        "another_output_file",
-        rules.combine_yaml_configs.output
     input:
+        rules.combine_yaml_configs.output,
         expand("fastqc/{sample}_{read_type}_fastqc.zip", sample=config["samples"].keys(), read_type=["reads1", "reads2"]),
         expand("fastqc/{sample}_{read_type}_trimmed_fastqc.zip", sample=config["trimmed_samples"].keys(), read_type=["reads1", "reads2"])
-    
-
 
 #rule all:
 #    input:
@@ -91,7 +89,24 @@ rule all:
         
         
         
-        
+ # Assuming the config dictionary has been loaded with the YAML file.
+# Also assuming that coverages, files, and orientations are of the same length.
+
+rule process_forward_reads:
+    input:
+        lambda wildcards: [
+            f"{config['samples']['CGAF']['paths'][i]}/{config['samples']['CGAF']['files'][i]}"
+            for i in range(len(config['samples']['CGAF']['coverages']))
+            if config['samples']['CGAF']['coverages'][i] == '30' and
+               config['samples']['CGAF']['orientations'][i] == 'R1'
+        ]
+    output:
+        "processed/{sample}_fwd_reads_processed.fq.gz"
+    shell:
+        """
+        # Your shell commands here
+        """
+       
         
         
         
