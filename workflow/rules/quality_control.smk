@@ -1,4 +1,6 @@
 # Define rule for running LongQC on raw reads (longCQ is under catfish/01-PROGRAMS/) should run within mamba quality_control environment 
+
+
 rule run_LongQC:
     input:
         "path/to/input/{sample}.fastq"
@@ -7,17 +9,22 @@ rule run_LongQC:
     params:
         preset="pb-sequel",  # specify preset, change accordingly
         nproc="$(nproc)",  # number of processors, can be adjusted
-        sample_name="{sample}"  # sample name
+        sample_name="{sample}",  # sample name
+        longqc_path="/tarafs/data/home/qandres/scratch/catfish/01-PROGRAMS/LongQC-1.2.0c"  # adjust this to your LongQC installation path
     conda:
-        "path/to/quality_control.yml"  # Conda environment specification file
+        "/quality_control.yml"  # Replace with the path to your 'quality_control' environment file
     shell:
         """
-        longqc sampleqc \
+        source activate {conda}  # Activating the conda environment
+        cd {params.longqc_path}  # Navigating to LongQC directory
+        python longQC.py sampleqc \
         -x {params.preset} \
         -p {params.nproc} \
-        -o {output}/{params.sample_name} \
+        -o {output} \
         {input}
         """
+
+
 
 # Define rule for running FastQC on raw reads
 rule fastqc_raw_reads:
