@@ -1,5 +1,68 @@
-# Define rule for running LongQC on raw reads (longCQ is under catfish/01-PROGRAMS/) should run within mamba quality_control environment 
+# Define variables to be called in the following rules
+{output_folder_prefix} = ~/scratch/catfish/03-OUTPUTS/
 
+
+
+# Role: Used for the quality control of reads by fast, memory-efficient counting of k-mers in DNA https://genome.umd.edu/jellyfish.html 
+# https://genome.umd.edu/docs/JellyfishUserGuide.pdf
+
+rule run_jellyfish_count:
+    input:
+        "{sample}.fastq"
+    output:
+        directory("path/to/output/{sample}_LongQC_output/")
+    params:
+        jellyfish_path="/tarafs/data/home/qandres/scratch/catfish/01-PROGRAMS/LongQC-1"  # adjust this to your jellyfish installation path
+    conda:
+        "/quality_control.yml"  # Replace with the path to your 'quality_control' environment file
+    shell:
+        """
+        source activate {conda}  # Activating the conda environment
+        cd {params.longqc_path}  # Navigating to LongQC directory
+        jellyfish count \
+        -C {params.preset} \
+        -m {params.nproc} \
+        -s 1000000000 \
+        -o {output} \
+        -t {threads} \ 
+        {input}.fastq  
+        """
+        
+rule run_jellyfish_histo:
+    input:
+        "{sample}.jq"
+    output:
+        directory("path/to/output/{sample}_LongQC_output/")
+    params:
+        jellyfish_path="/tarafs/data/home/qandres/scratch/catfish/01-PROGRAMS/LongQC-1"  # adjust this to your jellyfish installation path
+    conda:
+        "/quality_control.yml"  # Replace with the path to your 'quality_control' environment file
+    shell:
+        """
+        source activate {conda}  # Activating the conda environment
+        cd {params.longqc_path}  # Navigating to jellyfish output directory
+        jellyfish histo -t {threads} reads.jf > reads.histo 
+        """        
+
+# Role: 
+rule run_genomescope:
+    input:
+        "{sample}.jq"
+    output:
+        directory("path/to/output/{sample}_LongQC_output/")
+    params:
+        jellyfish_path="/tarafs/data/home/qandres/scratch/catfish/01-PROGRAMS/LongQC-1"  # adjust this to your jellyfish installation path
+    conda:
+        "/quality_control.yml"  # Replace with the path to your 'quality_control' environment file
+    shell:
+        """
+        source activate {conda}  # Activating the conda environment
+        cd {jellyfish_output_path}  # Navigating to jellyfish output directory
+         Rscript genomescope.R histogram_file k-mer_length read_length output_dir [kmer_max] [verbose] 
+        """            
+
+# Define rule for running LongQC on raw reads (longCQ is under catfish/01-PROGRAMS/) should run within mamba quality_control environment 
+# Role: For the QC of long reads from HiFi
 
 rule run_LongQC:
     input:
@@ -24,7 +87,19 @@ rule run_LongQC:
         {input}
         """
 
+# Define rule for running nanoQC on nanopore raw data
+#conda install -c bioconda nanoqc
 
+rule run_nanoqc:
+    input: 
+         raw_read = 
+    output: 
+         path_output_nanoqc = "{output_folder_prefix}/nanoqc"
+    shell: 
+         """
+      mkdir -p {output_folder_prefix}/nanoqc
+      nanoQC -o {output} {input}.fastq --minlen 100
+         """
 
 # Define rule for running FastQC on raw reads
 rule fastqc_raw_reads:
@@ -88,5 +163,3 @@ rule quast_quality_control:
 
         echo "QUAST Quality control step finished for {wildcards.species} {wildcards.sex} {wildcards.version}"
         """
-
-
