@@ -2,7 +2,6 @@
 {output_folder_prefix} = ~/scratch/catfish/03-OUTPUTS/
 
 
-
 # Role: Used for the quality control of reads by fast, memory-efficient counting of k-mers in DNA https://genome.umd.edu/jellyfish.html 
 # https://genome.umd.edu/docs/JellyfishUserGuide.pdf
 
@@ -12,7 +11,8 @@ rule run_jellyfish_count:
     output:
         directory("path/to/output/{sample}_LongQC_output/")
     params:
-        jellyfish_path="/tarafs/data/home/qandres/scratch/catfish/01-PROGRAMS/LongQC-1"  # adjust this to your jellyfish installation path
+        jellyfish_path = "/tarafs/data/home/qandres/catfish/catfish/01-PROGRAMS/jellyfish-2.3.0/bin/jellyfish", 
+        kmer_size = 21
     conda:
         "/quality_control.yml"  # Replace with the path to your 'quality_control' environment file
     shell:
