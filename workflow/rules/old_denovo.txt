@@ -1,0 +1,21 @@
+rule run_hifasm_hifi_only:    # https://github.com/chhylp123/hifiasm/releases
+    input:
+       compressed_hifi_raw_reads = 
+    output:
+       
+    params: 
+       z = {tri}
+    shell:
+    "hifiasm -o {output}.asm -z20 --dual-scaf --primary -t {threads} {input}.fq.gz \ "
+
+
+#rule run_hifasm_hifi_UL:    # https://github.com/chhylp123/hifiasm/releases
+#    input:
+#       compressed_hifi_raw_reads = 
+#    output:      
+    params: 
+       z = {tri}
+    shell:
+    "hifiasm -o {output}.asm -z20 --dual-scaf --primary -t {threads} {input}.fq.gz \ "
+
+
