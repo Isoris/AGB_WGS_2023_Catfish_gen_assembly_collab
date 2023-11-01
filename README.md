@@ -1,4 +1,4 @@
-# Snakemake workflow for the genome assembly of catfish @ AGB (Animal Genomics and Bioresources research Unit) - October 2023
+# Snakemake workflow for the genome assembly of catfish @ AGB (Animal Genomics and Bioresources research Unit) - November 2023
 
 Reference of the flow: 
 
