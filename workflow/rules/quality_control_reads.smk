@@ -1,47 +1,41 @@
-#
+# snakemake --use-conda --conda-frontend mamba ...
 
 rule bam_to_fastq:
     input:
-        "path/to/{sample}.bam"
+        lambda wildcards: config["samples"][f"{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}"][".bam"]
     output:
-        fastq="path/to/{sample}_reads.fastq"
+        fastq={path_reads_prefix}/config["samples"][f"{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}"]_rawreads.fastq"
+    conda:
+        "quality_control_env.yaml"  # This YAML file contains the dependencies
     shell:
-        "bam2fastq -o {output.fastq} {input}"
+        "bam2fastq -c 1 -o {output.fastq} {input}"
+
 
 rule mash_sketch:
     input:
-        reads="path/to/{sample}_reads.fastq.gz"
+        reads=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz"
     output:
-        sketch="path/to/{sample}_reads.fastq.gz.msh"
+        sketch=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz.msh"
     shell:
         "mash sketch -m 2 -o {output.sketch} {input.reads}"
-
-rule mash_sketch_hifi:
-    input:
-        reads_hifi_bam=config["sample"]+".bam"
-    output:
-        mash_reads_hifi_sketches=config["sample"]+"_mash_sketch.msh",
-    shell:
-        "mash sketch -p {threads} {input} > {output}"
 
 rule mash_dist:
     input:
         ref_sketch="path/to/combined.msh",
-        reads_sketch="path/to/{sample}_reads.fastq.gz.msh"
+        reads_sketch=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz.msh"
     output:
-        distances="results/{sample}_distances.tab"
+        distances="results/{{sample}}_distances.tab"
     shell:
         "mash dist -p 8 {input.ref_sketch} {input.reads_sketch} > {output.distances}"
 
 rule mash_screen:
     input:
         ref_sketch="path/to/combined.msh",
-        reads="path/to/{sample}_reads.fastq.gz"
+        reads=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz"
     output:
-        screen="results/{sample}_screen.tab"
+        screen="results/{{sample}}_screen.tab"
     shell:
         "mash screen {input.ref_sketch} {input.reads} > {output.screen}"
-
 
 
 # Role: Used for the quality control of reads by fast, memory-efficient counting of k-mers in DNA https://genome.umd.edu/jellyfish.html 
@@ -49,9 +43,9 @@ rule mash_screen:
 
 rule run_jellyfish_count:
     input:
-        "{sample}.fastq"
+        reads=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz"
     output:
-        directory("path/to/output/{sample}_LongQC_output/")
+        directory=f"{path_out_prefix}/{{sample}}_rawreads_jellyfishcount.jq"
     params:
         jellyfish_path = "/tarafs/data/home/qandres/catfish/catfish/01-PROGRAMS/jellyfish-2.3.0/bin/jellyfish", 
         kmer_size = 21
@@ -61,7 +55,7 @@ rule run_jellyfish_count:
         """
         source activate {conda}  # Activating the conda environment
         cd {params.longqc_path}  # Navigating to LongQC directory
-        jellyfish count \
+        zcat _rawreads.fastq.gz | jellyfish count jellyfish count \
         -C {params.preset} \
         -m {params.nproc} \
         -s 1000000000 \
