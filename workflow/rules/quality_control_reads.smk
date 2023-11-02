@@ -69,7 +69,7 @@ rule run_jellyfish_count:
     input:
         reads=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz"
     output:
-        count=f"{path_out_prefix}/{{sample}}_jellyfishcount.jf"
+        jellyfish_count=f"{path_out_prefix}/{{sample}}_jellyfishcount.jf"
     params:
         jellyfish_path = "/tarafs/data/home/qandres/catfish/catfish/01-PROGRAMS/jellyfish-2.3.0/bin/jellyfish",
         kmer_size = 21
@@ -78,12 +78,12 @@ rule run_jellyfish_count:
     shell:
         """
         zcat {input.reads} | {params.jellyfish_path} count -m {params.kmer_size} -s 100M -t {threads} \
-        -C -o {output.count} /dev/stdin
+        -C -o {output.jellyfish_count} /dev/stdin
         """
 
 rule run_jellyfish_histo:
     input:
-        count=f"{path_out_prefix}/{{sample}}_jellyfishcount.jf"
+        jellyfish_count=f"{path_out_prefix}/{{sample}}_jellyfishcount.jf"
     output:
         histo=f"{path_out_prefix}/{{sample}}_jellyfish_histo.histo"
     params:
@@ -91,7 +91,7 @@ rule run_jellyfish_histo:
     conda:
         "quality_control.yml"  # Replace with the path to your 'quality_control' environment file
     shell:
-        "{params.jellyfish_path} histo -t {threads} {input.count} > {output.histo}"
+        "{params.jellyfish_path} histo -t {threads} {input.jellyfish_count} > {output.histo}"
 
 
 # Role: Genomescope is used for genome profiling based on k-mer analysis
