@@ -4,15 +4,15 @@ rule bam_to_fastq:
     input:
         lambda wildcards: config["samples"][f"{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}"][".bam"]
     output:
-        fastq={path_reads_prefix}/config["samples"][f"{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}"]_rawreads.fastq"
+        fastq=lambda wildcards: f"{path_reads_prefix}/{config['samples'][f'{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}']}_rawreads.fastq"
     conda:
         "quality_control_env.yaml"  # This YAML file contains the dependencies
     shell:
         "bam2fastq -c 1 -o {output.fastq} {input}"
 
-CG_M_ILLUMINA_PE_FWD.fastq
-CG_M_NANOPORE.fastq
-CG_M_HIFI.bam
+#CG_M_ILLUMINA_PE_FWD.fastq
+#CG_M_NANOPORE.fastq
+#CG_M_HIFI.bam
 
 rule mash_sketch:
     input:

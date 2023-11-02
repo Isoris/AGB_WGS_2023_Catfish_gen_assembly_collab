@@ -43,9 +43,9 @@ def get_reference_accession():
 
 def get_combined_samples():
     species = get_species()
-    sex = get_sex()
-    method = get_method()
-    orientation = get_orientation()
+    sex = get_sexes()
+    method = get_methods()
+    orientation = get_orientations()
     return ["{}_{}_{}_{}".format(s, sx, m, o) for s in species for sx in sex for m in method for o in orientation]
 
 
@@ -92,9 +92,9 @@ rule all:
         rules.combine_yaml_configs.output,
         #Mash outputs
         expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", 
-                sample=get_combined_samples())
+                sample=get_combined_samples()),
         expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", 
-                sample=get_combined_samples())
+                sample=get_combined_samples()),
         expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", 
                 sample=get_combined_samples())
         #FastQC outputs
@@ -124,25 +124,25 @@ rule all:
 
 #include: "rules/plots.smk"
 #include: "rules/reference.smk"
-include: "rules/quality_control_reads" 
-#include: "rules/quality_control_assembly" 
+include: "rules/quality_control_reads.smk"
+#include: "rules/quality_control_assembly.smk" 
 #include: "rules/trimming.smk"
 #include: "rules/denovo.smk"
 
-rule create_assembly_metadata:
-    input:
-        expand("path/to/assemblies/{sample}_assembly.fasta", sample=SAMPLES)
-    output:
-        "assemblies_metadata.yaml"
-    run:
-        import yaml
-
-        assembly_data = {}
-        for sample in SAMPLES:
-            assembly_data[sample] = {"assembly": f"path/to/assemblies/{sample}_assembly.fasta"}
-        
-        with open(output[0], 'w') as outfile:
-            yaml.dump(assembly_data, outfile, default_flow_style=False)
+#rule create_assembly_metadata:
+#    input:
+#        expand("path/to/assemblies/{sample}_assembly.fasta", sample=SAMPLES)
+#    output:
+#        "assemblies_metadata.yaml"
+#    run:
+#        import yaml
+#
+#        assembly_data = {}
+#        for sample in SAMPLES:
+#            assembly_data[sample] = {"assembly": f"path/to/assemblies/{sample}_assembly.fasta"}
+#        
+#        with open(output[0], 'w') as outfile:
+#            yaml.dump(assembly_data, outfile, default_flow_style=False)
 
 
 
