@@ -41,6 +41,12 @@ def get_orientations():
 def get_reference_accession():
     return get_unique_values('')
 
+def get_combined_samples():
+    species = get_species()
+    sex = get_sex()
+    method = get_method()
+    orientation = get_orientation()
+    return ["{}_{}_{}_{}".format(s, sx, m, o) for s in species for sx in sex for m in method for o in orientation]
 
 
 ##### load init rules #####
@@ -85,9 +91,12 @@ rule all:
         #Parse metadata outputs
         rules.combine_yaml_configs.output,
         #Mash outputs
-        expand("mash_results/combined.tbl", sample=SAMPLES), 
-        expand("mash_screen/{sample}_screen.out", sample=SAMPLES),
-        expand("plots/mash_plot.png", sample=SAMPLES),
+        expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", 
+                sample=get_combined_samples())
+        expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", 
+                sample=get_combined_samples())
+        expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", 
+                sample=get_combined_samples())
         #FastQC outputs
 
         #LongQC outputs
