@@ -41,3 +41,19 @@ rule run_spades_short_reads_only:    # https://github.com/chhylp123/hifiasm/rele
     "hifiasm -o {output}.asm -z20 --dual-scaf --primary -t {threads} {input}.fq.gz \ "
 
 
+rule run_falcon:
+    output:
+        haplotype1 = "path/to/haplotype1",
+        haplotype2 = "path/to/haplotype2"
+    run:
+        # Run falcon and generate outputs using subprocess
+        subprocess.run("""
+        # Your shell commands here
+        """, shell=True)
+
+        # Update config dynamically after the rule execution
+        sample = "Sample1"  # replace with actual sample name
+        config['samples'][sample]['outputs']['falcon_haplotype1'] = "path/to/haplotype1"
+        config['samples'][sample]['outputs']['falcon_haplotype2'] = "path/to/haplotype2"
+        
+# More rules ...

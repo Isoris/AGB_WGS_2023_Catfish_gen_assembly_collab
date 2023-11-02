@@ -1,5 +1,47 @@
-# Define variables to be called in the following rules
-{output_folder_prefix} = ~/scratch/catfish/03-OUTPUTS/
+#
+
+rule bam_to_fastq:
+    input:
+        "path/to/{sample}.bam"
+    output:
+        fastq="path/to/{sample}_reads.fastq"
+    shell:
+        "bam2fastq -o {output.fastq} {input}"
+
+rule mash_sketch:
+    input:
+        reads="path/to/{sample}_reads.fastq.gz"
+    output:
+        sketch="path/to/{sample}_reads.fastq.gz.msh"
+    shell:
+        "mash sketch -m 2 -o {output.sketch} {input.reads}"
+
+rule mash_sketch_hifi:
+    input:
+        reads_hifi_bam=config["sample"]+".bam"
+    output:
+        mash_reads_hifi_sketches=config["sample"]+"_mash_sketch.msh",
+    shell:
+        "mash sketch -p {threads} {input} > {output}"
+
+rule mash_dist:
+    input:
+        ref_sketch="path/to/combined.msh",
+        reads_sketch="path/to/{sample}_reads.fastq.gz.msh"
+    output:
+        distances="results/{sample}_distances.tab"
+    shell:
+        "mash dist -p 8 {input.ref_sketch} {input.reads_sketch} > {output.distances}"
+
+rule mash_screen:
+    input:
+        ref_sketch="path/to/combined.msh",
+        reads="path/to/{sample}_reads.fastq.gz"
+    output:
+        screen="results/{sample}_screen.tab"
+    shell:
+        "mash screen {input.ref_sketch} {input.reads} > {output.screen}"
+
 
 
 # Role: Used for the quality control of reads by fast, memory-efficient counting of k-mers in DNA https://genome.umd.edu/jellyfish.html 
@@ -92,8 +134,8 @@ rule run_LongQC:
 
 rule run_nanoqc:
     input: 
-         raw_read = 
-    output: 
+         raw_read =config["sample"]+"_mash_sketch.msh", 
+    output:
          path_output_nanoqc = "{output_folder_prefix}/nanoqc"
     shell: 
          """
