@@ -1,6 +1,14 @@
 import subprocess
 
 
+##### load paths #####
+
+path_folder_prefix = "/tarafs/scratch/proj5034-AGBKU/catfish"
+path_reads_prefix = f"{path_folder_prefix}/00-DATA/00-READS"
+path_tmp_prefix = f"{path_folder_prefix}/04-TEMPORARY"
+path_output_prefix = f"{path_folder_prefix}/03-OUTPUTS"
+path_progs_prefix = f"{path_folder_prefix}/01-PROGRAMS"
+
 ##### setup config and report #####
 configfile: "../config/config.yaml"
 report: "report/workflow.rst"
