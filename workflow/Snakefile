@@ -82,29 +82,43 @@ rule combine_yaml_configs:
 
 rule all:
     input:
+        #Parse metadata outputs
         rules.combine_yaml_configs.output,
-  
-##### target rules #####
- 
-rule all:
-    input:
-        expand("{path_prefix_reads_trimmed}{sample}_trimmed_R1.fastq.gz", 
-               path_prefix_reads_trimmed=config['path_prefix_reads_trimmed'], 
-               sample=config['shortNames']),
-        expand("{path_prefix_reads_trimmed}{sample}_trimmed_R2.fastq.gz", 
-               path_prefix_reads_trimmed=config['path_prefix_reads_trimmed'], 
-               sample=config['shortNames']),
+        #Mash outputs
+        expand("mash_results/combined.tbl", sample=SAMPLES), 
+        expand("mash_screen/{sample}_screen.out", sample=SAMPLES),
+        expand("plots/mash_plot.png", sample=SAMPLES),
+        #FastQC outputs
 
+        #LongQC outputs
         
+        #NanoQC outputs
+
+        #Jellyfish histo and genomescope outputs
+
+        #Hifasm outputs
         
+        #Greenhill outputs
+        
+        #mitoVGP assembly pipeline outputs
+
+
+
+  #      expand("{path_prefix_reads_trimmed}{sample}_trimmed_R1.fastq.gz", 
+  #             path_prefix_reads_trimmed=config['path_prefix_reads_trimmed'], 
+  #             sample=config['shortNames']),
+  #      expand("{path_prefix_reads_trimmed}{sample}_trimmed_R2.fastq.gz", 
+  #             path_prefix_reads_trimmed=config['path_prefix_reads_trimmed'], 
+  #             sample=config['shortNames'])
+
 ##### load rules #####
 
-include: "rules/plots.smk"
-include: "rules/reference.smk"
+#include: "rules/plots.smk"
+#include: "rules/reference.smk"
 include: "rules/quality_control_reads" 
-include: "rules/quality_control_assembly" 
-include: "rules/trimming.smk"
-include: "rules/denovo.smk"
+#include: "rules/quality_control_assembly" 
+#include: "rules/trimming.smk"
+#include: "rules/denovo.smk"
 
 rule create_assembly_metadata:
     input:
@@ -123,17 +137,17 @@ rule create_assembly_metadata:
 
 
 
-include: "rules/mapping_illumina.smk"
-include: "rules/variant_calling.smk"
+#include: "rules/mapping_illumina.smk"
+#include: "rules/variant_calling.smk"
 
-include: "rules/pangenomes_plots.smk"
+#include: "rules/pangenomes_plots.smk"
 
-include: "rules/mitoVGP_conda_env_ONT.smk"
-include: "rules/mitoVG_conda_env_pacbio.smk"
+#include: "rules/mitoVGP_conda_env_ONT.smk"
+#include: "rules/mitoVG_conda_env_pacbio.smk"
 
 
-include: "rules/annotations.smk"
-include: "rules/pangenomes_annotations.smk"
+#include: "rules/annotations.smk"
+#include: "rules/pangenomes_annotations.smk"
 
 rule create_annotations_metadata:
     input:
