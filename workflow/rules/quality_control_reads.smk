@@ -10,6 +10,9 @@ rule bam_to_fastq:
     shell:
         "bam2fastq -c 1 -o {output.fastq} {input}"
 
+CG_M_ILLUMINA_PE_FWD.fastq
+CG_M_NANOPORE.fastq
+CG_M_HIFI.bam
 
 rule mash_sketch:
     input:
@@ -53,7 +56,6 @@ rule run_jellyfish_count:
         "/quality_control.yml"  # Replace with the path to your 'quality_control' environment file
     shell:
         """
-        source activate {conda}  # Activating the conda environment
         cd {params.longqc_path}  # Navigating to LongQC directory
         zcat _rawreads.fastq.gz | jellyfish count jellyfish count \
         -C {params.preset} \
@@ -89,10 +91,9 @@ rule run_genomescope:
     params:
         jellyfish_path="/tarafs/data/home/qandres/scratch/catfish/01-PROGRAMS/LongQC-1"  # adjust this to your jellyfish installation path
     conda:
-        "/quality_control.yml"  # Replace with the path to your 'quality_control' environment file
+        "/quality_control_reads.yaml"  # Replace with the path to your 'quality_control' environment file
     shell:
         """
-        source activate {conda}  # Activating the conda environment
         cd {jellyfish_output_path}  # Navigating to jellyfish output directory
          Rscript genomescope.R histogram_file k-mer_length read_length output_dir [kmer_max] [verbose] 
         """            
