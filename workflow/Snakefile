@@ -48,7 +48,30 @@ def get_combined_samples():
     orientation = get_orientations()
     return ["{}_{}_{}_{}".format(s, sx, m, o) for s in species for sx in sex for m in method for o in orientation]
 
+rule all:
+    input:
+        #Parse metadata outputs
+        rules.combine_yaml_configs.output,
+        #Mash outputs
+        expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", 
+                sample=get_combined_samples()),
+        expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", 
+                sample=get_combined_samples()),
+        expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", 
+                sample=get_combined_samples())
+        #FastQC outputs
 
+        #LongQC outputs
+        
+        #NanoQC outputs
+
+        #Jellyfish histo and genomescope outputs
+
+        #Hifasm outputs
+        
+        #Greenhill outputs
+        
+        #mitoVGP assembly pipeline outputs   
 ##### load init rules #####
 
 # Snakemake rules to generate and combine the YAML files
@@ -85,43 +108,7 @@ rule combine_yaml_configs:
         """
 
 ##### Main rule to orchestrate the workflow #####
-
-rule all:
-    input:
-        #Parse metadata outputs
-        rules.combine_yaml_configs.output,
-        #Mash outputs
-        expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", 
-                sample=get_combined_samples()),
-        expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", 
-                sample=get_combined_samples()),
-        expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", 
-                sample=get_combined_samples())
-        #FastQC outputs
-
-        #LongQC outputs
-        
-        #NanoQC outputs
-
-        #Jellyfish histo and genomescope outputs
-
-        #Hifasm outputs
-        
-        #Greenhill outputs
-        
-        #mitoVGP assembly pipeline outputs
-
-
-
-  #      expand("{path_prefix_reads_trimmed}{sample}_trimmed_R1.fastq.gz", 
-  #             path_prefix_reads_trimmed=config['path_prefix_reads_trimmed'], 
-  #             sample=config['shortNames']),
-  #      expand("{path_prefix_reads_trimmed}{sample}_trimmed_R2.fastq.gz", 
-  #             path_prefix_reads_trimmed=config['path_prefix_reads_trimmed'], 
-  #             sample=config['shortNames'])
-
 ##### load rules #####
-
 #include: "rules/plots.smk"
 #include: "rules/reference.smk"
 include: "rules/quality_control_reads.smk"
