@@ -149,20 +149,20 @@ rule create_assembly_metadata:
 #include: "rules/annotations.smk"
 #include: "rules/pangenomes_annotations.smk"
 
-rule create_annotations_metadata:
-    input:
-        expand("path/to/assemblies/{sample}_assembly.fasta", sample=SAMPLES)
-    output:
-        "annotations_metadata.yaml"
-    run:
-        import yaml
-
-        annotation_data = {}
-        for sample in SAMPLES:
-            annotation_data[sample] = {"assembly": f"path/to/assemblies/{sample}_assembly.fasta"}
-        
-        with open(output[0], 'w') as outfile:
-            yaml.dump(annotation_data, outfile, default_flow_style=False)
-
-
+#rule create_annotations_metadata:
+#    input:
+#        expand("path/to/assemblies/{sample}_assembly.fasta", sample=SAMPLES)
+#    output:
+#        "annotations_metadata.yaml"
+#    run:
+#        import yaml
+#
+#        annotation_data = {}
+#        for sample in SAMPLES:
+#            annotation_data[sample] = {"assembly": f"path/to/assemblies/{sample}_assembly.fasta"}
+#        
+#        with open(output[0], 'w') as outfile:
+#            yaml.dump(annotation_data, outfile, default_flow_style=False)
+#
+#
 # End
