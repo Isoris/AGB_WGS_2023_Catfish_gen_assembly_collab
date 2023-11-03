@@ -3,7 +3,7 @@ import yaml
 
 # Read the CSV file and populate a dictionary
 references = {}
-with open('../../config/references.csv', 'r') as f:
+with open('config/references.csv', 'r') as f:
     reader = csv.DictReader(f)
     for row in reader:
         ref_id = row['Reference_ID']
@@ -51,6 +51,6 @@ with open('../../config/references.csv', 'r') as f:
         references[species_short]['wgs_project_accessions'].append(row['WGS_project_accession'])
 
 # Output to YAML format
-with open('../../config/config_references.yaml', 'w') as f:
+with open('config/config_references.yaml', 'w') as f:
     yaml.dump({'references': references}, f, default_flow_style=False)
 

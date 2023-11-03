@@ -14,7 +14,7 @@ path_tmp_prefix = f"{path_folder_prefix}/04-TEMPORARY"
 
 
 ##### setup config and report #####
-configfile: "../config/config.yaml"
+configfile: "config/config.yaml"
 report: "report/workflow.rst"
 
 
@@ -54,7 +54,7 @@ def get_combined_samples():
 # Rule to generate config_samples.yaml
 rule generate_config_samples:
     output:
-        "../config/config_samples.yaml"
+        "config/config_samples.yaml"
     shell:
         """
         cd workflow/scripts && python generate_config_samples.py
@@ -63,7 +63,7 @@ rule generate_config_samples:
 # Rule to generate config_references.yaml
 rule generate_config_references:
     output:
-        "../config/config_references.yaml"
+        "config/config_references.yaml"
     shell:
         """
         cd workflow/scripts && python generate_config_references.py
@@ -74,9 +74,9 @@ rule combine_yaml_configs:
     input:
         samples = rules.generate_config_samples.output,
         references = rules.generate_config_references.output,
-        params = "../config/params.yaml"
+        params = "config/params.yaml"
     output:
-        "../config/config.yaml"
+        "config/config.yaml"
     shell:
         """
         cat {input.samples} {input.references} {input.params} > {output}
@@ -86,7 +86,7 @@ rule all:
     input:
         #Parse metadata outputs
         rules.combine_yaml_configs.output,
-        #Mash outputs
+	#Mash outputs
         expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", 
                 sample=get_combined_samples()),
         expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", 

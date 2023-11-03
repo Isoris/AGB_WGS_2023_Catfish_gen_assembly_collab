@@ -6,7 +6,7 @@ cwd = os.getcwd()
 
 # Read the CSV file and populate a dictionary
 samples = {}
-with open('../../config/samples.csv', 'r') as f:
+with open('config/samples.csv', 'r') as f:
     reader = csv.DictReader(f)
     for row in reader:
         sample_id = row['Sample_ID']
@@ -36,7 +36,7 @@ with open('../../config/samples.csv', 'r') as f:
         samples[species_short]['descriptions'].append(row['Description'])
 
 # Output to YAML format
-with open('../../config/config_samples.yaml', 'w') as f:
+with open('config/config_samples.yaml', 'w') as f:
     yaml.dump({'samples': samples}, f, default_flow_style=False)
 
 
