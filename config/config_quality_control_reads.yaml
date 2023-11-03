@@ -1,0 +1,5 @@
+
+
+# Define variables to be called in the following rules
+{output_folder_prefix} = ~/scratch/catfish/03-OUTPUTS/
+

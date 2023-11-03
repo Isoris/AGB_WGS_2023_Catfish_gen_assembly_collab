@@ -1,147 +1,167 @@
 import subprocess
+import os
+import sys
+import glob
 
+##### load paths #####
+path_folder_prefix = "/tarafs/scratch/proj5034-AGBKU/catfish"
+###
+path_reads_prefix = f"{path_folder_prefix}/00-DATA/00-READS"
+path_prog_prefix = f"{path_folder_prefix}/01-PROGRAMS"
+path_exp_prefix=f"{path_folder_prefix}/02-EXPERIMENTS"
+path_out_prefix = f"{path_folder_prefix}/03-OUTPUTS"
+path_tmp_prefix = f"{path_folder_prefix}/04-TEMPORARY"  
 
 ##### setup config and report #####
 configfile: "../config/config.yaml"
 report: "report/workflow.rst"
 
-##### load rules #####
 
-include: "rules/denovo.smk"
-include: "rules/mapping_illumina.smk"
-include: "rules/pangenomes.smk"
-include: "rules/plots.smk"
-include: "rules/quality_control.smk"
-include: "rules/reference.smk"
-include: "rules/trimming.smk"
-include: "rules/variant_calling.smk"
+##### Definition of functions
 
-##### target rules #####
+def get_unique_values(key):
+    values = set()
+    for sample in config["samples"].values():
+        values.update(sample.get(key, []))
+    return list(values)
 
-rule all:
-    input:
-        # Define your final outputs here
-        ...
-        
-rule run_falcon:
-    output:
-        haplotype1 = "path/to/haplotype1",
-        haplotype2 = "path/to/haplotype2"
-    run:
-        # Run falcon and generate outputs using subprocess
-        subprocess.run("""
-        # Your shell commands here
-        """, shell=True)
+def get_species():
+    return get_unique_values('species_long')
 
-        # Update config dynamically after the rule execution
-        sample = "Sample1"  # replace with actual sample name
-        config['samples'][sample]['outputs']['falcon_haplotype1'] = "path/to/haplotype1"
-        config['samples'][sample]['outputs']['falcon_haplotype2'] = "path/to/haplotype2"
-        
-# More rules ...
+def get_sexes():
+    return get_unique_values('sexes')
 
-##### Snakemake rules to generate and combine the yaml files #####
+def get_methods():
+    return get_unique_values('methods')
+
+def get_orientations():
+    return get_unique_values('orientations')
+
+def get_reference_accession():
+    return get_unique_values('')
+
+def get_combined_samples():
+    species = get_species()
+    sex = get_sexes()
+    method = get_methods()
+    orientation = get_orientations()
+    return ["{}_{}_{}_{}".format(s, sx, m, o) for s in species for sx in sex for m in method for o in orientation]
+##### load init rules #####
+
+# Snakemake rules to generate and combine the YAML files
 
 # Rule to generate config_samples.yaml
 rule generate_config_samples:
     output:
-        "../../config/config_samples.yaml"
+        "../config/config_samples.yaml"
     shell:
         """
-        python generate_config_samples.py
+        cd workflow/scripts && python generate_config_samples.py
+        """
+
+# Rule to generate config_references.yaml
+rule generate_config_references:
+    output:
+        "../config/config_references.yaml"
+    shell:
+        """
+        cd workflow/scripts && python generate_config_references.py
         """
 
 # Rule to concatenate the yaml files
 rule combine_yaml_configs:
     input:
         samples = rules.generate_config_samples.output,
-        reference = "../config/config_reference_genomes.yaml",
-        params="../config/params.yaml"
+        references = rules.generate_config_references.output,
+        params = "../config/params.yaml"
     output:
         "../config/config.yaml"
     shell:
         """
-        cat {input.samples} {input.reference} {input.params} > {output}
+        cat {input.samples} {input.references} {input.params} > {output}
         """
-
-##### Main rule to orchestrate the workflow #####
 
 rule all:
     input:
+        #Parse metadata outputs
         rules.combine_yaml_configs.output,
-        expand("fastqc/{sample}_{read_type}_fastqc.zip", sample=config["samples"].keys(), read_type=["reads1", "reads2"]),
-        expand("fastqc/{sample}_{read_type}_trimmed_fastqc.zip", sample=config["trimmed_samples"].keys(), read_type=["reads1", "reads2"])
+        #Mash outputs
+        expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", 
+                sample=get_combined_samples()),
+        expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", 
+                sample=get_combined_samples()),
+        expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", 
+                sample=get_combined_samples())
+        #FastQC outputs
 
-#rule all:
+        #LongQC outputs
+        
+        #NanoQC outputs
+
+        #Jellyfish histo and genomescope outputs
+        expand(f"{path_out_prefix}/00-JELLYFISH/{{sample}}_jellyfishcount.jf", 
+                sample=get_combined_samples())
+        expand(f"{path_out_prefix}/00-JELLYFISH/{{sample}}_jellyfish_histo.histo", 
+                sample=get_combined_samples())
+        expand(f"{path_out_prefix}/00-GENOMESCOPE/{{sample}}_plot.png", 
+                sample=get_combined_samples())
+        #Hifasm outputs
+        
+        #Greenhill outputs
+        
+        #mitoVGP assembly pipeline outputs   
+##### Main rule to orchestrate the workflow #####
+##### load rules #####
+#include: "rules/plots.smk"
+#include: "rules/reference.smk"
+include: "rules/quality_control_reads.smk"
+#include: "rules/quality_control_assembly.smk" 
+#include: "rules/trimming.smk"
+#include: "rules/denovo.smk"
+
+#rule create_assembly_metadata:
 #    input:
-#        get_final_output(),    
-      
-        
-rule all:
-    input:
-        expand("{path_prefix_reads_trimmed}{sample}_trimmed_R1.fastq.gz", 
-               path_prefix_reads_trimmed=config['path_prefix_reads_trimmed'], 
-               sample=config['shortNames']),
-        expand("{path_prefix_reads_trimmed}{sample}_trimmed_R2.fastq.gz", 
-               path_prefix_reads_trimmed=config['path_prefix_reads_trimmed'], 
-               sample=config['shortNames']),
-
-        
-        
-        
- # Assuming the config dictionary has been loaded with the YAML file.
-# Also assuming that coverages, files, and orientations are of the same length.
-
-rule process_forward_reads:
-    input:
-        lambda wildcards: [
-            f"{config['samples']['CGAF']['paths'][i]}/{config['samples']['CGAF']['files'][i]}"
-            for i in range(len(config['samples']['CGAF']['coverages']))
-            if config['samples']['CGAF']['coverages'][i] == '30' and
-               config['samples']['CGAF']['orientations'][i] == 'R1'
-        ]
-    output:
-        "processed/{sample}_fwd_reads_processed.fq.gz"
-    shell:
-        """
-        # Your shell commands here
-        """
-       
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-##### setup singularity #####
-
-
-# this container defines the underlying OS for each job when using the workflow
-# with --use-conda --use-singularity
-# container: "docker://continuumio/miniconda3"
-
-
-
-    
-#rule all:
-#    input:
-#        "plots/quals.svg"
+#        expand("path/to/assemblies/{sample}_assembly.fasta", sample=SAMPLES)
+#    output:
+#        "assemblies_metadata.yaml"
+#    run:
+#        import yaml
 #
-#### SAMPLES = ["A", "B"]
+#        assembly_data = {}
+#        for sample in SAMPLES:
+#            assembly_data[sample] = {"assembly": f"path/to/assemblies/{sample}_assembly.fasta"}
+#        
+#        with open(output[0], 'w') as outfile:
+#            yaml.dump(assembly_data, outfile, default_flow_style=False)
 
 
-# rom snakemake.utils import min_version
 
-##### set minimum snakemake version #####
-# min_version("6.4.1")
+#include: "rules/mapping_illumina.smk"
+#include: "rules/variant_calling.smk"
 
-        
-        
-        
-      
+#include: "rules/pangenomes_plots.smk"
+
+#include: "rules/mitoVGP_conda_env_ONT.smk"
+#include: "rules/mitoVG_conda_env_pacbio.smk"
+
+
+#include: "rules/annotations.smk"
+#include: "rules/pangenomes_annotations.smk"
+
+#rule create_annotations_metadata:
+#    input:
+#        expand("path/to/assemblies/{sample}_assembly.fasta", sample=SAMPLES)
+#    output:
+#        "annotations_metadata.yaml"
+#    run:
+#        import yaml
+#
+#        annotation_data = {}
+#        for sample in SAMPLES:
+#            annotation_data[sample] = {"assembly": f"path/to/assemblies/{sample}_assembly.fasta"}
+#        
+#        with open(output[0], 'w') as outfile:
+#            yaml.dump(annotation_data, outfile, default_flow_style=False)
+#
+#
+# End

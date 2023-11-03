@@ -1,3 +1,33 @@
+rule process_forward_reads:
+    input:
+        lambda wildcards: [
+            f"{config['samples']['CGAF']['paths'][i]}/{config['samples']['CGAF']['files'][i]}"
+            for i in range(len(config['samples']['CGAF']['coverages']))
+            if config['samples']['CGAF']['coverages'][i] == '30' and
+               config['samples']['CGAF']['orientations'][i] == 'R1'
+        ]
+    output:
+        "processed/{sample}_fwd_reads_processed.fq.gz"
+    shell:
+        """
+        # Your shell commands here
+        """
+
+
+
+rule remove_hifi_adapters:
+    input:
+        raw_read_hifi = ""
+    output: 
+        trimmed_hifi_reads = {}
+      shell:
+      """ 
+       echo "Trimming reads for sample: {input}" >> log_file.txt
+       seqtk trimfq -b 20 -e 20 {input}.fastq > {output}_trimmed.fastq
+      """
+   
+# Define variables
+
 rule adapter_removal:
     input:
         read1 = "{path_prefix_reads}{sample}_R1.fastq.gz",
