@@ -1,6 +1,6 @@
 # snakemake --use-conda --conda-frontend mamba ...
 
-rule bam_to_fastq:
+rule bam_to_fastq: #takes bam from pacbio and convert to fastq.gz
     input:
         lambda wildcards: config["samples"][f"{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}"][".bam"]
     output:
@@ -24,18 +24,36 @@ rule mash_sketch:
 
 rule mash_dist:
     input:
-        ref_sketch="path/to/combined.msh",
+        ref_sketch=f"{path_reads_prefix}/00-MASH_DB/combined.msh",
         reads_sketch=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz.msh"
     output:
-        distances=f"{path_out_prefix}/{{sample}}_distances.tab",
-        key=f"{path_out_prefix}/{{sample}}_mash_dist_key"
+        distances=f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl",
+        key=f"{path_out_prefix}/00-MASH/{{sample}}_mash_dist_key"
     shell:
         """
         mash dist -p {threads} {input.ref_sketch} {input.reads_sketch} > {output.distances}
         head -n 1 {output.distances} | \
-        awk '{for (i=2; i<=NF; i++) print $i}' | \
+        awk '{for (i=2; i <=NF; i++) print $i}' | \
         awk -F "/" '{print $NF}' | \
-        sed -E 's/_(combined)?\\.tbl$//g' > {output.key} 
+        sed 's/\.subreads\.fast[aq]\.gz//g' | \
+        sed 's/_rawreads\.fast[aq]\.gz//g' | \
+        sed 's/\.fast[aq]\.gz//g' | \
+        sed 's/\.fast[aq]//g'  > {output.key} 
+        """
+
+rule mash_dist_plot:
+    input:
+        distances=f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl",
+        key=f"{path_out_prefix}/00-MASH/{{sample}}_mash_dist_key"
+    output:
+        plot=f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png"
+    params:
+        plot_mash_script="scripts/plot_mash.R"  # adjust this to your script path
+    conda:
+        "quality_control_reads.yaml"  # Replace with the path to your environment file
+    shell:
+        """
+        Rscript {params.plot_mash_script} {output.plot} 
         """
 
 rule mash_screen:
@@ -51,16 +69,7 @@ rule plot_mash:
     input:
         distances=f"{path_out_prefix}/{{sample}}_distances.tab",
         key=f"{path_out_prefix}/{{sample}}_mash_dist_key"
-    output:
-        plot=f"{path_out_prefix}/{{sample}}_mash_plot.png"
-    params:
-        plot_mash_script="scripts/plot_mash.R"  # adjust this to your script path
-    conda:
-        "quality_control_reads.yaml"  # Replace with the path to your environment file
-    shell:
-        """
-        Rscript {params.plot_mash_script} {output.plot} 
-        """
+
 
 # Role: Used for the quality control of reads by fast, memory-efficient counting of k-mers in DNA https://genome.umd.edu/jellyfish.html 
 # https://genome.umd.edu/docs/JellyfishUserGuide.pdf

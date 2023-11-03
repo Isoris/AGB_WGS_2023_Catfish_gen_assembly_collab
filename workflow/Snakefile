@@ -10,8 +10,7 @@ path_reads_prefix = f"{path_folder_prefix}/00-DATA/00-READS"
 path_prog_prefix = f"{path_folder_prefix}/01-PROGRAMS"
 path_exp_prefix=f"{path_folder_prefix}/02-EXPERIMENTS"
 path_out_prefix = f"{path_folder_prefix}/03-OUTPUTS"
-path_tmp_prefix = f"{path_folder_prefix}/04-TEMPORARY"
-
+path_tmp_prefix = f"{path_folder_prefix}/04-TEMPORARY"  
 
 ##### setup config and report #####
 configfile: "../config/config.yaml"
@@ -100,7 +99,12 @@ rule all:
         #NanoQC outputs
 
         #Jellyfish histo and genomescope outputs
-
+        expand(f"{path_out_prefix}/00-JELLYFISH/{{sample}}_jellyfishcount.jf", 
+                sample=get_combined_samples())
+        expand(f"{path_out_prefix}/00-JELLYFISH/{{sample}}_jellyfish_histo.histo", 
+                sample=get_combined_samples())
+        expand(f"{path_out_prefix}/00-GENOMESCOPE/{{sample}}_plot.png", 
+                sample=get_combined_samples())
         #Hifasm outputs
         
         #Greenhill outputs
