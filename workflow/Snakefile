@@ -54,45 +54,31 @@ def get_combined_samples():
 
 rule all:
     input:
-	"logs/combined_samples.txt"
-	#Mash outputs
-#        expand("{path_out_prefix}/00-MASH/{sample}_combined.tbl", sample=get_combined_samples()),
-#        expand("{path_out_prefix}/00-MASH/{sample}_screen.out", sample=get_combined_samples()),
-#        expand("{path_out_prefix}/00-MASH/{sample}_mash_plot.png", sample=get_combined_samples()),
-        #FastQC outputs
-        #LongQC outputs
-        #NanoQC outputs
-        #Jellyfish histo and genomescope outputs
-#        expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfishcount.jf", sample=get_combined_samples()),
-#        expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfish_histo.histo", sample=get_combined_samples()),
-#        expand("{path_out_prefix}/00-GENOMESCOPE/{sample}_plot.png", sample=get_combined_samples())
-        #Hifasm outputs
-        #Greenhill outputs
-        #mitoVGP assembly pipeline outputs   
+        "logs/test.txt",
+        expand("{path_out_prefix}/00-MASH/{sample}_combined.tbl", sample=get_combined_samples()),
+        expand("{path_out_prefix}/00-MASH/{sample}_screen.out", sample=get_combined_samples()),
+        expand("{path_out_prefix}/00-MASH/{sample}_mash_plot.png", sample=get_combined_samples())
+        # Uncomment the following lines when you want to include them in the execution
+        # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfishcount.jf", sample=get_combined_samples()),
+        # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfish_histo.histo", sample=get_combined_samples()),
+        # expand("{path_out_prefix}/00-GENOMESCOPE/{sample}_plot.png", sample=get_combined_samples())
+        # Add additional lines for other output files as needed
+
 ##### Main rule to orchestrate the workflow #####
+
 ##### load rules #####
 #include: "rules/plots.smk"
 #include: "rules/reference.smk"
-#include: "rules/quality_control_reads.smk"
+include: "rules/quality_control_reads.smk"
 #include: "rules/quality_control_assembly.smk" 
 #include: "rules/trimming.smk"
 #include: "rules/denovo.smk"
 
-
-
-rule print_combined_samples:
+rule create_log_folder:
     output:
-        "logs/combined_samples.txt"
+	"logs/test.txt"
     shell:
-        "touch {output}"
-    run:
-        with open(output[0], 'w') as f:
-            combined_samples = get_combined_samples()
-            for sample in combined_samples:
-                print(sample)
-                f.write(sample + '\n')
-
-
+	"touch {output}"
 
 
 #rule create_assembly_metadata:
