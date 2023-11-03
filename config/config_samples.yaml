@@ -1,0 +1,246 @@
+samples:
+  CG:
+    coverages:
+    - '90'
+    - '90'
+    - '25'
+    - ''
+    - ''
+    - '40'
+    - '30'
+    - '30'
+    descriptions:
+    - 'Forward read files from illumina seq for Clarias gariepinus male with a coverage
+      of 90X '
+    - 'Reverse read files from illumina seq for Clarias gariepinus male with a coverage
+      of 90X '
+    - nanopore reads for Clarias gariepinus male with a coverage of 25X
+    - 'HiC reads for Clarias gariepinus male '
+    - 'HiC reads for Clarias gariepinus male '
+    - pacbio reads for Clarias gariepinus male with a coverage of 40X
+    - Forward read files from illumina seq for Clarias gariepinus female with a 30X
+      coverage
+    - Reverse read files from illumina seq for Clarias gariepinus female with a 30X
+      coverage
+    file_prefixes:
+    - CGAM
+    - CGAM
+    - CGAM
+    - CGAM
+    - CGAM
+    - CGAM
+    - CGAF
+    - CGAF
+    methods:
+    - ILLUMINA_PE
+    - ILLUMINA_PE
+    - NANOPORE
+    - HIC
+    - HIC
+    - HIFI
+    - ILLUMINA_PE
+    - ILLUMINA_PE
+    orientations:
+    - FWD
+    - REV
+    - ''
+    - FWD
+    - REV
+    - ''
+    - FWD
+    - REV
+    path_prefixes:
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    sample_ids:
+    - ID1
+    - ID2
+    - ID3
+    - ID4
+    - ID5
+    - ID6
+    - ID15
+    - ID16
+    sex_long:
+    - male
+    - male
+    - male
+    - male
+    - male
+    - male
+    - female
+    - female
+    sexes:
+    - M
+    - M
+    - M
+    - M
+    - M
+    - M
+    - F
+    - F
+    species_long:
+    - Clarias_gariepinus
+    - Clarias_gariepinus
+    - Clarias_gariepinus
+    - Clarias_gariepinus
+    - Clarias_gariepinus
+    - Clarias_gariepinus
+    - Clarias_gariepinus
+    - Clarias_gariepinus
+  CH:
+    coverages:
+    - '30'
+    - '30'
+    - '30'
+    - '30'
+    descriptions:
+    - Forward read files from illumina seq for Clarias hybrid male with a coverage
+      of 30X
+    - Reverse read files from illumina seq for Clarias hybrid male with a coverage
+      of 30X
+    - Forward read files from illumina seq for Clarias hybrid female with a coverage
+      of 30X
+    - Reverse read files from illumina seq for Claris hybrid female with a coverage
+      of 30X
+    file_prefixes:
+    - CHAM
+    - CHAM
+    - CHAF
+    - CHAF
+    methods:
+    - ILLUMINA_PE
+    - ILLUMINA_PE
+    - ILLUMINA_PE
+    - ILLUMINA_PE
+    orientations:
+    - FWD
+    - REV
+    - FWD
+    - REV
+    path_prefixes:
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    sample_ids:
+    - ID17
+    - ID18
+    - ID19
+    - ID20
+    sex_long:
+    - male
+    - male
+    - female
+    - female
+    sexes:
+    - M
+    - M
+    - F
+    - F
+    species_long:
+    - Clarias_hybrid
+    - Clarias_hybrid
+    - Clarias_hybrid
+    - Clarias_hybrid
+  CM:
+    coverages:
+    - '90'
+    - '90'
+    - '25'
+    - ''
+    - ''
+    - '40'
+    - '30'
+    - '30'
+    descriptions:
+    - Forward read files from illumina seq for Clarias macrocephalus male with a 90X
+      coverage
+    - Reverse read files from illumina seq for Clarias macrocephalus male with a 90X
+      coverage
+    - nanopore reads for Clarias macrocephalus male with a coverage of 25X
+    - 'HiC reads for Clarias macrocephalus male '
+    - 'HiC reads for Clarias macrocephalus male '
+    - pacbio reads for Clarias macrocephalus male with a coverage of 40X
+    - Forward read files from illumina seq for Clarias macrocephalus femaile with
+      a coverage of 30X
+    - Reverse read files from illumina seq for  Clarias macrocephalus femaile with
+      a coverage of 30X
+    file_prefixes:
+    - CMAM
+    - CMAM
+    - CMAM
+    - CMAM
+    - CMAM
+    - CMAM
+    - CMAF
+    - CMAF
+    methods:
+    - ILLUMINA_PE
+    - ILLUMINA_PE
+    - NANOPORE
+    - HIC
+    - HIC
+    - HIFI
+    - ILLUMINA_PE
+    - ILLUMINA_PE
+    orientations:
+    - FWD
+    - REV
+    - ''
+    - FWD
+    - REV
+    - ''
+    - FWD
+    - REV
+    path_prefixes:
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    - ~/scratch/catfish/00-INPUTS/00-READS/
+    sample_ids:
+    - ID7
+    - ID8
+    - ID9
+    - ID10
+    - ID11
+    - ID12
+    - ID13
+    - ID14
+    sex_long:
+    - male
+    - male
+    - male
+    - male
+    - male
+    - male
+    - female
+    - female
+    sexes:
+    - M
+    - M
+    - M
+    - M
+    - M
+    - M
+    - F
+    - F
+    species_long:
+    - Clarias_macrocephalus
+    - Clarias_macrocephalus
+    - Clarias_macrocephalus
+    - Clarias_macrocephalus
+    - Clarias_macrocephalus
+    - Clarias_macrocephalus
+    - Clarias_macrocephalus
+    - Clarias_macrocephalus
