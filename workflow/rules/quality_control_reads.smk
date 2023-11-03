@@ -4,7 +4,7 @@ rule bam_to_fastq: #takes bam from pacbio and convert to fastq.gz
     input:
         lambda wildcards: config["samples"][f"{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}"][".bam"]
     output:
-        fastq="{path_reads_prefix}/{config['samples'][f'{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}']}_rawreads.fastq"
+        fastq="{path_reads_prefix}/{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}_rawreads.fastq"
     conda:
         "quality_control_env.yaml"  # This YAML file contains the dependencies
     shell:
@@ -16,9 +16,9 @@ rule bam_to_fastq: #takes bam from pacbio and convert to fastq.gz
 
 rule mash_sketch:
     input:
-        reads=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz"
+        reads=f"{path_reads_prefix}/{sample}_rawreads.fastq.gz"
     output:
-        sketch=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz.msh"
+        sketch=f"{path_reads_prefix}/{sample}_rawreads.fastq.gz.msh"
     shell:
         "mash sketch -m 2 -o {output.sketch} {input.reads}"
 
