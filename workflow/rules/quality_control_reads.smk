@@ -1,14 +1,21 @@
 # snakemake --use-conda --conda-frontend mamba ...
 
-rule bam_to_fastq: #takes bam from pacbio and convert to fastq.gz
+def get_sample_prefix(wildcards):
+    # This function now assumes each sample is a key in the config that 
+    # corresponds to a prefix without a file extension
+    return f"{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}"
+
+rule bam_to_fastq:
     input:
-        lambda wildcards: config["samples"][f"{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}"][".bam"]
+        bam=lambda wildcards: get_sample_prefix(wildcards) + ".bam"
     output:
-        fastq="{path_reads_prefix}/{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}_rawreads.fastq"
-    conda:
-        "quality_control_env.yaml"  # This YAML file contains the dependencies
+        fastq="{path_reads_prefix}/{species}_{sex}_{method}_{orientation}_rawreads.fastq.gz"
     shell:
-        "bam2fastq -c 1 -o {output.fastq} {input}"
+        """
+        bam2fastq -c 1 -o {output.fastq} {input.bam}
+        """
+
+
 
 #CG_M_ILLUMINA_PE_FWD.fastq
 #CG_M_NANOPORE.fastq
@@ -16,7 +23,7 @@ rule bam_to_fastq: #takes bam from pacbio and convert to fastq.gz
 
 rule mash_sketch:
     input:
-        reads=f"{path_reads_prefix}/{sample}_rawreads.fastq.gz"
+        reads=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz", 
     output:
         sketch=f"{path_reads_prefix}/{sample}_rawreads.fastq.gz.msh"
     shell:

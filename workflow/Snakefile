@@ -5,13 +5,13 @@ import glob
 import yaml 
 
 ##### load paths #####
-path_folder_prefix = "/tarafs/scratch/proj5034-AGBKU/catfish"
+path_folder_prefix="/tarafs/scratch/proj5034-AGBKU/catfish"
 ###
-path_reads_prefix = f"{path_folder_prefix}/00-DATA/00-READS"
-path_prog_prefix = f"{path_folder_prefix}/01-PROGRAMS"
+path_reads_prefix=f"{path_folder_prefix}/00-DATA/00-READS"
+path_prog_prefix=f"{path_folder_prefix}/01-PROGRAMS"
 path_exp_prefix=f"{path_folder_prefix}/02-EXPERIMENTS"
-path_out_prefix = f"{path_folder_prefix}/03-OUTPUTS"
-path_tmp_prefix = f"{path_folder_prefix}/04-TEMPORARY"  
+path_out_prefix=f"{path_folder_prefix}/03-OUTPUTS"
+path_tmp_prefix=f"{path_folder_prefix}/04-TEMPORARY"  
 
 ##### setup config and report #####
 
@@ -55,9 +55,9 @@ def get_combined_samples():
 rule all:
     input:
         "logs/test.txt",
-        expand("{path_out_prefix}/00-MASH/{sample}_combined.tbl", sample=get_combined_samples()),
-        expand("{path_out_prefix}/00-MASH/{sample}_screen.out", sample=get_combined_samples()),
-        expand("{path_out_prefix}/00-MASH/{sample}_mash_plot.png", sample=get_combined_samples())
+        expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
+        expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
+        expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", path_out_prefix=path_out_prefix, sample=get_combined_samples())
         # Uncomment the following lines when you want to include them in the execution
         # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfishcount.jf", sample=get_combined_samples()),
         # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfish_histo.histo", sample=get_combined_samples()),
@@ -77,8 +77,7 @@ include: "rules/quality_control_reads.smk"
 rule create_log_folder:
     output:
 	"logs/test.txt"
-    shell:
-	"touch {output}"
+    shell: "touch {output}"
 
 
 #rule create_assembly_metadata:
