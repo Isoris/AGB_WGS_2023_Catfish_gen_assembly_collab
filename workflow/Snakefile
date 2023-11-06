@@ -16,8 +16,7 @@ path_tmp_prefix=f"{path_folder_prefix}/04-TEMPORARY"
 
 ##### setup config and report #####
 report: "report/workflow.rst"
-
-
+threads = 12
 configfile: "config/config.yaml"
 
 ##### Definition of functions

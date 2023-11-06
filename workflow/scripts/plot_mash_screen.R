@@ -1,4 +1,10 @@
-args<-commandArgs(TRUE)
+# Correctly get the command line arguments
+args <- commandArgs(TRUE)
+distance_file <- args[[1]]
+key_file <- args[[2]]
+out_name <- args[[3]]
+
+
 out_name=paste("mash.", args[[1]], ".png", sep="")
 
 png(out_name, res=300, width=9.6, height=9.6, units="in", pointsize=8, type="cairo", bg="white")
@@ -6,18 +12,18 @@ par(mar=c(3.2,3.2,0,0))
 par(mgp=c(2.2,1,0))
 
 # get names
-key=read.table("key")
+key=read.table(key_file)
 labels=key[,1]
 
 # make dendrogram
-x = read.table("combined.tbl")
+x = read.table(distance_file)
 y=x[,2:dim(x)[2]]
 z = data.matrix(y)
 z[is.infinite(z)]=0
 rc = hclust(as.dist(z), method="ward.D2")
 
 # make coloring
-x = read.table("combined.tbl");
+x = read.table(distance_file);
 y=x[,2:dim(x)[2]]
 cr3 = data.matrix(y)
 cr3=100-(cr3*100)

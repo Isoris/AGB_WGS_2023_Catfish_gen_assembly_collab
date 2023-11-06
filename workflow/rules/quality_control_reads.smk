@@ -1,31 +1,29 @@
-# snakemake --use-conda --conda-frontend mamba ...
-
-
-#CG_M_ILLUMINA_PE_FWD.fastq
-#CG_M_NANOPORE.fastq
-#CG_M_HIFI.bam
-
-
 def get_sample(wildcards): #Get_sample_prefix
     # This function now assumes each sample is a key in the config that 
     # corresponds to a prefix without a file extension
     return f"{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}"
 
-
 ### Parse and prepare PacBio data
 rule bam_to_fastq:
     input:
-        bam=lambda wildcards: f"{path_reads_prefix}/{get_sample(wildcards).bam}"
-    output:
+        bam=lambda wildcards: f"{path_reads_prefix}/{get_sample(wildcards)}.bam"
+ output:
         fastq="{path_reads_prefix}/{species}_{sex}_{method}_{orientation}_reads.fastq.gz"
     conda:
-        "quality_control_reads.yaml"  # Replace with the path to your environment file
+        "quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:
         """
-        bam2fastq -c 1 -o {output.fastq} {input.bam}
+        if [ "{wildcards.method}" == "HIFI" ]; then
+            # Command for processing HiFi reads
+            bam2fastq -c 1 -o {output.fastq} {input.bam}
+        elseif
+            echo "Unsupported method: {wildcards.method}"
+            exit 1
+        fi
         """
 
 ### Parse and prepare ONT nanopore data
+
 
 ### Parse and prepare Illumina data
 
@@ -35,29 +33,36 @@ rule bam_to_fastq:
 
 rule mash_sketch:
     input:
-        reads=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz", 
+        fastq_gz="{path_reads_prefix}/{sample}_reads.fastq.gz", 
     output:
-        sketch=f"{path_reads_prefix}/{sample}_rawreads.fastq.gz.msh"
+        sketch="{sample}.msh"    
     shell:
-        "mash sketch -m 2 -o {output.sketch} {input.reads}"
+        "mash sketch -m 2 -o {output.sketch} {input.fastq_gz}"
 
-rule mash_screen:
+
+rule mash_screen: # Run on the reads against RefSeq minimal database 
     input:
-        ref_sketch="path/to/combined.msh",
-        reads=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz"
+        ref_sketch="{path_data_prefix}/01-MASHDB/combined.msh", # The RefSeq database of mash indexes.
+        reads="{path_reads_prefix}/{sample}_reads.fastq.gz"
     output:
-        screen="results/{{sample}}_screen.tab"
+        screen="{path_out_prefix}/00-MASH/{sample}_screen.tab"
     shell:
         "mash screen {input.ref_sketch} {input.reads} > {output.screen}"
 
 
-rule mash_dist:
+
+
+# Rule mash_dist: calculates the pairwise Mash distances between a reference sketch and read sketches, 
+#  saving the output in a table, 
+#  generates a key file that strips away extraneous filename components to produce a clean label for each sample.
+
+rule mash_dist: 
     input:
-        ref_sketch=f"{path_reads_prefix}/00-MASH_DB/combined.msh",
-        reads_sketch=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz.msh"
+        ref_sketch="{path_data_prefix}/00-MASH_DB/combined.msh",
+        reads_sketch="{path_reads_prefix}/{sample}_reads.fastq.gz.msh"
     output:
-        distances=f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl",
-        key=f"{path_out_prefix}/00-MASH/{{sample}}_mash_dist_key"
+        distances="{path_out_prefix}/00-MASH/{sample}_combined.tbl",
+        key="{path_out_prefix}/00-MASH/{sample}_mash_dist_keyfile.txt"
     shell:
         """
         mash dist -p {threads} {input.ref_sketch} {input.reads_sketch} > {output.distances}
@@ -65,24 +70,24 @@ rule mash_dist:
         awk '{for (i=2; i <=NF; i++) print $i}' | \
         awk -F "/" '{print $NF}' | \
         sed 's/\.subreads\.fast[aq]\.gz//g' | \
-        sed 's/_rawreads\.fast[aq]\.gz//g' | \
+        sed 's/_reads\.fast[aq]\.gz//g' | \
         sed 's/\.fast[aq]\.gz//g' | \
         sed 's/\.fast[aq]//g'  > {output.key} 
         """
 
 rule mash_dist_plot:
     input:
-        distances=f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl",
-        key=f"{path_out_prefix}/00-MASH/{{sample}}_mash_dist_key"
+        distance_file="{path_out_prefix}/00-MASH/{sample}_combined.tbl",
+        key_file="{path_out_prefix}/00-MASH/{sample}_mash_dist_keyfile.txt"
     output:
-        plot=f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png"
+        plot="{path_out_prefix}/00-MASH/{sample}_mash_plot.png"
     params:
-        plot_mash_script="scripts/plot_mash.R"  # adjust this to your script path
+        plot_mash_script="workflow/scripts/plot_mash.R"  # adjust this to your script path
     conda:
         "quality_control_reads.yaml"  # Replace with the path to your environment file
     shell:
         """
-        Rscript {params.plot_mash_script} {output.plot} 
+        Rscript {params.plot_mash_script} {input.distance_file} {input.key_file} {output.plot}
         """
 
 rule plot_mash:
@@ -229,4 +234,37 @@ rule run_genomescope:
 #        if os.path.exists(input.trimmed_read):
 #            if not os.path.exists(output_path):
 #                shell("fastqc -o {params.output_dir} -t {params.nthreads} {input.trimmed_read}")
+
+      
                 
+# snakemake --use-conda --conda-frontend mamba ...
+#CG_M_ILLUMINA_PE_FWD.fastq
+#CG_M_NANOPORE.fastq
+#CG_M_HIFI.bam
+
+#rule example_rule:
+#    input:
+#        reads=lambda wildcards: f"{wildcards.sample}_{config['method']}_reads.fastq.gz" if config['method'] == 'Illumina' else None
+#    output:
+#        processed_reads="{sample}_Illumina_processed.fastq.gz"
+#    shell:
+#        """
+#        # Command to process Illumina reads
+#       process_illumina_reads -i {input.reads} -o {output.processed_reads}
+#        """
+#rule example_rule:
+#    input:
+#        reads="{sample}_{method}_reads.fastq.gz"
+#    output:
+#        processed_reads="{sample}_{method}_processed.fastq.gz"
+#    shell:
+#        """
+#        if [ "{wildcards.method}" == "Illumina" ]; then
+#            # Command for processing Illumina reads
+ #           process_illumina_reads -i {input.reads} -o {output.processed_reads}
+ #       elif [ "{wildcards.method}" == "Nanopore" ]; then
+            # Command for processing Nanopore reads
+ #           process_nanopore_reads -i {input.reads} -o {output.processed_reads}
+        # ... handle other methods as needed
+  #      fi
+   #     """
