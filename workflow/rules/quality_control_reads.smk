@@ -1,8 +1,6 @@
-def get_sample(wildcards): #Get_sample_prefix
-    # This function now assumes each sample is a key in the config that 
-    # corresponds to a prefix without a file extension
-    return f"{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}"
-
+### Parse and prepare ONT nanopore data
+### Parse and prepare Illumina data
+### Parse and prepare HiC data
 ### Parse and prepare PacBio data
 rule bam_to_fastq:
     input:
@@ -22,12 +20,7 @@ rule bam_to_fastq:
         fi
         """
 
-### Parse and prepare ONT nanopore data
 
-
-### Parse and prepare Illumina data
-
-### Parse and prepare HiC data
 
 ### Mash
 
