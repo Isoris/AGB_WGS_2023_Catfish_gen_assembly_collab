@@ -18,6 +18,12 @@ log_references="generate_config_references.log"
 echo "Generating $config_samples..."
 python generate_config_samples.py > "../config/$config_samples" 2> "$log_samples"
 
+cd ../config/metadata_references
+
+cat *.ref.tsv > combined_references.csv #NCBI genomes csv format 
+
+cd ../../scripts
+
 echo "Generating $config_references..."
 python generate_config_references.py > "../config/$config_references" 2> "$log_references"
 

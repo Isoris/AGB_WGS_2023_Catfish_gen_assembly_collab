@@ -35,10 +35,10 @@ def get_unique_values_references(key):
 
 
 def get_sample_ids():
-    return get_unique_values('sample_ids')
+    return get_unique_values('sample_id')
 
 def get_reference_accession():
-    return get_unique_values('refseq_genbank_accession')
+    return get_unique_values('assembly_accession')
 
 def get_species_file_prefix():
     return get_unique_values('file_prefixes')

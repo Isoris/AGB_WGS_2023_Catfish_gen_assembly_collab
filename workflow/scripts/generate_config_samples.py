@@ -12,7 +12,7 @@ main_dict = {'samples': {}}
 with open('../config/metadata_samples/samples.csv', 'r') as f:
     reader = csv.DictReader(f)
     for row in reader:
-        species = row['Species']
+        species = row['Species_long']
         sample_id = row['Sample_ID']
         # Check if species is already in the dictionary, if not, add it
         if species not in main_dict['samples']:
