@@ -1,25 +1,37 @@
 # snakemake --use-conda --conda-frontend mamba ...
 
-def get_sample_prefix(wildcards):
+
+#CG_M_ILLUMINA_PE_FWD.fastq
+#CG_M_NANOPORE.fastq
+#CG_M_HIFI.bam
+
+
+def get_sample(wildcards): #Get_sample_prefix
     # This function now assumes each sample is a key in the config that 
     # corresponds to a prefix without a file extension
     return f"{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}"
 
+
+### Parse and prepare PacBio data
 rule bam_to_fastq:
     input:
-        bam=lambda wildcards: get_sample_prefix(wildcards) + ".bam"
+        bam=lambda wildcards: f"{path_reads_prefix}/{get_sample(wildcards).bam}"
     output:
-        fastq="{path_reads_prefix}/{species}_{sex}_{method}_{orientation}_rawreads.fastq.gz"
+        fastq="{path_reads_prefix}/{species}_{sex}_{method}_{orientation}_reads.fastq.gz"
+    conda:
+        "quality_control_reads.yaml"  # Replace with the path to your environment file
     shell:
         """
         bam2fastq -c 1 -o {output.fastq} {input.bam}
         """
 
+### Parse and prepare ONT nanopore data
 
+### Parse and prepare Illumina data
 
-#CG_M_ILLUMINA_PE_FWD.fastq
-#CG_M_NANOPORE.fastq
-#CG_M_HIFI.bam
+### Parse and prepare HiC data
+
+### Mash
 
 rule mash_sketch:
     input:
@@ -28,6 +40,16 @@ rule mash_sketch:
         sketch=f"{path_reads_prefix}/{sample}_rawreads.fastq.gz.msh"
     shell:
         "mash sketch -m 2 -o {output.sketch} {input.reads}"
+
+rule mash_screen:
+    input:
+        ref_sketch="path/to/combined.msh",
+        reads=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz"
+    output:
+        screen="results/{{sample}}_screen.tab"
+    shell:
+        "mash screen {input.ref_sketch} {input.reads} > {output.screen}"
+
 
 rule mash_dist:
     input:
@@ -63,21 +85,14 @@ rule mash_dist_plot:
         Rscript {params.plot_mash_script} {output.plot} 
         """
 
-rule mash_screen:
-    input:
-        ref_sketch="path/to/combined.msh",
-        reads=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz"
-    output:
-        screen="results/{{sample}}_screen.tab"
-    shell:
-        "mash screen {input.ref_sketch} {input.reads} > {output.screen}"
-
 rule plot_mash:
     input:
         distances=f"{path_out_prefix}/{{sample}}_distances.tab",
         key=f"{path_out_prefix}/{{sample}}_mash_dist_key"
 
 
+
+### Jellyfish
 # Role: Used for the quality control of reads by fast, memory-efficient counting of k-mers in DNA https://genome.umd.edu/jellyfish.html 
 # https://genome.umd.edu/docs/JellyfishUserGuide.pdf
 
@@ -110,6 +125,7 @@ rule run_jellyfish_histo:
         "{params.jellyfish_path} histo -t {threads} {input.jellyfish_count} > {output.histo}"
 
 
+### GenomeScope
 # Role: Genomescope is used for genome profiling based on k-mer analysis
 rule run_genomescope:
     input:

@@ -2,41 +2,41 @@ import csv
 import yaml
 import os
 
+# Get the current working directory
 cwd = os.getcwd()
 
-# Read the CSV file and populate a dictionary
-samples = {}
+# Initialize the main dictionary with a 'species' key
+samples_dict = {'species': {}}
+
+# Read the CSV file and populate the dictionary
 with open('../config/metadata_samples/samples.csv', 'r') as f:
     reader = csv.DictReader(f)
     for row in reader:
         sample_id = row['Sample_ID']
         species_short = row['Species']
-        if species_short not in samples:
-            samples[species_short] = {
+        if species_short not in samples_dict['species']:
+            samples_dict['species'][species_short] = {
                 'sample_ids': [],
-                'sexes': [],
-                'methods': [],
-                'orientations': [],
-                'coverages': [],
+                'species_long': [],
+                'sex': [],
+                'method': [],
+                'orientation': [],
+                'coverage': [],
                 'path_prefixes': [],
                 'file_prefixes': [],
-                'species_long': [],
-                'sex_long': [],
                 'descriptions': []
             }
-        samples[species_short]['sample_ids'].append(sample_id)
-        samples[species_short]['sexes'].append(row['Sex'])
-        samples[species_short]['methods'].append(row['Method'])
-        samples[species_short]['orientations'].append(row['Orientation'])
-        samples[species_short]['coverages'].append(row['Coverage'])
-        samples[species_short]['path_prefixes'].append(row['Path_prefix'])
-        samples[species_short]['file_prefixes'].append(row['File_prefix'])
-        samples[species_short]['species_long'].append(row['Species_long'])
-        samples[species_short]['sex_long'].append(row['Sex_long'])
-        samples[species_short]['descriptions'].append(row['Description'])
+        species_data = samples_dict['species'][species_short]
+        species_data['sample_ids'].append(sample_id)
+        species_data['species_long'].append(row['Species_long'])
+        species_data['sex'].append(row['Sex'])
+        species_data['method'].append(row['Method'])
+        species_data['orientation'].append(row['Orientation'])
+        species_data['coverage'].append(row['Coverage'])
+        species_data['path_prefixes'].append(row['Path_prefix'])
+        species_data['file_prefixes'].append(row['File_prefix'])
+        species_data['descriptions'].append(row['Description'])
 
 # Output to YAML format
 with open('../config/config_samples.yaml', 'w') as f:
-    yaml.dump({'samples': samples}, f, default_flow_style=False)
-
-
+    yaml.dump({'samples': samples_dict['species']}, f, default_flow_style=False)

@@ -8,16 +8,17 @@ import yaml
 path_folder_prefix="/tarafs/scratch/proj5034-AGBKU/catfish"
 ###
 path_reads_prefix=f"{path_folder_prefix}/00-DATA/00-READS"
+path_data_prefix=f"{path_folder_prefix}/00-DATA/"
 path_prog_prefix=f"{path_folder_prefix}/01-PROGRAMS"
 path_exp_prefix=f"{path_folder_prefix}/02-EXPERIMENTS"
 path_out_prefix=f"{path_folder_prefix}/03-OUTPUTS"
 path_tmp_prefix=f"{path_folder_prefix}/04-TEMPORARY"  
 
 ##### setup config and report #####
-
-configfile: "config/config.yaml"
 report: "report/workflow.rst"
 
+
+configfile: "config/config.yaml"
 
 ##### Definition of functions
 
@@ -27,26 +28,35 @@ def get_unique_values(key):
         values.update(sample.get(key, []))
     return list(values)
 
-def get_species():
-    return get_unique_values('species_long')
-
-def get_sexes():
-    return get_unique_values('sexes')
-
-def get_methods():
-    return get_unique_values('methods')
-
-def get_orientations():
-    return get_unique_values('orientations')
+def get_sample_ids():
+    return get_unique_values('sample_ids')
 
 def get_reference_accession():
-    return get_unique_values('')
+    return get_unique_values('refseq_genbank_accession')
+
+def get_species_file_prefix():
+    return get_unique_values('file_prefixes')
+
+def get_species_long():
+    return get_unique_values('species_long')
+
+def get_species():
+    return get_unique_values('species')
+
+def get_sex():
+    return get_unique_values('sex')
+
+def get_method():
+    return get_unique_values('method')
+
+def get_orientation():
+    return get_unique_values('orientations')
 
 def get_combined_samples():
     species = get_species()
-    sex = get_sexes()
-    method = get_methods()
-    orientation = get_orientations()
+    sex = get_sex()
+    method = get_method()
+    orientation = get_orientation()
     return ["{}_{}_{}_{}".format(s, sx, m, o) for s in species for sx in sex for m in method for o in orientation]
 
 
