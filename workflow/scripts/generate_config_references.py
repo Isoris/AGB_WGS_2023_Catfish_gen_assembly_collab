@@ -1,8 +1,8 @@
+
 import csv
 import yaml
 import os
 import re
-
 
 # Read the existing YAML file to determine the starting point for ref_id_counter
 def get_max_sample_id(yaml_file_path):
@@ -58,7 +58,7 @@ with open('../config/metadata_references/combined_references.csv', 'r') as f:
         ref_id_counter += 1
         ref_id = f"ID{ref_id_counter}"
         references[species]['reference_ids'].append(ref_id)
-        references[species]['species_long'].append(row['Species_long'])
+        references[species]['species_long'].append(row['species_long'])
         references[species]['sexes'].append(row['Sex'])
         references[species]['methods'].append(row['Method'])
         references[species]['orientations'].append(row['Orientation'])
