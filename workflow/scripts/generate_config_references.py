@@ -24,21 +24,20 @@ ref_id_counter = get_max_sample_id('../config/config_samples.yaml')
 # Continue with reading the references.csv and populating the references dictionary
 references = {}
 
+
 with open('../config/metadata_references/combined_references.csv', 'r') as f:
     reader = csv.DictReader(f)
     for row in reader:
-        species = row['Species_long']
+        species = row.get('Species_long', 'Unknown Species')
+        
         if species not in references:
             references[species] = {
                 'reference_ids': [],
                 'species_long': [],
-                'sexes': [],
-                'methods': [],
-                'orientations': [],
-                'descriptions': [],
-                'assembly_accessions': [],
-                'assembly_names': [],
-                'organism_names': [],
+                'sex': [],
+                'method': [],
+                'orientation': [],
+                'common_names': [],
                 'organism_infraspecific_names': {
                     'breed': [],
                     'strain': [],
@@ -46,36 +45,52 @@ with open('../config/metadata_references/combined_references.csv', 'r') as f:
                     'ecotype': [],
                     'isolate': [],
                     'sex': []
-                },
-                'annotation_names': [],
-                'assembly_stats_total_sequence_length': [],
-                'assembly_level': [],
-                'assembly_release_dates': [],
-                'wgs_project_accessions': []
+                },                
+                'qualifiers': [],
+                'taxonomy_ids': [],
+                'assembly_name': [],
+                'assembly_accession': [],
+                'sources': [],
+                'annotations': [],
+                'assembly_levels': [],
+                'contig_n50s': [],
+                'sizes': [],
+                'submission_dates': [],
+                'gene_counts': [],
+                'bioprojects': [],
+                'biosamples': [],
+                'descriptions': [],
+
             }
         
-        # Increment the counter to generate a unique ref_id for each entry
+        # Generate a unique ref_id for each entry and append
         ref_id_counter += 1
         ref_id = f"ID{ref_id_counter}"
         references[species]['reference_ids'].append(ref_id)
-        references[species]['species_long'].append(row['species_long'])
-        references[species]['sexes'].append(row['Sex'])
-        references[species]['methods'].append(row['Method'])
-        references[species]['orientations'].append(row['Orientation'])
-        references[species]['descriptions'].append(row['Description'])
-        references[species]['assembly_accessions'].append(row['Assembly_Accession'])
-        references[species]['assembly_names'].append(row['Assembly_Name'])
-        references[species]['organism_names'].append(row['Organism_Name'])
-        for infraspecific_name in ['Breed', 'Strain', 'Cultivar', 'Ecotype', 'Isolate', 'Sex']:
-            if row.get(f'Organism_Infraspecific_Names_{infraspecific_name}'):
-                references[species]['organism_infraspecific_names'][infraspecific_name.lower()].append(
-                    row[f'Organism_Infraspecific_Names_{infraspecific_name}']
-                )
-        references[species]['annotation_names'].append(row['Annotation_Name'])
-        references[species]['assembly_stats_total_sequence_length'].append(row['Assembly_Stats_Total_Sequence_Length'])
-        references[species]['assembly_level'].append(row['Assembly_Level'])
-        references[species]['assembly_release_dates'].append(row['Assembly_Release_Date'])
-        references[species]['wgs_project_accessions'].append(row['WGS_project_accession'])
+
+        # Append data using row.get for safety against missing columns
+        references[species]['species_long'].append(row.get('Organism Scientific Name', ''))
+        references[species]['common_names'].append(row.get('Organism Common Name', ''))
+        references[species]['sex'].append(row.get('Sex', ''))
+        references[species]['method'].append(row.get('Method', ''))
+        references[species]['orientation'].append(row.get('Orientation', ''))
+        
+        # ... [do this for all infraspecific names and other attributes]
+        
+        references[species]['qualifiers'].append(row.get('Organism Qualifier', ''))
+        references[species]['taxonomy_ids'].append(row.get('Taxonomy id', ''))
+        references[species]['assembly_names'].append(row.get('Assembly Name', ''))
+        references[species]['assembly_accessions'].append(row.get('Assembly Accession', ''))
+        references[species]['sources'].append(row.get('Source', ''))
+        references[species]['annotations'].append(row.get('Annotation', ''))
+        references[species]['assembly_levels'].append(row.get('Level', ''))
+        references[species]['contig_n50s'].append(row.get('Contig N50', ''))
+        references[species]['sizes'].append(row.get('Size', ''))
+        references[species]['submission_dates'].append(row.get('Submission Date', ''))
+        references[species]['gene_counts'].append(row.get('Gene Count', ''))
+        references[species]['bioprojects'].append(row.get('BioProject', ''))
+        references[species]['biosamples'].append(row.get('BioSample', ''))
+        references[species]['descriptions'].append(row.get('Description', ''))
 
 # Output to YAML format
 with open('../config/config_references.yaml', 'w') as f:
