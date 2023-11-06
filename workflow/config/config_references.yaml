@@ -1,1 +1,129 @@
-references: {}
+references:
+  Unknown Species:
+    annotations:
+    - GenBank
+    - Annotation
+    - GCA_024256425.2
+    - ''
+    - GCF_024256425.1
+    assembly_accession:
+    - DU_Cmac_1.0
+    - Assembly Accession
+    - '13013'
+    - GCA_030014235.1
+    - '13013'
+    assembly_levels:
+    - ''
+    - Level
+    - GenBank
+    - Scaffold
+    - RefSeq
+    assembly_name:
+    - '35657'
+    - Assembly Name
+    - ' sex: male'
+    - ASM3001423v1
+    - ' sex: male'
+    bioproject:
+    - ''
+    - BioProject
+    - '2022-07-13'
+    - PRJNA917279
+    - '2022-07-13'
+    biosample:
+    - PRJNA604477
+    - BioSample
+    - ''
+    - SAMN32534528
+    - '40491'
+    common_names:
+    - bighead catfish
+    - Organism Common Name
+    - North African catfish
+    - North African catfish
+    - North African catfish
+    contig_n50s:
+    - Scaffold
+    - Contig N50
+    - ''
+    - '9577'
+    - GCF_024256425.1-RS_2023_03
+    descriptions:
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    gene_count:
+    - '2020-03-18'
+    - Gene Count
+    - '969604269'
+    - ''
+    - '969604269'
+    method:
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    organism_infraspecific_names:
+      breed: []
+      cultivar: []
+      ecotype: []
+      isolate: []
+      sex: []
+      strain: []
+    orientation:
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    qualifiers:
+    - 'isolate: CM_001'
+    - Organism Qualifier
+    - 'ecotype: Netherlands'
+    - 'isolate: AMNH 255334'
+    - 'ecotype: Netherlands'
+    reference_ids:
+    - ID21
+    - ID22
+    - ID23
+    - ID24
+    - ID25
+    sex:
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    sizes:
+    - '47837'
+    - Size
+    - Chromosome
+    - '924137414'
+    - Chromosome
+    sources:
+    - GCA_011419295.1
+    - Source
+    - CGAR_prim_01v2
+    - GenBank
+    - CGAR_prim_01v2
+    species_long:
+    - Clarias macrocephalus
+    - Organism Scientific Name
+    - Clarias gariepinus
+    - Clarias gariepinus
+    - Clarias gariepinus
+    submission_dates:
+    - '883399353'
+    - Submission Date
+    - '33715535'
+    - '2023-05-15'
+    - '33715535'
+    taxonomy_ids:
+    - ' sex: female'
+    - Taxonomy id
+    - ' isolate: MV-2021'
+    - '13013'
+    - ' isolate: MV-2021'

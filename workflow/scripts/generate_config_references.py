@@ -56,9 +56,9 @@ with open('../config/metadata_references/combined_references.csv', 'r') as f:
                 'contig_n50s': [],
                 'sizes': [],
                 'submission_dates': [],
-                'gene_counts': [],
-                'bioprojects': [],
-                'biosamples': [],
+                'gene_count': [],
+                'bioproject': [],
+                'biosample': [],
                 'descriptions': [],
 
             }
@@ -79,17 +79,17 @@ with open('../config/metadata_references/combined_references.csv', 'r') as f:
         
         references[species]['qualifiers'].append(row.get('Organism Qualifier', ''))
         references[species]['taxonomy_ids'].append(row.get('Taxonomy id', ''))
-        references[species]['assembly_names'].append(row.get('Assembly Name', ''))
-        references[species]['assembly_accessions'].append(row.get('Assembly Accession', ''))
+        references[species]['assembly_name'].append(row.get('Assembly Name', ''))
+        references[species]['assembly_accession'].append(row.get('Assembly Accession', ''))
         references[species]['sources'].append(row.get('Source', ''))
         references[species]['annotations'].append(row.get('Annotation', ''))
         references[species]['assembly_levels'].append(row.get('Level', ''))
         references[species]['contig_n50s'].append(row.get('Contig N50', ''))
         references[species]['sizes'].append(row.get('Size', ''))
         references[species]['submission_dates'].append(row.get('Submission Date', ''))
-        references[species]['gene_counts'].append(row.get('Gene Count', ''))
-        references[species]['bioprojects'].append(row.get('BioProject', ''))
-        references[species]['biosamples'].append(row.get('BioSample', ''))
+        references[species]['gene_count'].append(row.get('Gene Count', ''))
+        references[species]['bioproject'].append(row.get('BioProject', ''))
+        references[species]['biosample'].append(row.get('BioSample', ''))
         references[species]['descriptions'].append(row.get('Description', ''))
 
 # Output to YAML format

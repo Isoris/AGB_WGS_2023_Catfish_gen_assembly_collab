@@ -20,7 +20,7 @@ python generate_config_samples.py > "../config/$config_samples" 2> "$log_samples
 
 cd ../config/metadata_references
 
-cat *.ref.tsv > combined_references.csv #NCBI genomes csv format 
+cat *.ref.tsv | sed 's/\t/,/g' > combined_references.csv
 
 cd ../../scripts
 
