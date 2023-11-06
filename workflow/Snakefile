@@ -79,6 +79,7 @@ rule all:
 #include: "rules/plots.smk"
 #include: "rules/reference.smk"
 include: "rules/quality_control_reads.smk"
+#include: "rules/quality_control_reads_jellyfish.smk"
 #include: "rules/quality_control_assembly.smk" 
 #include: "rules/trimming.smk"
 #include: "rules/denovo.smk"
