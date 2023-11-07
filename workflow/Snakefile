@@ -74,11 +74,12 @@ def get_sample(wildcards): #Get_sample_prefix
 
 rule all:
     input:
-        "logs/test.txt",
+        "logs/logs.txt",
+	"logs/file_log.txt",
         expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", path_out_prefix=path_out_prefix, sample=get_combined_samples())
-        
+        expand
         
         
         # Uncomment the following lines when you want to include them in the execution
@@ -103,6 +104,19 @@ rule create_log_folder:
 	"logs/test.txt"
     shell: "touch {output}"
 
+rule log_all_directory_files:
+    output:
+        log="file_log.txt"
+    shell:
+        """
+        {{ echo "Listing files in READS directory:"; find {path_reads_prefix} -type f -printf '%P\\n'; }} \
+        {{ echo "\\nListing files in DATA directory:"; find {path_data_prefix} -type f -printf '%P\\n'; }} \
+        {{ echo "\\nListing files in PROGRAMS directory:"; find {path_prog_prefix} -type f -printf '%P\\n'; }} \
+        {{ echo "\\nListing files in EXPERIMENTS directory:"; find {path_exp_prefix} -type f -printf '%P\\n'; }} \
+        {{ echo "\\nListing files in OUTPUTS directory:"; find {path_out_prefix} -type f -printf '%P\\n'; }} \
+        {{ echo "\\nListing files in TEMPORARY directory:"; find {path_tmp_prefix} -type f -printf '%P\\n'; }} \
+        > {output.log}
+        """
 
 #rule create_assembly_metadata:
 #    input:
