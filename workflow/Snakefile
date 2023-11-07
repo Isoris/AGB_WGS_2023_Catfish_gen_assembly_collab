@@ -79,9 +79,6 @@ rule all:
         expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", path_out_prefix=path_out_prefix, sample=get_combined_samples())
-        expand
-        
-        
         # Uncomment the following lines when you want to include them in the execution
         # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfishcount.jf", sample=get_combined_samples()),
         # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfish_histo.histo", sample=get_combined_samples()),
@@ -101,8 +98,9 @@ include: "rules/quality_control_reads.smk"
 
 rule create_log_folder:
     output:
-	"logs/test.txt"
-    shell: "touch {output}"
+        log="logs/test.txt"
+    shell:
+        "touch {output.log}"
 
 rule log_all_directory_files:
     output:
