@@ -8,7 +8,7 @@ import yaml
 path_folder_prefix="/tarafs/scratch/proj5034-AGBKU/catfish"
 ###
 path_reads_prefix=f"{path_folder_prefix}/00-DATA/00-READS"
-path_data_prefix=f"{path_folder_prefix}/00-DATA/"
+path_data_prefix=f"{path_folder_prefix}/00-DATA"
 path_prog_prefix=f"{path_folder_prefix}/01-PROGRAMS"
 path_exp_prefix=f"{path_folder_prefix}/02-EXPERIMENTS"
 path_out_prefix=f"{path_folder_prefix}/03-OUTPUTS"
@@ -78,6 +78,9 @@ rule all:
         expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", path_out_prefix=path_out_prefix, sample=get_combined_samples())
+        
+        
+        
         # Uncomment the following lines when you want to include them in the execution
         # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfishcount.jf", sample=get_combined_samples()),
         # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfish_histo.histo", sample=get_combined_samples()),

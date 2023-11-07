@@ -1,24 +1,125 @@
 ### Parse and prepare ONT nanopore data
+
 ### Parse and prepare Illumina data
+
+
 ### Parse and prepare HiC data
-### Parse and prepare PacBio data
-rule bam_to_fastq:
+
+rule fastqc_on_hic:
     input:
-        bam=lambda wildcards: f"{path_reads_prefix}/{get_sample(wildcards)}.bam"
- output:
-        fastq="{path_reads_prefix}/{species}_{sex}_{method}_{orientation}_reads.fastq.gz"
+        hic_zg=lambda wildcards: f"{path_reads_prefix}/{get_sample(wildcards)}.gz"
+    output:
+        fastqc_out="{path_out_prefix}/00-FASTQC_TMP/{species}_{sex}_{method}_{orientation}/"
+    params:
+        tmp_dir="{path_tmp_prefix}/00-FASTQC_TMP/{species}_{sex}_{method}_{orientation}/",
+        log="logs/fastqc_on_hic_{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}.log"
     conda:
         "quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:
         """
+        echo "Starting FastQC on HiC data." > {params.log}
+        mkdir -p {params.tmp_dir} {output.fastqc_out} && \
+        fastqc {input.hic_zg} -d {params.tmp_dir} -o {output.fastqc_out} &>> {params.log}
+        echo "FastQC on HiC data completed." >> {params.log}
+        """
+
+
+
+#rule adapter_removal: # Eventually remove HiC adapter DNA sequences
+#    input:
+#        read1 = "{path_reads_prefix_reads}{sample}_R1.fastq.gz",
+#        read2 = "{path_reads_reads}{sample}_R2.fastq.gz"
+#    output:
+#        out1 = "{path_prefix_reads_trimmed}{sample}_trimmed_R1.fastq.gz",
+#        out2 = "{path_prefix_reads_trimmed}{sample}_trimmed_R2.fastq.gz"
+#    threads: config['CPUS']
+#    shell:
+#        """
+#        mkdir -p {config[path_prefix_step1_trimming]}AdaptRemoval
+#        {config[path_prefix_programs]}{config[progAdapterRemoval]} \
+#            --file1 {input.read1} \
+#            --file2 {input.read2} \
+#            --gzip \
+#            --output1 {output.out1} \
+#            --output2 {output.out2} \
+#            --threads {threads}
+#        """
+#
+#rule all_adapter_removal:
+#    input:
+#        expand(f"{config['path_prefix_step1_trimming']}AdaptRemoval/{{sample}}_R1_trimmed.fq.gz", sample=config['shortNames'].keys()),
+#        expand(f"{config['path_prefix_step1_trimming']}AdaptRemoval/{{sample}}_R2_trimmed.fq.gz", sample=config['shortNames'].keys())
+
+
+
+
+### Parse and prepare PacBio data
+
+### Parse and prepare PacBio data
+rule bam_to_fastq:
+    input:
+        bam=lambda wildcards: f"{path_reads_prefix}/{get_sample(wildcards)}.bam"
+    output:
+        fastq="{path_reads_prefix}/{species}_{sex}_{method}_{orientation}_rawreads.fastq"
+    params:
+        log="logs/bam_to_fastq_{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}.log"
+    conda:
+        "quality_control_reads.yaml"  # Replace with the path to your conda environment file
+    shell:
+        """
+        echo "Converting BAM to FASTQ." > {params.log}
         if [ "{wildcards.method}" == "HIFI" ]; then
-            # Command for processing HiFi reads
-            bam2fastq -c 1 -o {output.fastq} {input.bam}
-        elseif
-            echo "Unsupported method: {wildcards.method}"
+            bam2fastq -o {output.fastq} {input.bam} &>> {params.log}
+        else
+            echo "Unsupported method: {wildcards.method}" >> {params.log}
             exit 1
         fi
+        echo "Conversion completed." >> {params.log}
         """
+
+rule remove_hifi_adapters:
+    input:
+        raw_read_hifi=lambda wildcards: f"{path_reads_prefix}/{get_sample(wildcards)}_rawreads.fastq"
+    output:
+        trimmed_hifi_reads="{path_reads_prefix}/{sample}_reads.fastq"
+    params:
+        log="logs/remove_hifi_adapters_{sample}.log"
+    conda:
+        "envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
+    shell:
+        """ 
+        echo "Starting adapter removal for HiFi reads." > {params.log}
+        if [ "{wildcards.method}" == "HIFI" ]; then
+            seqtk trimfq -b 20 -e 20 {input.raw_read_hifi} > {output.trimmed_hifi_reads} &>> {params.log}
+        else
+            echo "Unsupported method: {wildcards.method}" >> {params.log}
+            exit 1
+        fi
+        echo "Adapter removal completed." >> {params.log}
+        """
+
+rule gzip_hifi_fastq:
+    input:
+        trimmed_hifi_reads=lambda wildcards: f"{path_reads_prefix}/{get_sample(wildcards)}_reads.fastq"
+    output:
+        fastq="{path_reads_prefix}/{species}_{sex}_{method}_{orientation}_reads.fastq.gz"
+    params:
+        log="logs/gzip_hifi_fastq_{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}.log"
+    conda:
+        "quality_control_reads.yaml"  # Replace with the path to your conda environment file
+    shell:
+        """ 
+        echo "Starting gzipping of trimmed HiFi reads." > {params.log}
+        if [ "{wildcards.method}" == "HIFI" ]; then
+            gzip -5 {input.trimmed_hifi_reads} &>> {params.log}
+        else
+            echo "Unsupported method: {wildcards.method}" >> {params.log}
+            exit 1
+        fi
+        mv {input.trimmed_hifi_reads}.gz {output.fastq}
+        echo "Gzipping completed." >> {params.log}
+        """
+
 
 
 
@@ -41,9 +142,6 @@ rule mash_screen: # Run on the reads against RefSeq minimal database
         screen="{path_out_prefix}/00-MASH/{sample}_screen.tab"
     shell:
         "mash screen {input.ref_sketch} {input.reads} > {output.screen}"
-
-
-
 
 # Rule mash_dist: calculates the pairwise Mash distances between a reference sketch and read sketches, 
 #  saving the output in a table, 
@@ -82,3 +180,4 @@ rule mash_dist_plot:
         """
         Rscript {params.plot_mash_script} {input.distance_file} {input.key_file} {output.plot}
         """
+
