@@ -190,3 +190,38 @@ def get_fastqs(wc):
 
 def get_contrast(wildcards):
     return config["diffexp"]["contrasts"][wildcards.contrast]
+
+#rule create_assembly_metadata:
+#    input:
+#        expand("path/to/assemblies/{sample}_assembly.fasta", sample=SAMPLES)
+#    output:
+#        "assemblies_metadata.yaml"
+#    run:
+#        import yaml
+#
+#        assembly_data = {}
+#        for sample in SAMPLES:
+#            assembly_data[sample] = {"assembly": f"path/to/assemblies/{sample}_assembly.fasta"}
+#        
+#        with open(output[0], 'w') as outfile:
+#            yaml.dump(assembly_data, outfile, default_flow_style=False)
+
+
+
+
+
+#rule create_annotations_metadata:
+#    input:
+#        expand("path/to/assemblies/{sample}_assembly.fasta", sample=SAMPLES)
+#    output:
+#        "annotations_metadata.yaml"
+#    run:
+#        import yaml
+#
+#        annotation_data = {}
+#        for sample in SAMPLES:
+#            annotation_data[sample] = {"assembly": f"path/to/assemblies/{sample}_assembly.fasta"}
+#        
+#        with open(output[0], 'w') as outfile:
+#            yaml.dump(annotation_data, outfile, default_flow_style=False)
+#

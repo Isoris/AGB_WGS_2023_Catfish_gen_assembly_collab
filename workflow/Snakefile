@@ -94,59 +94,93 @@ rule create_log_folder:
     shell:
         "touch {output.log}"
 
-#rule log_all_directory_files:
-#    output:
-#        log="logs/file_log.txt"
-#    shell:
-#       """
-#        echo "Listing specific file types in directories:" > {output.log}
-#        echo "" >> {output.log}
-#        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in READS directory:" >> {output.log}
-#        find {path_reads_prefix} -type f | grep -E '(\.fq|\.fastq|\.gz|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
-#        echo "" >> {output.log}
-        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in DATA directory:" >> {output.log}
-        find {path_data_prefix} -type f | grep -E '(\.fq|\.fastq|\.gz|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+#rule log_reads_directory:
+    output:
+        log="logs/reads_log.txt"
+    shell:
+        """
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in READS directory:" > {output.log}
+        find {path_reads_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
         echo "" >> {output.log}
-        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in PROGRAMS directory:" >> {output.log}
-        find {path_prog_prefix} -type f | grep -E '(\.fq|\.fastq|\.gz|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
-        echo "" >> {output.log}
-        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in EXPERIMENTS directory:" >> {output.log}
-        find {path_exp_prefix} -type f | grep -E '(\.fq|\.fastq|\.gz|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
-        echo "" >> {output.log}
-        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in OUTPUTS directory:" >> {output.log}
-        find {path_out_prefix} -type f | grep -E '(\.fq|\.fastq|\.gz|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
-        echo "" >> {output.log}
-        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in TEMPORARY directory:" >> {output.log}
-        find {path_tmp_prefix} -type f | grep -E '(\.fq|\.fastq|\.gz|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
         """
 
+rule log_data_directory:
+    output:
+        log="logs/data_log.txt"
+    shell:
+        """
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in DATA directory:" > {output.log}
+        find {path_data_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        echo "" >> {output.log}
+        """
+
+rule log_programs_directory:
+    output:
+        log="logs/programs_log.txt"
+    shell:
+        """
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in PROGRAMS directory:" > {output.log}
+        find {path_prog_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        echo "" >> {output.log}
+        """
+
+rule log_experiments_directory:
+    output:
+        log="logs/experiments_log.txt"
+    shell:
+        """
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in EXPERIMENTS directory:" > {output.log}
+        find {path_exp_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        echo "" >> {output.log}
+        """
+
+rule log_outputs_directory:
+    output:
+        log="logs/outputs_log.txt"
+    shell:
+        """
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in OUTPUTS directory:" > {output.log}
+        find {path_out_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        echo "" >> {output.log}
+        """
+
+rule log_temporary_directory:
+    output:
+        log="logs/temporary_log.txt"
+    shell:
+        """
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in TEMPORARY directory:" > {output.log}
+        find {path_tmp_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        echo "" >> {output.log}
+        """
+
+rule concatenate_logs:
+    input:
+        reads="logs/reads_log.txt",
+        data="logs/data_log.txt",
+        programs="logs/programs_log.txt",
+        experiments="logs/experiments_log.txt",
+        outputs="logs/outputs_log.txt",
+        temporary="logs/temporary_log.txt"
+    output:
+        log="logs/file_log.txt"
+    shell:
+        """
+        cat {input.reads} {input.data} {input.programs} {input.experiments} {input.outputs} {input.temporary} > {output.log}
+        """
 #find . -type f -print0 | grep -E '\\.(fq|fastq|gz|sam|bam|bed|msh|fasta|gfa)$' >> {output.log}
 
 ##### load rules #####
 #include: "rules/plots.smk"
 #include: "rules/reference.smk"
+##
 include: "rules/quality_control_reads.smk"
+
+
 #include: "rules/quality_control_reads_jellyfish.smk"
 #include: "rules/quality_control_assembly.smk" 
 #include: "rules/trimming.smk"
 #include: "rules/denovo.smk"
-
-#rule create_assembly_metadata:
-#    input:
-#        expand("path/to/assemblies/{sample}_assembly.fasta", sample=SAMPLES)
-#    output:
-#        "assemblies_metadata.yaml"
-#    run:
-#        import yaml
-#
-#        assembly_data = {}
-#        for sample in SAMPLES:
-#            assembly_data[sample] = {"assembly": f"path/to/assemblies/{sample}_assembly.fasta"}
-#        
-#        with open(output[0], 'w') as outfile:
-#            yaml.dump(assembly_data, outfile, default_flow_style=False)
-
-
 
 #include: "rules/mapping_illumina.smk"
 #include: "rules/variant_calling.smk"
@@ -160,20 +194,6 @@ include: "rules/quality_control_reads.smk"
 #include: "rules/annotations.smk"
 #include: "rules/pangenomes_annotations.smk"
 
-#rule create_annotations_metadata:
-#    input:
-#        expand("path/to/assemblies/{sample}_assembly.fasta", sample=SAMPLES)
-#    output:
-#        "annotations_metadata.yaml"
-#    run:
-#        import yaml
-#
-#        annotation_data = {}
-#        for sample in SAMPLES:
-#            annotation_data[sample] = {"assembly": f"path/to/assemblies/{sample}_assembly.fasta"}
-#        
-#        with open(output[0], 'w') as outfile:
-#            yaml.dump(annotation_data, outfile, default_flow_style=False)
-#
-#
+
+
 # End
