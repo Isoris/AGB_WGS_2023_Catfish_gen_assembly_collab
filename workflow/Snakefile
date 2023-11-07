@@ -36,7 +36,6 @@ def get_unique_values_references(key):
         values.update(sample.get(key, []))
     return list(values)
 
-
 def get_sample_ids():
     return get_unique_values('sample_id')
 
@@ -79,9 +78,9 @@ rule all:
     input:
         "logs/logs.txt",
 	    "logs/file_log.txt",
-        expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
-        expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
-        expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", path_out_prefix=path_out_prefix, sample=get_combined_samples())
+        #expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
+        #expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
+        #expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", path_out_prefix=path_out_prefix, sample=get_combined_samples())
         # Uncomment the following lines when you want to include them in the execution
         # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfishcount.jf", sample=get_combined_samples()),
         # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfish_histo.histo", sample=get_combined_samples()),
@@ -100,13 +99,30 @@ rule log_all_directory_files:
         log="logs/file_log.txt"
     shell:
         """
-        {{ echo "Listing files in READS directory:"; find {path_reads_prefix} -type f -printf '%P\\n'; }} \
-        {{ echo "\\nListing files in DATA directory:"; find {path_data_prefix} -type f -printf '%P\\n'; }} \
-        {{ echo "\\nListing files in PROGRAMS directory:"; find {path_prog_prefix} -type f -printf '%P\\n'; }} \
-        {{ echo "\\nListing files in EXPERIMENTS directory:"; find {path_exp_prefix} -type f -printf '%P\\n'; }} \
-        {{ echo "\\nListing files in OUTPUTS directory:"; find {path_out_prefix} -type f -printf '%P\\n'; }} \
-        {{ echo "\\nListing files in TEMPORARY directory:"; find {path_tmp_prefix} -type f -printf '%P\\n'; }} \
-        > {output.log}
+        echo "Listing files in directories:" > {output.log}
+        echo "" >> {output.log}
+        echo "Listing files in READS directory:" >> {output.log}
+        find {path_reads_prefix} -type f -printf '%P\\n' >> {output.log}
+        echo "" >> {output.log}
+        
+        echo "Listing files in DATA directory:" >> {output.log}
+        find {path_data_prefix} -type f -printf '%P\\n' >> {output.log}
+        echo "" >> {output.log}
+        
+        echo "Listing files in PROGRAMS directory:" >> {output.log}
+        find {path_prog_prefix} -type f -printf '%P\\n' >> {output.log}
+        echo "" >> {output.log}
+        
+        echo "Listing files in EXPERIMENTS directory:" >> {output.log}
+        find {path_exp_prefix} -type f -printf '%P\\n' >> {output.log}
+        echo "" >> {output.log}
+        
+        echo "Listing files in OUTPUTS directory:" >> {output.log}
+        find {path_out_prefix} -type f -printf '%P\\n' >> {output.log}
+        echo "" >> {output.log}
+        
+        echo "Listing files in TEMPORARY directory:" >> {output.log}
+        find {path_tmp_prefix} -type f -printf '%P\\n' >> {output.log}
         """
 
 ##### load rules #####
