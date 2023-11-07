@@ -77,7 +77,13 @@ def get_sample(wildcards): #Get_sample_prefix
 rule all:
     input:
         "logs/logs.txt",
-	    "logs/file_log.txt",
+        "logs/reads_log.txt",
+        "logs/data_log.txt",
+        "logs/programs_log.txt",
+        "logs/experiments_log.txt",
+        "logs/outputs_log.txt",
+        "logs/temporary_log.txt",
+        "logs/file_log.txt",
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", path_out_prefix=path_out_prefix, sample=get_combined_samples())
@@ -88,13 +94,14 @@ rule all:
         # Add additional lines for other output files as needed
 
 ##### Main rule to orchestrate the workflow #####
+
 rule create_log_folder:
     output:
         log="logs/logs.txt"
     shell:
         "touch {output.log}"
 
-#rule log_reads_directory:
+rule log_reads_directory:
     output:
         log="logs/reads_log.txt"
     shell:
