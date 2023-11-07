@@ -4,8 +4,11 @@ import sys
 import glob
 import yaml 
 
+
 ##### load paths #####
-path_folder_prefix="/tarafs/scratch/proj5034-AGBKU/catfish"
+current_path = f"os.getcwd()" 
+path_folder_prefix=f"{current_path}"
+#path_folder_prefix=f"/tarafs/scratch/proj5034-AGBKU/catfish" # =  ../../..
 ###
 path_reads_prefix=f"{path_folder_prefix}/00-DATA/00-READS"
 path_data_prefix=f"{path_folder_prefix}/00-DATA"
