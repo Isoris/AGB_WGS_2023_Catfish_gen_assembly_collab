@@ -93,12 +93,13 @@ rule export_paths:
     output:
         "paths.sh"
     params:
-        path_reads_prefix="{path_folder_prefix}/00-INPUTS/00-READS",
-        path_data_prefix="{path_folder_prefix}/00-INPUTS",
-        path_prog_prefix="{path_folder_prefix}/01-PROGRAMS",
-        path_exp_prefix="{path_folder_prefix}/02-EXPERIMENTS",
-        path_out_prefix="{path_folder_prefix}/03-OUTPUTS",
-        path_tmp_prefix="{path_folder_prefix}/04-TEMPORARY_FILES"
+        path_folder_prefix=path_folder_prefix,  # This assumes path_folder_prefix is a predefined variable
+        path_reads_prefix=lambda wc: f"{path_folder_prefix}/00-INPUTS/00-READS",
+        path_data_prefix=lambda wc: f"{path_folder_prefix}/00-INPUTS",
+        path_prog_prefix=lambda wc: f"{path_folder_prefix}/01-PROGRAMS",
+        path_exp_prefix=lambda wc: f"{path_folder_prefix}/02-EXPERIMENTS",
+        path_out_prefix=lambda wc: f"{path_folder_prefix}/03-OUTPUTS",
+        path_tmp_prefix=lambda wc: f"{path_folder_prefix}/04-TEMPORARY_FILES"
     run:
         with open(str(output), "w") as f:
             f.write(f"export path_reads_prefix={params.path_reads_prefix}\n")
@@ -107,6 +108,7 @@ rule export_paths:
             f.write(f"export path_exp_prefix={params.path_exp_prefix}\n")
             f.write(f"export path_out_prefix={params.path_out_prefix}\n")
             f.write(f"export path_tmp_prefix={params.path_tmp_prefix}\n")
+
 
 rule create_log_folder:
     output:
