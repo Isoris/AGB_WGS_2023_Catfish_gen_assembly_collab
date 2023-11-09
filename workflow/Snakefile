@@ -10,7 +10,7 @@ current_path=os.getcwd()
 path_folder_prefix=f"{current_path}/../../.."
 #path_folder_prefix=f"/tarafs/scratch/proj5034-AGBKU/catfish" # =  ../../..
 ###
-path_reads_prefix=print(f"{path_folder_prefix}/00-INPUTS/00-READS")
+path_reads_prefix=f"{path_folder_prefix}/00-INPUTS/00-READS"
 path_data_prefix=f"{path_folder_prefix}/00-INPUTS"
 path_prog_prefix=f"{path_folder_prefix}/01-PROGRAMS"
 path_exp_prefix=f"{path_folder_prefix}/02-EXPERIMENTS"
