@@ -199,8 +199,7 @@ rule concatenate_logs:
 ##
 
 include: "rules/00-trimming_reads.smk"
-include: "rules/02-quality_control_reads.smk"
-include 
+include: "rules/02-quality_control_reads.smk" 
 
 #include: "rules/quality_control_reads_jellyfish.smk"
 #include: "rules/quality_control_assembly.smk" 
