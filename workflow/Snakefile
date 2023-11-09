@@ -89,6 +89,12 @@ rule all:
         # Add additional lines for other output files as needed
 ##### Main rule to orchestrate the workflow #####
 
+rule create_log_folder:
+    output:
+        log="logs/logs.txt"
+    shell:
+        "touch {output.log}"
+
 rule export_paths:
     output:
         "paths.sh"
@@ -102,32 +108,23 @@ rule export_paths:
         path_tmp_prefix=lambda wc: f"{path_folder_prefix}/04-TEMPORARY_FILES"
     run:
         with open(str(output), "w") as f:
-            f.write(f"export path_reads_prefix={params.path_reads_prefix}\n")
-            f.write(f"export path_data_prefix={params.path_data_prefix}\n")
-            f.write(f"export path_prog_prefix={params.path_prog_prefix}\n")
-            f.write(f"export path_exp_prefix={params.path_exp_prefix}\n")
-            f.write(f"export path_out_prefix={params.path_out_prefix}\n")
-            f.write(f"export path_tmp_prefix={params.path_tmp_prefix}\n")
-
-
-rule create_log_folder:
-    output:
-        log="logs/logs.txt"
-    shell:
-        "touch {output.log}"
+            f.write(f"export path_reads_prefix='{params.path_reads_prefix}'\n")
+            f.write(f"export path_data_prefix='{params.path_data_prefix}'\n")
+            f.write(f"export path_prog_prefix='{params.path_prog_prefix}'\n")
+            f.write(f"export path_exp_prefix='{params.path_exp_prefix}'\n")
+            f.write(f"export path_out_prefix='{params.path_out_prefix}'\n")
+            f.write(f"export path_tmp_prefix='{params.path_tmp_prefix}'\n")
 
 rule log_reads_directory:
     input:
         "paths.sh"
     output:
         log="logs/reads_log.txt"
-    params:
-        path_reads_prefix=path_reads_prefix
     shell:
         """
         source paths.sh
         echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in READS directory:" > {output.log}
-        find {params.path_reads_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        find $path_reads_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
         echo "" >> {output.log}
         """
 
@@ -136,13 +133,11 @@ rule log_data_directory:
         "paths.sh"
     output:
         log="logs/data_log.txt"
-    params:
-        path_data_prefix=path_data_prefix
     shell:
         """
-        source paths.sh        
+        source paths.sh
         echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in DATA directory:" > {output.log}
-        find {params.path_data_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        find $path_data_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
         echo "" >> {output.log}
         """
 rule log_outputs_directory:
@@ -150,13 +145,11 @@ rule log_outputs_directory:
         "paths.sh"
     output:
         log="logs/outputs_log.txt"
-    params:
-        path_out_prefix=path_out_prefix
     shell:
         """
         source paths.sh
-        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in OUTPUTS directory:" > {output.log} && \
-        find {params.path_out_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log} && \
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in OUTPUTS directory:" > {output.log}
+        find $path_out_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
         echo "" >> {output.log}
         """
 
