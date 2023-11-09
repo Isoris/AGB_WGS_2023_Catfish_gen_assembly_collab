@@ -178,8 +178,8 @@ rule log_programs_directory:
 rule concatenate_logs:
     input:
         reads="logs/reads_log.txt",
-        data="logs/data_log.txt",
-        outputs="logs/outputs_log.txt"
+        data="logs/data_log.txt"
+        #outputs="logs/outputs_log.txt"
     output:
         log="logs/file_log.txt"
     shell:
