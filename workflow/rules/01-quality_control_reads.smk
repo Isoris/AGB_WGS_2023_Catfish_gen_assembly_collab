@@ -3,6 +3,7 @@
 ### Parse and prepare Illumina data
 
 
+
 ### Parse and prepare HiC data
 
 rule fastqc_on_hic:
@@ -22,36 +23,6 @@ rule fastqc_on_hic:
         fastqc {input.hic_zg} -d {params.tmp_dir} -o {output.fastqc_out} &>> {params.log}
         echo "FastQC on HiC data completed." >> {params.log}
         """
-
-
-
-#rule adapter_removal: # Eventually remove HiC adapter DNA sequences
-#    input:
-#        read1 = "{path_reads_prefix_reads}{sample}_R1.fastq.gz",
-#        read2 = "{path_reads_reads}{sample}_R2.fastq.gz"
-#    output:
-#        out1 = "{path_prefix_reads_trimmed}{sample}_trimmed_R1.fastq.gz",
-#        out2 = "{path_prefix_reads_trimmed}{sample}_trimmed_R2.fastq.gz"
-#    threads: config['CPUS']
-#    shell:
-#        """
-#        mkdir -p {config[path_prefix_step1_trimming]}AdaptRemoval
-#        {config[path_prefix_programs]}{config[progAdapterRemoval]} \
-#            --file1 {input.read1} \
-#            --file2 {input.read2} \
-#            --gzip \
-#            --output1 {output.out1} \
-#            --output2 {output.out2} \
-#            --threads {threads}
-#        """
-#
-#rule all_adapter_removal:
-#    input:
-#        expand(f"{config['path_prefix_step1_trimming']}AdaptRemoval/{{sample}}_R1_trimmed.fq.gz", sample=config['shortNames'].keys()),
-#        expand(f"{config['path_prefix_step1_trimming']}AdaptRemoval/{{sample}}_R2_trimmed.fq.gz", sample=config['shortNames'].keys())
-
-
-
 
 ### Parse and prepare PacBio data
 
@@ -119,8 +90,6 @@ rule gzip_hifi_fastq:
         mv {input.trimmed_hifi_reads}.gz {output.fastq}
         echo "Gzipping completed." >> {params.log}
         """
-
-
 
 
 ### Mash

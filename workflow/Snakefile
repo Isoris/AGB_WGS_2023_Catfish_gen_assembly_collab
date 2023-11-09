@@ -78,7 +78,9 @@ rule all:
     input:
         "paths.sh",
         "logs/logs.txt",
-        "logs/file_log.txt"
+        "logs/file_log.txt",
+        expand(f"{path_prefix_reads}/{{sample}}_trimmed.fq.gz", sample=get_combined_samples())
+
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", path_out_prefix=path_out_prefix, sample=get_combined_samples())
@@ -195,8 +197,10 @@ rule concatenate_logs:
 #include: "rules/plots.smk"
 #include: "rules/reference.smk"
 ##
-include: "rules/quality_control_reads.smk"
 
+include: "rules/00-trimming_reads.smk"
+include: "rules/02-quality_control_reads.smk"
+include 
 
 #include: "rules/quality_control_reads_jellyfish.smk"
 #include: "rules/quality_control_assembly.smk" 

@@ -109,17 +109,17 @@ rule run_genomescope:
 #         """
 #
 # Define rule for running FastQC on raw reads
-#rule fastqc_raw_reads:
-#    input:
-#        raw_read = lambda wildcards: config["samples"][wildcards.sample][wildcards.read_type]
-#    output:
-#        report = "fastqc/{sample}_{read_type}_fastqc.zip"
-#    params:
-#       output_dir = "fastqc/",
-#        nthreads = config["CPUS"]
-#    run:
-#        output_path = os.path.join(params.output_dir, os.path.basename(output.report))
-#        if not os.path.exists(output_path):
+rule fastqc_raw_reads:
+    input:
+        raw_read = lambda wildcards: config["samples"][wildcards.sample][wildcards.read_type]
+    output:
+        report = "fastqc/{sample}_{read_type}_fastqc.zip"
+    params:
+       output_dir = "fastqc/",
+        nthreads = config["CPUS"]
+    run:
+        output_path = os.path.join(params.output_dir, os.path.basename(output.report))
+        if not os.path.exists(output_path):
 #            shell("fastqc -o {params.output_dir} -t {params.nthreads} {input.raw_read}")
 #
 # Define rule for running FastQC on trimmed reads (if they exist)
