@@ -17,9 +17,24 @@ path_exp_prefix=f"{path_folder_prefix}/02-EXPERIMENTS"
 path_out_prefix=f"{path_folder_prefix}/03-OUTPUTS"
 path_tmp_prefix=f"{path_folder_prefix}/04-TEMPORARY_FILES"  
 
-#####         "logs/reads_log.txt",
-        "logs/data_log.txt",
-        "logs/outputs_log.txt",urn list(values)
+##### setup config and report #####
+report: "report/workflow.rst"
+threads = 12
+configfile: "config/config.yaml"
+
+##### Definition of functions
+
+def get_unique_values(key):
+    values = set()
+    for sample in config["samples"].values():
+        values.update(sample.get(key, []))
+    return list(values)
+
+def get_unique_values_references(key):
+    values = set()
+    for sample in config["references"]["references"].values():
+        values.update(sample.get(key, []))
+    return list(values)
 
 def get_sample_ids():
     return get_unique_values('sample_id')
