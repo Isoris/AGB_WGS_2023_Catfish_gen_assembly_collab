@@ -132,10 +132,7 @@ rule concatenate_logs:
         log="logs/file_log.txt"
     shell:
         """
-        cat {input.reads} \
-        {input.data} \
-        {input.outputs} \
-        > {output.log}
+        cat {input.reads} {input.data} {input.outputs} > {output.log}
         """
     #       {input.temporary} \
     # {input.programs} \
