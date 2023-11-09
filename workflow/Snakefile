@@ -79,7 +79,7 @@ rule all:
         "paths.sh",
         "logs/logs.txt",
         "logs/file_log.txt",
-        expand(f"{path_prefix_reads}/{{sample}}_trimmed.fq.gz", sample=get_combined_samples())
+        expand(f"{path_reads_prefix}/{{sample}}_trimmed.fq.gz", sample=get_combined_samples())
 
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
