@@ -98,7 +98,7 @@ rule log_reads_directory:
     output:
         log="logs/reads_log.txt"
     params:
-    path_out_prefix=path_out_prefix
+    path_reads_prefix=path_reads_prefix
     shell:
         """
         echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in READS directory:" > {output.log}
@@ -110,7 +110,7 @@ rule log_data_directory:
     output:
         log="logs/data_log.txt"
     params:
-    path_out_prefix=path_out_prefix
+    path_data_prefix=path_data_prefix
     shell:
         """
         echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in DATA directory:" > {output.log}
