@@ -98,7 +98,7 @@ rule log_reads_directory:
     output:
         log="logs/reads_log.txt"
     params:
-    path_reads_prefix=path_reads_prefix
+        path_reads_prefix=path_reads_prefix
     shell:
         """
         echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in READS directory:" > {output.log}
@@ -110,7 +110,7 @@ rule log_data_directory:
     output:
         log="logs/data_log.txt"
     params:
-    path_data_prefix=path_data_prefix
+        path_data_prefix=path_data_prefix
     shell:
         """
         echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in DATA directory:" > {output.log}
@@ -121,7 +121,7 @@ rule log_outputs_directory:
     output:
         log="logs/outputs_log.txt"
     params:
-    path_out_prefix=path_out_prefix        
+        path_out_prefix=path_out_prefix        
     shell:
         """
         echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in OUTPUTS directory:" > {output.log} && \
@@ -138,9 +138,9 @@ rule concatenate_logs:
         log="logs/file_log.txt"
     shell:
         """
-        cat {input.reads} {input.data} {input.outputs} > {output.log}
+        cat {input.reads} {input.data} > {output.log}
         """
-    #       {input.temporary} \
+    #       {input.temporary} \ {input.outputs} 
     # {input.programs} \
     # {input.experiments} \
 #find . -type f -print0 | grep -E '\\.(fq|fastq|gz|sam|bam|bed|msh|fasta|gfa)$' >> {output.log}
