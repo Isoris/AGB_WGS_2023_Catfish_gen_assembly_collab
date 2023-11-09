@@ -10,7 +10,7 @@ current_path=os.getcwd()
 path_folder_prefix=f"{current_path}/../../.."
 #path_folder_prefix=f"/tarafs/scratch/proj5034-AGBKU/catfish" # =  ../../..
 ###
-path_reads_prefix=f"{path_folder_prefix}/00-INPUTS/00-READS"
+path_reads_prefix=print(f"{path_folder_prefix}/00-INPUTS/00-READS")
 path_data_prefix=f"{path_folder_prefix}/00-INPUTS"
 path_prog_prefix=f"{path_folder_prefix}/01-PROGRAMS"
 path_exp_prefix=f"{path_folder_prefix}/02-EXPERIMENTS"
@@ -76,8 +76,9 @@ def get_sample(wildcards): #Get_sample_prefix
 
 rule all:
     input:
-        "logs/logs.txt",
-        "logs/file_log.txt"
+        #"logs/logs.txt",
+        #"logs/file_log.txt"
+        "paths.sh"
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", path_out_prefix=path_out_prefix, sample=get_combined_samples())
@@ -87,6 +88,25 @@ rule all:
         # expand("{path_out_prefix}/00-GENOMESCOPE/{sample}_plot.png", sample=get_combined_samples())
         # Add additional lines for other output files as needed
 ##### Main rule to orchestrate the workflow #####
+
+rule export_paths:
+    output:
+        "paths.sh"
+    params:
+        path_reads_prefix="{path_folder_prefix}/00-INPUTS/00-READS",
+        path_data_prefix="{path_folder_prefix}/00-INPUTS",
+        path_prog_prefix="{path_folder_prefix}/01-PROGRAMS",
+        path_exp_prefix="{path_folder_prefix}/02-EXPERIMENTS",
+        path_out_prefix="{path_folder_prefix}/03-OUTPUTS",
+        path_tmp_prefix="{path_folder_prefix}/04-TEMPORARY_FILES"
+    run:
+        with open(str(output), "w") as f:
+            f.write(f"export path_reads_prefix={params.path_reads_prefix}\n")
+            f.write(f"export path_data_prefix={params.path_data_prefix}\n")
+            f.write(f"export path_prog_prefix={params.path_prog_prefix}\n")
+            f.write(f"export path_exp_prefix={params.path_exp_prefix}\n")
+            f.write(f"export path_out_prefix={params.path_out_prefix}\n")
+            f.write(f"export path_tmp_prefix={params.path_tmp_prefix}\n")
 
 rule create_log_folder:
     output:
@@ -101,6 +121,7 @@ rule log_reads_directory:
         path_reads_prefix=path_reads_prefix
     shell:
         """
+        source paths.sh
         echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in READS directory:" > {output.log}
         find {params.path_reads_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
         echo "" >> {output.log}
@@ -113,6 +134,7 @@ rule log_data_directory:
         path_data_prefix=path_data_prefix
     shell:
         """
+        source paths.sh        
         echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in DATA directory:" > {output.log}
         find {params.path_data_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
         echo "" >> {output.log}
@@ -121,9 +143,10 @@ rule log_outputs_directory:
     output:
         log="logs/outputs_log.txt"
     params:
-        path_out_prefix=path_out_prefix        
+        path_out_prefix=path_out_prefix
     shell:
         """
+        source paths.sh
         echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in OUTPUTS directory:" > {output.log} && \
         find {params.path_out_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log} && \
         echo "" >> {output.log}
