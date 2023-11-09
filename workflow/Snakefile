@@ -173,8 +173,14 @@ rule concatenate_logs:
         log="logs/file_log.txt"
     shell:
         """
-        cat {input.reads} {input.data} {input.programs} {input.experiments} {input.outputs} {input.temporary} > {output.log}
+        cat {input.reads} \
+        {input.data} \
+        {input.outputs} \
+        > {output.log}
         """
+    #       {input.temporary} \
+    # {input.programs} \
+    # {input.experiments} \
 #find . -type f -print0 | grep -E '\\.(fq|fastq|gz|sam|bam|bed|msh|fasta|gfa)$' >> {output.log}
 
 ##### load rules #####
