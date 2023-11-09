@@ -140,16 +140,38 @@ rule log_data_directory:
         find $path_data_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
         echo "" >> {output.log}
         """
-rule log_outputs_directory:
-    input:
-        "paths.sh"
+#rule log_outputs_directory:
+#    input:
+#        "paths.sh"
+#    output:
+#        log="logs/outputs_log.txt"
+#    shell:
+#        """
+#        source paths.sh
+#        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in OUTPUTS directory:" > {output.log}
+#        find $path_out_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+#        echo "" >> {output.log}
+#       """
+
+rule log_experiments_directory:
     output:
-        log="logs/outputs_log.txt"
+        log="logs/experiments_log.txt"
     shell:
         """
         source paths.sh
-        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in OUTPUTS directory:" > {output.log}
-        find $path_out_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in EXPERIMENTS directory:" > {output.log}
+        find $path_exp_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        echo "" >> {output.log}
+        """
+
+rule log_programs_directory:
+    output:
+        log="logs/programs_log.txt"
+    shell:
+        """
+        source paths.sh
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in PROGRAMS directory:" > {output.log}
+        find path_prog_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
         echo "" >> {output.log}
         """
 
