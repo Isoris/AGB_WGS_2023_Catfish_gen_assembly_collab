@@ -117,6 +117,8 @@ rule create_log_folder:
         "touch {output.log}"
 
 rule log_reads_directory:
+    input:
+        "paths.sh"
     output:
         log="logs/reads_log.txt"
     params:
@@ -130,6 +132,8 @@ rule log_reads_directory:
         """
 
 rule log_data_directory:
+    input:
+        "paths.sh"
     output:
         log="logs/data_log.txt"
     params:
@@ -142,6 +146,8 @@ rule log_data_directory:
         echo "" >> {output.log}
         """
 rule log_outputs_directory:
+    input:
+        "paths.sh"
     output:
         log="logs/outputs_log.txt"
     params:
