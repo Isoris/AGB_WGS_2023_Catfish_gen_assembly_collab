@@ -79,10 +79,7 @@ rule all:
         "logs/logs.txt",
         "logs/reads_log.txt",
         "logs/data_log.txt",
-        #"logs/programs_log.txt",
-        #"logs/experiments_log.txt",
         "logs/outputs_log.txt",
-        #"logs/temporary_log.txt",
         "logs/file_log.txt"
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
@@ -92,7 +89,6 @@ rule all:
         # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfish_histo.histo", sample=get_combined_samples()),
         # expand("{path_out_prefix}/00-GENOMESCOPE/{sample}_plot.png", sample=get_combined_samples())
         # Add additional lines for other output files as needed
-
 ##### Main rule to orchestrate the workflow #####
 
 rule create_log_folder:
@@ -120,27 +116,6 @@ rule log_data_directory:
         find {path_data_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
         echo "" >> {output.log}
         """
-
-rule log_programs_directory:
-    output:
-        log="logs/programs_log.txt"
-    shell:
-        """
-        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in PROGRAMS directory:" > {output.log}
-        find {path_prog_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
-        echo "" >> {output.log}
-        """
-
-rule log_experiments_directory:
-    output:
-        log="logs/experiments_log.txt"
-    shell:
-        """
-        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in EXPERIMENTS directory:" > {output.log}
-        find {path_exp_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
-        echo "" >> {output.log}
-        """
-
 rule log_outputs_directory:
     output:
         log="logs/outputs_log.txt"
@@ -151,24 +126,11 @@ rule log_outputs_directory:
         echo "" >> {output.log}
         """
 
-rule log_temporary_directory:
-    output:
-        log="logs/temporary_log.txt"
-    shell:
-        """
-        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in TEMPORARY directory:" > {output.log}
-        find {path_tmp_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
-        echo "" >> {output.log}
-        """
-
 rule concatenate_logs:
     input:
         reads="logs/reads_log.txt",
         data="logs/data_log.txt",
-        #programs="logs/programs_log.txt",
-        #experiments="logs/experiments_log.txt",
-        outputs="logs/outputs_log.txt",
-        #temporary="logs/temporary_log.txt"
+        outputs="logs/outputs_log.txt"
     output:
         log="logs/file_log.txt"
     shell:

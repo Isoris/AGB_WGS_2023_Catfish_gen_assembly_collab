@@ -225,3 +225,32 @@ def get_contrast(wildcards):
 #        with open(output[0], 'w') as outfile:
 #            yaml.dump(annotation_data, outfile, default_flow_style=False)
 #
+
+rule log_experiments_directory:
+    output:
+        log="logs/experiments_log.txt"
+    shell:
+        """
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in EXPERIMENTS directory:" > {output.log}
+        find {path_exp_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        echo "" >> {output.log}
+        """
+
+rule log_programs_directory:
+    output:
+        log="logs/programs_log.txt"
+    shell:
+        """
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in PROGRAMS directory:" > {output.log}
+        find {path_prog_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        echo "" >> {output.log}
+        """
+rule log_temporary_directory:
+    output:
+        log="logs/temporary_log.txt"
+    shell:
+        """
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in TEMPORARY directory:" > {output.log}
+        find {path_tmp_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        echo "" >> {output.log}
+        """
