@@ -18,7 +18,7 @@ path_out_prefix=f"{path_folder_prefix}/03-OUTPUTS"
 path_tmp_prefix=f"{path_folder_prefix}/04-TEMPORARY_FILES"  
 
 ##### setup config and report #####
-report: "report/workflow.rst"
+#report: "report/workflow.rst"
 threads = 12
 configfile: "config/config.yaml"
 
@@ -97,6 +97,8 @@ rule create_log_folder:
 rule log_reads_directory:
     output:
         log="logs/reads_log.txt"
+    params:
+    path_out_prefix=path_out_prefix
     shell:
         """
         echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in READS directory:" > {output.log}
@@ -107,6 +109,8 @@ rule log_reads_directory:
 rule log_data_directory:
     output:
         log="logs/data_log.txt"
+    params:
+    path_out_prefix=path_out_prefix
     shell:
         """
         echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in DATA directory:" > {output.log}
@@ -116,10 +120,12 @@ rule log_data_directory:
 rule log_outputs_directory:
     output:
         log="logs/outputs_log.txt"
+    params:
+    path_out_prefix=path_out_prefix        
     shell:
         """
-        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in OUTPUTS directory:" > {output.log}
-        find {path_out_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in OUTPUTS directory:" > {output.log} && \
+        find {path_out_prefix} -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log} && \
         echo "" >> {output.log}
         """
 
