@@ -76,9 +76,9 @@ def get_sample(wildcards): #Get_sample_prefix
 
 rule all:
     input:
-        #"logs/logs.txt",
-        #"logs/file_log.txt"
         "paths.sh"
+        "logs/logs.txt",
+        "logs/file_log.txt"
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", path_out_prefix=path_out_prefix, sample=get_combined_samples())
