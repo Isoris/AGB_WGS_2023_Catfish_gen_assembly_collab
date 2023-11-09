@@ -165,10 +165,10 @@ rule concatenate_logs:
     input:
         reads="logs/reads_log.txt",
         data="logs/data_log.txt",
-        programs="logs/programs_log.txt",
+        #programs="logs/programs_log.txt",
         experiments="logs/experiments_log.txt",
         outputs="logs/outputs_log.txt",
-        temporary="logs/temporary_log.txt"
+        #temporary="logs/temporary_log.txt"
     output:
         log="logs/file_log.txt"
     shell:
