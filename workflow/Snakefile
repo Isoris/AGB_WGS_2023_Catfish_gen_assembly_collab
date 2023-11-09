@@ -83,7 +83,7 @@ rule all:
         #"logs/experiments_log.txt",
         "logs/outputs_log.txt",
         #"logs/temporary_log.txt",
-        "logs/file_log.txt",
+        "logs/file_log.txt"
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
         #expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", path_out_prefix=path_out_prefix, sample=get_combined_samples())
