@@ -166,7 +166,7 @@ rule concatenate_logs:
         reads="logs/reads_log.txt",
         data="logs/data_log.txt",
         #programs="logs/programs_log.txt",
-        experiments="logs/experiments_log.txt",
+        #experiments="logs/experiments_log.txt",
         outputs="logs/outputs_log.txt",
         #temporary="logs/temporary_log.txt"
     output:
