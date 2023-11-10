@@ -7,7 +7,7 @@ rule fastqc_on_illumina_raw_reads:
         read_FWD = path_reads_prefix + "/{species}_{sex}_ILLUMINA_FWD.fq.gz",
         read_REV = path_reads_prefix + "/{species}_{sex}_ILLUMINA_REV.fq.gz"
     output:
-        fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_{method}_{orientation}/"
+        fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_{method}_{orientation_pe}/"
     conda:
         "envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:

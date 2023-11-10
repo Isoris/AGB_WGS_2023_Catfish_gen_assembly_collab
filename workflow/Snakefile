@@ -79,33 +79,33 @@ rule all:
         "logs/logs.txt",
         "logs/file_log.txt",
         "debug_config_output.txt",
-        expand("{path_out_prefix}/00-FASTQC/CG_F_ILLUMINA_{orientation}/",
+        expand("{path_out_prefix}/00-FASTQC/CG_F_ILLUMINA_{orientation_pe}/",
                path_out_prefix=path_out_prefix, 
-               orientation=ORIENTATIONS_PE),
-        expand("{path_out_prefix}/00-FASTQC/CM_F_ILLUMINA_{orientation}/", 
+               orientation_pe=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/00-FASTQC/CM_F_ILLUMINA_{orientation_pe}/", 
                path_out_prefix=path_out_prefix, 
-               orientation=ORIENTATIONS_PE),
-        expand("{path_out_prefix}/00-FASTQC/CM_M_ILLUMINA_{orientation}/", 
+               orientation_pe=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/00-FASTQC/CM_M_ILLUMINA_{orientation_pe}/", 
                path_out_prefix=path_out_prefix, 
-               orientation=ORIENTATIONS_PE),
-        expand("{path_reads_prefix}/CG_F_ILLUMINA_{orientation}_trimmed.fq.gz",
+               orientation_pe=ORIENTATIONS_PE),
+        expand("{path_reads_prefix}/CG_F_ILLUMINA_{orientation_pe}_trimmed.fq.gz",
                path_reads_prefix=path_reads_prefix, 
-               orientation=ORIENTATIONS_PE),
-        expand("{path_reads_prefix}/CM_F_ILLUMINA_{orientation}_trimmed.fq.gz", 
+               orientation_pe=ORIENTATIONS_PE),
+        expand("{path_reads_prefix}/CM_F_ILLUMINA_{orientation_pe}_trimmed.fq.gz", 
                path_reads_prefix=path_reads_prefix, 
-               orientation=ORIENTATIONS_PE),
-        expand("{path_reads_prefix}/CM_M_ILLUMINA_{orientation}_trimmed.fq.gz",
+               orientation_pe=ORIENTATIONS_PE),
+        expand("{path_reads_prefix}/CM_M_ILLUMINA_{orientation_pe}_trimmed.fq.gz",
                path_reads_prefix=path_reads_prefix, 
-               orientation=ORIENTATIONS_PE),
-        expand("{path_out_prefix}/00-FASTQC/CG_F_ILLUMINA_{orientation}_trimmed/",
+               orientation_pe=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/00-FASTQC/CG_F_ILLUMINA_{orientation_pe}_trimmed/",
                path_out_prefix=path_out_prefix, 
-               orientation=ORIENTATIONS_PE),
-        expand("{path_out_prefix}/00-FASTQC/CM_F_ILLUMINA_{orientation}_trimmed/",
+               orientation_pe=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/00-FASTQC/CM_F_ILLUMINA_{orientation_pe}_trimmed/",
                path_out_prefix=path_out_prefix, 
-               orientation=ORIENTATIONS_PE),
-        expand("{path_out_prefix}/00-FASTQC/CM_M_ILLUMINA_{orientation}_trimmed/",
+               orientation_pe=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/00-FASTQC/CM_M_ILLUMINA_{orientation_pe}_trimmed/",
                path_out_prefix=path_out_prefix, 
-               orientation=ORIENTATIONS_PE),
+               orientation_pe=ORIENTATIONS_PE),
         expand("{path_out_prefix}/00-FASTQC/{species}_{sex}_HIFI_None/",
                path_out_prefix=path_out_prefix,
                species=SPECIES,
@@ -145,21 +145,7 @@ rule debug_config:
 rule create_log_folder:
     output:
         log="logs/logs.txt"
-    shell:
-        "touch {output.log}"
-
-rule export_paths:
-    output:
-        "paths.sh"
-    params:
-        path_folder_prefix=path_folder_prefix,  # This assumes path_folder_prefix is a predefined variable
-        path_reads_prefix=lambda wc: f"{path_folder_prefix}/00-INPUTS/00-READS",
-        path_data_prefix=lambda wc: f"{path_folder_prefix}/00-INPUTS",
-        path_prog_prefix=lambda wc: f"{path_folder_prefix}/01-PROGRAMS",
-        path_exp_prefix=lambda wc: f"{path_folder_prefix}/02-EXPERIMENTS",
-        path_out_prefix=lambda wc: f"{path_folder_prefix}/03-OUTPUTS",
-        path_tmp_prefix=lambda wc: f"{path_folder_prefix}/04-TEMPORARY_FILES"
-    run:
+    shell:cts this, and your fastqc_on_illumina_raw_reads rule should reference these files correctly:
         with open(str(output), "w") as f:
             f.write(f"export path_reads_prefix='{params.path_reads_prefix}'\n")
             f.write(f"export path_data_prefix='{params.path_data_prefix}'\n")
