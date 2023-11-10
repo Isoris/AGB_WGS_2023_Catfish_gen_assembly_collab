@@ -80,16 +80,10 @@ rule all:
         "logs/logs.txt",
         "logs/file_log.txt",
         expand(lambda wildcards: f"{path_reads_prefix}/{wildcards.sample}_trimmed.fq.gz", sample=get_combined_samples())
-        #expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
-        #expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
-        #expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", path_out_prefix=path_out_prefix, sample=get_combined_samples())
-        # Uncomment the following lines when you want to include them in the execution
-        # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfishcount.jf", sample=get_combined_samples()),
-        # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfish_histo.histo", sample=get_combined_samples()),
-        # expand("{path_out_prefix}/00-GENOMESCOPE/{sample}_plot.png", sample=get_combined_samples())
+    
         # Add additional lines for other output files as needed
-##### Main rule to orchestrate the workflow #####
 
+##### Main rule to orchestrate the workflow #####
 rule create_log_folder:
     output:
         log="logs/logs.txt"
@@ -141,18 +135,6 @@ rule log_data_directory:
         find $path_data_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
         echo "" >> {output.log}
         """
-#rule log_outputs_directory:
-#    input:
-#        "paths.sh"
-#    output:
-#        log="logs/outputs_log.txt"
-#    shell:
-#        """
-#        source paths.sh
-#        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in OUTPUTS directory:" > {output.log}
-#        find $path_out_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
-#        echo "" >> {output.log}
-#       """
 
 rule log_experiments_directory:
     output:
@@ -187,19 +169,59 @@ rule concatenate_logs:
         """
         cat {input.reads} {input.data} > {output.log}
         """
+
+
+##### load rules #####
+include: "rules/00-trimming_reads.smk"
+include: "rules/01-quality_control_reads.smk" 
+
+
+
+###############################################
+
+
+        #expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
+        #expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
+        #expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", path_out_prefix=path_out_prefix, sample=get_combined_samples())
+        # Uncomment the following lines when you want to include them in the execution
+        # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfishcount.jf", sample=get_combined_samples()),
+        # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfish_histo.histo", sample=get_combined_samples()),
+        # expand("{path_out_prefix}/00-GENOMESCOPE/{sample}_plot.png", sample=get_combined_samples())
+
+#rule log_outputs_directory:
+#    input:
+#        "paths.sh"
+#    output:
+#        log="logs/outputs_log.txt"
+#    shell:
+#        """
+#        source paths.sh
+#        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in OUTPUTS directory:" > {output.log}
+#        find $path_out_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+#        echo "" >> {output.log}
+#       """
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     #       {input.temporary} \ {input.outputs} 
     # {input.programs} \
     # {input.experiments} \
 #find . -type f -print0 | grep -E '\\.(fq|fastq|gz|sam|bam|bed|msh|fasta|gfa)$' >> {output.log}
 
-##### load rules #####
 #include: "rules/plots.smk"
 #include: "rules/reference.smk"
 ##
-
-include: "rules/00-trimming_reads.smk"
-include: "rules/01-quality_control_reads.smk" 
-
 #include: "rules/quality_control_reads_jellyfish.smk"
 #include: "rules/quality_control_assembly.smk" 
 #include: "rules/trimming.smk"

@@ -1,7 +1,3 @@
-
-
-
-
 # Define variables
 rule adapter_removal:
     input:
