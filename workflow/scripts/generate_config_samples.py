@@ -20,7 +20,7 @@ with open('../config/metadata_samples/samples.csv', 'r') as f:
         # Now check if the sample_id is already in the species dict, if not, add it
         if sample_id not in main_dict['samples'][species]:
             main_dict['samples'][species][sample_id] = {
-                'species': species,  # Include the species as an attribute
+                'species': row['Species'],  # Include the species as an attribute
                 'sample_id': sample_id,  # Include the species as an attribute
                 'species_long': row['Species_long'],
                 'sex': row['Sex'],
