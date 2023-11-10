@@ -108,12 +108,20 @@ rule all:
                orientation_pe=ORIENTATIONS_PE),
         expand("{path_out_prefix}/00-FASTQC/{species}_{sex}_HIFI_None/",
                path_out_prefix=path_out_prefix,
-               species=SPECIES,
-               sex=SEX),
+               species="CM",
+               sex="M"),
         expand("{path_reads_prefix}/{species}_{sex}_HIFI_None_reads.fastq.gz",
                path_reads_prefix=path_reads_prefix,
-               species=SPECIES,
-               sex=SEX)
+               species="CM",
+               sex="M"),
+        expand("{path_out_prefix}/00-FASTQC/{species}_{sex}_HIFI_None/",
+               path_out_prefix=path_out_prefix,
+               species="CG",
+               sex="F"),
+        expand("{path_reads_prefix}/{species}_{sex}_HIFI_None_reads.fastq.gz",
+               path_reads_prefix=path_reads_prefix,
+               species="CG",
+               sex="F")
 
 
 # Snakefile
