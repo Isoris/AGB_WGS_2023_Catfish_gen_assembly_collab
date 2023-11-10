@@ -29,47 +29,6 @@ SEX = ["F", "M"]
 METHODS = ["ILLUMINA", "HIFI"]
 ORIENTATIONS = ["FWD", "REV", "None"]  # "None" is used for files without orientation like HIFI
 
-
-def get_unique_values(key):
-    values = set()
-    for species in config["samples"].values():
-        for sample in species.values():
-            value = sample.get(key)
-            if value is not None:
-                values.add(value)
-    return list(values)
-
-def get_unique_values_references(key):
-    values = set()
-    for sample in config["references"]["references"].values():
-        values.update(sample.get(key, []))
-    return list(values)
-
-def get_sample_ids():
-    return get_unique_values('sample_id')
-
-def get_reference_accession():
-    return get_unique_values('assembly_accession')
-
-def get_species_file_prefix():
-    return get_unique_values('file_prefixes')
-
-def get_species_long():
-    return get_unique_values('species_long')
-
-def get_species():
-    return get_unique_values('species')
-
-def get_sex():
-    return get_unique_values('sex')
-
-def get_method():
-    return get_unique_values('method')
-
-def get_orientation():
-    return get_unique_values('orientation')
-
-
 ##### load init rules #####
 
 rule all:
@@ -79,39 +38,37 @@ rule all:
         "logs/file_log.txt",
         "debug_config_output.txt",
         "expand.keys.txt",
-        expand("{path_reads_prefix}/{species}_{sex}_{method}_{orientation}_trimmed.fq.gz", 
+        expand("{path_reads_prefix}/CG_F_ILLUMINA_{orientation}_trimmed.fq.gz", 
                path_reads_prefix=path_reads_prefix, 
-               species=SPECIES, 
-               sex=SEX, 
-               method=METHODS, 
+               orientation=ORIENTATIONS)
+        expand("{path_reads_prefix}/CM_F_ILLUMINA_{orientation}_trimmed.fq.gz", 
+               path_reads_prefix=path_reads_prefix, 
+               orientation=ORIENTATIONS)
+        expand("{path_reads_prefix}/CM_M_ILLUMINA_{orientation}_trimmed.fq.gz", 
+               path_reads_prefix=path_reads_prefix, 
                orientation=ORIENTATIONS)
 
 
-# Rule to print function outputs
-rule print_function_outputs:
+# Define variables
+rule adapter_removal:
+    input:
+        read1 = "{path_reads_prefix}/{species}_{sex}_{method}_FWD.fq.gz",
+        read2 = "{path_reads_prefix}/{species}_{sex}_{method}_REV.fq.gz"
     output:
-        "expand.keys.txt"
-    run:
-        with open(output[0], 'w') as f_out:
-            # List of functions to display output from
-            functions_to_run = [
-                get_sample_ids,
-                get_reference_accession,
-                get_species_file_prefix,
-                get_species_long,
-                get_species,
-                get_sex,
-                get_method,
-                get_orientation,
-                get_combined_samples,
-                get_existing_reads_files
-            ]
-            # Iterate over the functions and print their output
-            for func in functions_to_run:
-                func_name = func.__name__
-                func_output = func()
-                print(f"Output of {func_name}: {func_output}")
-                f_out.write(f"Output of {func_name}: {func_output}\n")
+        out1 = "{path_reads_prefix}/{species}_{sex}_{method}_FWD_trimmed.fq.gz",
+        out2 = "{path_reads_prefix}/{species}_{sex}_{method}_REV_trimmed.fq.gz"
+    conda:
+        "rules/quality_control_reads.yaml"
+    shell:
+        """
+        AdapterRemoval \
+            --file1 {input.read1} \
+            --file2 {input.read2} \
+            --gzip \
+            --output1 {output.out1} \
+            --output2 {output.out2} \
+            --threads {threads} 
+        """
 
 # Snakefile
 
@@ -228,5 +185,3 @@ rule concatenate_logs:
 ##### load rules #####
 include: "rules/00-trimming_reads.smk"
 #include: "rules/01-quality_control_reads.smk" 
-
-

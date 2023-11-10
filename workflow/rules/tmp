@@ -229,3 +229,111 @@ rule adapter_removal:
             --output2 {output.out2} \
             --threads {threads}
         """
+
+
+
+def get_unique_values(key):
+    values = set()
+    for species in config["samples"].values():
+        for sample in species.values():
+            value = sample.get(key)
+            if value is not None:
+                values.add(value)
+    return list(values)
+
+def get_unique_values_references(key):
+    values = set()
+    for sample in config["references"]["references"].values():
+        values.update(sample.get(key, []))
+    return list(values)
+
+def get_sample_ids():
+    return get_unique_values('sample_id')
+
+def get_reference_accession():
+    return get_unique_values('assembly_accession')
+
+def get_species_file_prefix():
+    return get_unique_values('file_prefixes')
+
+def get_species_long():
+    return get_unique_values('species_long')
+
+def get_species():
+    return get_unique_values('species')
+
+def get_sex():
+    return get_unique_values('sex')
+
+def get_method():
+    return get_unique_values('method')
+
+def get_orientation():
+    return get_unique_values('orientation')
+
+
+def get_unique_values(key):
+    values = set()
+    for species in config["samples"].values():
+        for sample in species.values():
+            value = sample.get(key)
+            if value is not None:
+                values.add(value)
+    return list(values)
+
+def get_unique_values_references(key):
+    values = set()
+    for sample in config["references"]["references"].values():
+        values.update(sample.get(key, []))
+    return list(values)
+
+def get_sample_ids():
+    return get_unique_values('sample_id')
+
+def get_reference_accession():
+    return get_unique_values('assembly_accession')
+
+def get_species_file_prefix():
+    return get_unique_values('file_prefixes')
+
+def get_species_long():
+    return get_unique_values('species_long')
+
+def get_species():
+    return get_unique_values('species')
+
+def get_sex():
+    return get_unique_values('sex')
+
+def get_method():
+    return get_unique_values('method')
+
+def get_orientation():
+    return get_unique_values('orientation')
+
+
+# Rule to print function outputs
+rule print_function_outputs:
+    output:
+        "expand.keys.txt"
+        run:
+        with open(output[0], 'w') as f_out:
+            # List of functions to display output from
+            functions_to_run = [
+                get_sample_ids,
+                get_reference_accession,
+                get_species_file_prefix,
+                get_species_long,
+                get_species,
+                get_sex,
+                get_method,
+                get_orientation,
+                get_combined_samples,
+                get_existing_reads_files
+            ]
+            # Iterate over the functions and print their output
+            for func in functions_to_run:
+                func_name = func.__name__
+                func_output = func()
+                print(f"Output of {func_name}: {func_output}")
+                f_out.write(f"Output of {func_name}: {func_output}\n")
