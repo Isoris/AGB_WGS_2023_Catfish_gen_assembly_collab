@@ -247,7 +247,6 @@ rule concatenate_logs:
         cat {input.reads} {input.data} > {output.log}
         """
 
-
 ##### load rules #####
 include: "rules/00-trimming_reads.smk"
 #include: "rules/01-quality_control_reads.smk" 
