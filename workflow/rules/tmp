@@ -181,3 +181,51 @@ def get_existing_reads_files():
 
 # Note: Make sure that 'config' is loaded either in your main Snakefile or in this file.
 
+def populate_wildcard_lists():
+    species_list = set()
+    sex_list = set()
+    method_list = set()
+    orientation_list = set()
+
+    pattern = re.compile(r'(\w+)_(\w+)_(\w+)_(\w+).fq.gz$')
+    for filename in os.listdir(path_reads_prefix):
+        match = pattern.match(filename)
+        if match:
+            species, sex, method, orientation = match.groups()
+            species_list.add(species)
+            sex_list.add(sex)
+            method_list.add(method)
+            orientation_list.add(orientation)
+
+    return {
+        'species': list(species_list),
+        'sex': list(sex_list),
+        'method': list(method_list),
+        'orientation': list(orientation_list)
+    }
+
+# Call the function and store the results in variables
+wildcards = populate_wildcard_lists()
+SPECIES = wildcards['species']
+SEX = wildcards['sex']
+METHODS = wildcards['method']
+ORIENTATIONS = wildcards['orientation']
+rule adapter_removal:
+    input:
+        read1 = "{path_reads_prefix}/{species}_{sex}_{method}_FWD.fq.gz",
+        read2 = "{path_reads_prefix}/{species}_{sex}_{method}_REV.fq.gz"
+    output:
+        out1 = "{path_reads_prefix}/{species}_{sex}_{method}_FWD_trimmed.fq.gz",
+        out2 = "{path_reads_prefix}/{species}_{sex}_{method}_REV_trimmed.fq.gz"
+    conda:
+        "rules/quality_control_reads.yaml"
+    shell:
+        """
+        AdapterRemoval \
+            --file1 {input.read1} \
+            --file2 {input.read2} \
+            --gzip \
+            --output1 {output.out1} \
+            --output2 {output.out2} \
+            --threads {threads}
+        """

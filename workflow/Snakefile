@@ -24,6 +24,12 @@ configfile: f"{current_path}/config/config.yaml" #report: "report/workflow.rst"
 
 ##### Definition of functions
 
+SPECIES = ["CG", "CM"]
+SEX = ["F", "M"]
+METHODS = ["ILLUMINA", "HIFI"]
+ORIENTATIONS = ["FWD", "REV", "None"]  # "None" is used for files without orientation like HIFI
+
+
 def get_unique_values(key):
     values = set()
     for species in config["samples"].values():
@@ -63,35 +69,6 @@ def get_method():
 def get_orientation():
     return get_unique_values('orientation')
 
-def populate_wildcard_lists():
-    species_list = set()
-    sex_list = set()
-    method_list = set()
-    orientation_list = set()
-
-    pattern = re.compile(r'(\w+)_(\w+)_(\w+)_(\w+).fq.gz$')
-    for filename in os.listdir(path_reads_prefix):
-        match = pattern.match(filename)
-        if match:
-            species, sex, method, orientation = match.groups()
-            species_list.add(species)
-            sex_list.add(sex)
-            method_list.add(method)
-            orientation_list.add(orientation)
-
-    return {
-        'species': list(species_list),
-        'sex': list(sex_list),
-        'method': list(method_list),
-        'orientation': list(orientation_list)
-    }
-
-# Call the function and store the results in variables
-wildcards = populate_wildcard_lists()
-SPECIES = wildcards['species']
-SEX = wildcards['sex']
-METHODS = wildcards['method']
-ORIENTATIONS = wildcards['orientation']
 
 ##### load init rules #####
 
@@ -102,12 +79,13 @@ rule all:
         "logs/file_log.txt",
         "debug_config_output.txt",
         "expand.keys.txt",
-        expand("{path_reads_prefix}/{species}_{sex}_{method}_FWD_trimmed.fq.gz", 
+        expand("{path_reads_prefix}/{species}_{sex}_{method}_{orientation}_trimmed.fq.gz", 
                path_reads_prefix=path_reads_prefix, 
                species=SPECIES, 
                sex=SEX, 
                method=METHODS, 
                orientation=ORIENTATIONS)
+
 
 # Rule to print function outputs
 rule print_function_outputs:
