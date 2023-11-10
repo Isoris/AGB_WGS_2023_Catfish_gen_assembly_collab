@@ -25,8 +25,8 @@ rule adapter_removal_on_illumina:
         read1 = "{path_reads_prefix}/{species}_{sex}_{method}_FWD.fq.gz",
         read2 = "{path_reads_prefix}/{species}_{sex}_{method}_REV.fq.gz"
     output:
-        out1 = "{path_reads_prefix}/{species}_{sex}_{method}_FWD_trimmed.fq.gz",
-        out2 = "{path_reads_prefix}/{species}_{sex}_{method}_REV_trimmed.fq.gz"
+        out1 = "{path_reads_prefix}/{species}_{sex}_{method}_FWD_trimmed_reads.fastq.gz",
+        out2 = "{path_reads_prefix}/{species}_{sex}_{method}_REV_trimmed_reads.fastq.gz"
     conda:
         "envs/quality_control_reads.yaml"
     shell:
@@ -43,7 +43,7 @@ rule adapter_removal_on_illumina:
 # Define rule for running FastQC on trimmed reads (if they exist)
 rule fastqc_on_illumina_trimmed_reads:
     input:
-        read = path_reads_prefix + "/{species}_{sex}_{method}_{orientation_pe}_trimmed.fq.gz"
+        read = path_reads_prefix + "/{species}_{sex}_{method}_{orientation_pe}_trimmed_reads.fastq.gz"
     output:
         fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_{method}_{orientation_pe}_trimmed/"
     conda:

@@ -71,6 +71,8 @@ SEX = ["F", "M"]
 METHODS = ["ILLUMINA", "HIFI"]
 ORIENTATIONS_PE = ["FWD", "REV"]  # "None" is used for files without orientation like HIFI
 ORIENTATIONS_SE = ["None"]  # "None" is used for files without orientation like HIFI
+
+
 ##### load init rules #####
 
 rule all:
@@ -79,6 +81,7 @@ rule all:
         "logs/logs.txt",
         "logs/file_log.txt",
         "debug_config_output.txt",
+        ####### FASTQC ILLUM READS
         expand("{path_out_prefix}/00-FASTQC/CG_F_ILLUMINA_{orientation_pe}/",
                path_out_prefix=path_out_prefix, 
                orientation_pe=ORIENTATIONS_PE),
@@ -88,15 +91,17 @@ rule all:
         expand("{path_out_prefix}/00-FASTQC/CM_M_ILLUMINA_{orientation_pe}/", 
                path_out_prefix=path_out_prefix, 
                orientation_pe=ORIENTATIONS_PE),
-        expand("{path_reads_prefix}/CG_F_ILLUMINA_{orientation_pe}_trimmed.fq.gz",
+        ####### ADAPTERREMOVAL
+        expand("{path_reads_prefix}/CG_F_ILLUMINA_{orientation_pe}_trimmed_reads.fastq.gz",
                path_reads_prefix=path_reads_prefix, 
                orientation_pe=ORIENTATIONS_PE),
-        expand("{path_reads_prefix}/CM_F_ILLUMINA_{orientation_pe}_trimmed.fq.gz", 
+        expand("{path_reads_prefix}/CM_F_ILLUMINA_{orientation_pe}_trimmed_reads.fastq.gz", 
                path_reads_prefix=path_reads_prefix, 
                orientation_pe=ORIENTATIONS_PE),
-        expand("{path_reads_prefix}/CM_M_ILLUMINA_{orientation_pe}_trimmed.fq.gz",
+        expand("{path_reads_prefix}/CM_M_ILLUMINA_{orientation_pe}_trimmed_reads.fastq.gz",
                path_reads_prefix=path_reads_prefix, 
                orientation_pe=ORIENTATIONS_PE),
+        ####### FASTQC ILLUM TRIMMED READS
         expand("{path_out_prefix}/00-FASTQC/CG_F_ILLUMINA_{orientation_pe}_trimmed/",
                path_out_prefix=path_out_prefix, 
                orientation_pe=ORIENTATIONS_PE),
@@ -106,13 +111,34 @@ rule all:
         expand("{path_out_prefix}/00-FASTQC/CM_M_ILLUMINA_{orientation_pe}_trimmed/",
                path_out_prefix=path_out_prefix, 
                orientation_pe=ORIENTATIONS_PE),
+        ####### PROCESS HIFI READS
         expand("{path_reads_prefix}/CM_M_HIFI_None_reads.fastq.gz",
                path_reads_prefix=path_reads_prefix),
         expand("{path_reads_prefix}/CG_F_HIFI_None_reads.fastq.gz",
-               path_reads_prefix=path_reads_prefix)
-
+               path_reads_prefix=path_reads_prefix),
+        ####### MASH FOR READ CONTAMINATION
+        expand("{path_out_prefix}/00-MASH/CM_M_HIFI_None_mash_plot.png",
+               path_out_prefix=path_out_prefix),
+        expand("{path_out_prefix}/00-MASH/CG_F_HIFI_None_mash_plot.png",
+               path_out_prefix=path_out_prefix),
+        expand("{path_out_prefix}/00-MASH/CG_F_ILLUMINA_{orientation}_mash_plot.png",
+               path_out_prefix=path_out_prefix,
+               orientation=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/00-MASH/CM_F_ILLUMINA_{orientation}_mash_plot.png",
+               path_out_prefix=path_out_prefix,
+               orientation=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/00-MASH/CM_M_ILLUMINA_{orientation}_mash_plot.png",
+               path_out_prefix=path_out_prefix,
+               orientation=ORIENTATIONS_PE)
 
 # Snakefile
+
+
+#SPECIES_IN = [""]
+#SEX_IN = [""]
+#METHODS_IN = [""]
+#ORIENTATIONS_ALL = [""]
+
 
 # ... [Other parts of your Snakefile] ...
 
@@ -205,4 +231,4 @@ rule concatenate_logs:
 
 ##### load rules #####
 include: "rules/00-trimming_reads.smk"
-#include: "rules/01-quality_control_reads.smk" 
+include: "rules/01-quality_control_reads.smk" 
