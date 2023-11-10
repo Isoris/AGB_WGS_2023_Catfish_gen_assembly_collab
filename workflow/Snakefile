@@ -9,9 +9,8 @@ from snakemake.io import Wildcards
 
 ##### load paths #####
 current_path=os.getcwd() 
-path_folder_prefix=f"{current_path}/../../.."
-#path_folder_prefix=f"/tarafs/scratch/proj5034-AGBKU/catfish" # =  ../../..
-###
+path_folder_prefix=f"{current_path}/../../.."   # path_folder_prefix=f"/tarafs/scratch/proj5034-AGBKU/catfish" # =  ../../..
+##### load specific paths #####
 path_reads_prefix=f"{path_folder_prefix}/00-INPUTS/00-READS"
 path_data_prefix=f"{path_folder_prefix}/00-INPUTS"
 path_prog_prefix=f"{path_folder_prefix}/01-PROGRAMS"
@@ -20,16 +19,8 @@ path_out_prefix=f"{path_folder_prefix}/03-OUTPUTS"
 path_tmp_prefix=f"{path_folder_prefix}/04-TEMPORARY_FILES"  
 
 ##### setup config and report #####
-#report: "report/workflow.rst"
 threads = 12
-configfile: f"{current_path}/config/config.yaml"
-print (config['samples'])
-# The following is equivalent to what snakemake does with the configuration file:
-#config = yaml.load(config_text)
-#config
-# Manually load an additional configuration file
-with open("config_active.yaml") as f:
-    config_active = yaml.safe_load(f)
+configfile: f"{current_path}/config/config.yaml" #report: "report/workflow.rst"
 
 ##### Definition of functions
 
@@ -117,10 +108,6 @@ rule all:
                sex=SEX, 
                method=METHODS, 
                orientation=ORIENTATIONS)        
-       #expand("{path_reads_prefix}/{sample}_trimmed.fq.gz", path_reads_prefix=path_reads_prefix) #line 82
-       #get_existing_reads_files()
-    # Add additional lines for other output files as needed
-
 
 # Rule to print function outputs
 rule print_function_outputs:
@@ -266,110 +253,3 @@ include: "rules/00-trimming_reads.smk"
 #include: "rules/01-quality_control_reads.smk" 
 
 
-
-###############################################
-
-
-        #expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
-        #expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", path_out_prefix=path_out_prefix, sample=get_combined_samples()),
-        #expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", path_out_prefix=path_out_prefix, sample=get_combined_samples())
-        # Uncomment the following lines when you want to include them in the execution
-        # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfishcount.jf", sample=get_combined_samples()),
-        # expand("{path_out_prefix}/00-JELLYFISH/{sample}_jellyfish_histo.histo", sample=get_combined_samples()),
-        # expand("{path_out_prefix}/00-GENOMESCOPE/{sample}_plot.png", sample=get_combined_samples())
-
-#rule log_outputs_directory:
-#    input:
-#        "paths.sh"
-#    output:
-#        log="logs/outputs_log.txt"
-#    shell:
-#        """
-#        source paths.sh
-#        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in OUTPUTS directory:" > {output.log}
-#        find $path_out_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
-#        echo "" >> {output.log}
-#       """
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    #       {input.temporary} \ {input.outputs} 
-    # {input.programs} \
-    # {input.experiments} \
-#find . -type f -print0 | grep -E '\\.(fq|fastq|gz|sam|bam|bed|msh|fasta|gfa)$' >> {output.log}
-
-#include: "rules/plots.smk"
-#include: "rules/reference.smk"
-##
-#include: "rules/quality_control_reads_jellyfish.smk"
-#include: "rules/quality_control_assembly.smk" 
-#include: "rules/trimming.smk"
-#include: "rules/denovo.smk"
-
-#include: "rules/mapping_illumina.smk"
-#include: "rules/variant_calling.smk"
-
-#include: "rules/pangenomes_plots.smk"
-
-#include: "rules/mitoVGP_conda_env_ONT.smk"
-#include: "rules/mitoVG_conda_env_pacbio.smk"
-
-
-#include: "rules/annotations.smk"
-#include: "rules/pangenomes_annotations.smk"
-
-
-
-# End
-def get_combined_samples():
-    species = get_species()
-    sex = get_sex()
-    method = get_method()
-    orientation = get_orientation()
-    return ["{}_{}_{}_{}".format(s, sx, m, o) for s in species for sx in sex for m in method for o in orientation]
-
-def get_sample(wildcards): #Get_sample_prefix
-    # This function now assumes each sample is a key in the config that 
-    # corresponds to a prefix without a file extension
-    return f"{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}"
-
-
-def get_available_wildcards():
-    species_set = set()
-    sex_set = set()
-    method_set = set()
-    orientation_set = set()
-    pattern = re.compile(r'(\w+)_(\w+)_(\w+)_(\w+).fq.gz$')
-
-    for filename in os.listdir(path_reads_prefix):
-        match = pattern.match(filename)
-        if match:
-            species, sex, method, orientation = match.groups()
-            species_set.add(species)
-            sex_set.add(sex)
-            method_set.add(method)
-            orientation_set.add(orientation)
-
-    return species_set, sex_set, method_set, orientation_set
-
-
-def get_existing_reads_files():
-    reads_files = []
-    for read_file in glob.glob(f"{path_reads_prefix}/*.fq.gz"):
-        if os.path.isfile(read_file):
-            # Remove the .fq.gz extension and append the _trimmed.fq.gz extension
-            trimmed_base = read_file.rsplit('.fq.gz', 1)[0]
-            trimmed_file = f"{trimmed_base}_trimmed.fq.gz"
-            reads_files.append(trimmed_file)
-    return reads_files

@@ -23,12 +23,3 @@ rule adapter_removal:
             --threads {threads} > {log.out1_log} 2> {log.out2_log}
         """
 
-#rule all_adapter_removal:
-#    input:
-#       expand(f"{path_prefix_reads}/{{sample}}_trimmed.fq.gz", sample=get_combined_samples())
-
-
-
-
-# Note: Make sure that 'config' is loaded either in your main Snakefile or in this file.
-
