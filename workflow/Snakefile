@@ -145,8 +145,7 @@ rule debug_config:
 rule create_log_folder:
     output:
         log="logs/logs.txt"
-    shell: 
-    "touch {output.log}"
+    shell: "touch {output.log}"
 
 rule log_reads_directory:
     input:
@@ -182,7 +181,7 @@ rule log_experiments_directory:
         source paths.sh
         echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in EXPERIMENTS directory:" > {output.log}
         find $path_exp_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
-        echo "" >> {output.log}p
+        echo "" >> {output.log}
         """
 
 rule log_programs_directory:
