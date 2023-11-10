@@ -3,7 +3,8 @@ import os
 import sys
 import glob
 import yaml 
-
+from snakemake.io import expand
+from snakemake.io import Wildcards
 
 ##### load paths #####
 current_path=os.getcwd() 
@@ -20,7 +21,12 @@ path_tmp_prefix=f"{path_folder_prefix}/04-TEMPORARY_FILES"
 ##### setup config and report #####
 #report: "report/workflow.rst"
 threads = 12
-configfile: "config/config.yaml"
+configfile: f"{current_path}/config/config.yaml"
+print (config['samples'])
+# The following is equivalent to what snakemake does with the configuration file:
+#config = yaml.load(config_text)
+#config
+
 
 ##### Definition of functions
 
@@ -79,6 +85,7 @@ rule all:
         "paths.sh",
         "logs/logs.txt",
         "logs/file_log.txt",
+        "debug_config_output.txt",
         "expand.keys.txt",
         expand("{path_reads_prefix}/{sample}_trimmed.fq.gz", path_reads_prefix=path_reads_prefix, sample=get_combined_samples()) #line 82
     
@@ -109,6 +116,31 @@ rule print_function_outputs:
                 func_output = func()
                 print(f"Output of {func_name}: {func_output}")
                 f_out.write(f"Output of {func_name}: {func_output}\n")
+
+# Snakefile
+
+# ... [Other parts of your Snakefile] ...
+
+# Rule to write config contents to a file
+rule debug_config:
+    output:
+        debug_config_output="debug_config_output.txt"
+    run:
+        with open(output.debug_config_output, 'w') as f:
+            # Iterate over samples and extract the information
+            for species, samples_dict in config['samples'].items():
+                for sample_id, sample_info in samples_dict.items():
+                    # Write out the details you're interested in
+                    f.write(f"Species: {species}, Sample ID: {sample_id}\n")
+                    f.write(f"Coverage: {sample_info['coverage']}\n")
+                    f.write(f"Description: {sample_info['description']}\n")
+                    f.write(f"File Prefix: {sample_info['file_prefix']}\n")
+                    f.write(f"Method: {sample_info['method']}\n")
+                    f.write(f"Orientation: {sample_info['orientation']}\n")
+                    f.write(f"Path Prefix: {sample_info['path_prefix']}\n")
+                    f.write(f"Sex: {sample_info['sex']}\n")
+                    f.write(f"Species Long: {sample_info['species_long']}\n")
+                    f.write("\n")
 
 ##### Main rule to orchestrate the workflow #####
 rule create_log_folder:
