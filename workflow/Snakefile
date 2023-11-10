@@ -88,7 +88,7 @@ rule all:
 # Rule to print function outputs
 rule print_function_outputs:
     output:
-        "function_outputs.txt"
+        "expand.keys.txt"
     run:
         with open(output[0], 'w') as f_out:
             # List of functions to display output from
@@ -109,7 +109,7 @@ rule print_function_outputs:
                 func_output = func()
                 print(f"Output of {func_name}: {func_output}")
                 f_out.write(f"Output of {func_name}: {func_output}\n")
-                
+
 ##### Main rule to orchestrate the workflow #####
 rule create_log_folder:
     output:
