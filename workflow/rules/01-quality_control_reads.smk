@@ -2,7 +2,7 @@
 
 rule mash_sketch:
     input:
-        fastq_gz= path_reads_prefix +"/{species}_{sex}_{method}_{orientation}_reads.fastq.gz", 
+        fastq_gz = path_reads_prefix + "/{species}_{sex}_{method}_{orientation}_reads.fastq.gz", 
     output:
         sketch = path_data_prefix + "/00-MASH_DB/{species}_{sex}_{method}_{orientation}_sketch_reads.msh"    
     shell:
@@ -17,7 +17,7 @@ rule mash_dist:
         key = path_out_prefix + "/00-MASH/{species}_{sex}_{method}_{orientation}_mash_dist_keyfile.txt"
     shell:
         """
-        mash dist -p {threads} {input.ref_sketch} {input.reads_sketch} > {output.distances}
+        mash dist -p {threads} {input.ref_sketch} {input.reads_sketch} > {output.distances} && \
         head -n 1 {output.distances} | \
         awk '{for (i=2; i <=NF; i++) print $i}' | \
         awk -F "/" '{print $NF}' | \
@@ -29,10 +29,10 @@ rule mash_dist:
 
 rule mash_dist_plot:
     input:
-        distance_file= path_out_prefix + "/00-MASH/{species}_{sex}_{method}_{orientation}_combined.tbl",
-        key_file= path_out_prefix + "/00-MASH/{species}_{sex}_{method}_{orientation}_mash_dist_keyfile.txt"
+        distance_file = path_out_prefix + "/00-MASH/{species}_{sex}_{method}_{orientation}_combined.tbl",
+        key_file = path_out_prefix +"/00-MASH/{species}_{sex}_{method}_{orientation}_mash_dist_keyfile.txt"
     output:
-        plot= path_out_prefix + "/00-MASH/{species}_{sex}_{method}_{orientation}_mash_plot.png"
+        plot = path_out_prefix + "/00-MASH/{species}_{sex}_{method}_{orientation}_mash_plot.png"
     params:
         plot_mash_script = "workflow/scripts/plot_mash.R"  # Adjust this to your script path
     conda:
