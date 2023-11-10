@@ -85,11 +85,13 @@ def get_sample(wildcards): #Get_sample_prefix
 
 def get_existing_reads_files():
     reads_files = []
-    for read_file in glob.glob(f"{path_reads_prefix}/*_trimmed.fq.gz"):
+    for read_file in glob.glob(f"{path_reads_prefix}/*.fq.gz"):
         if os.path.isfile(read_file):
-            reads_files.append(read_file)
+            # Remove the .fq.gz extension and append the _trimmed.fq.gz extension
+            trimmed_base = read_file.rsplit('.fq.gz', 1)[0]
+            trimmed_file = f"{trimmed_base}_trimmed.fq.gz"
+            reads_files.append(trimmed_file)
     return reads_files
-
 
 ##### load init rules #####
 
@@ -100,7 +102,7 @@ rule all:
         "logs/file_log.txt",
         "debug_config_output.txt",
         "expand.keys.txt",
-        expand("{sample}", sample=get_existing_reads_files())
+        get_existing_reads_files()
         #expand("{path_reads_prefix}/{sample}_trimmed.fq.gz", path_reads_prefix=path_reads_prefix, sample=get_combined_samples()) #line 82
     
         # Add additional lines for other output files as needed
