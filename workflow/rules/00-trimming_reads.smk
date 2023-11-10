@@ -54,18 +54,18 @@ rule fastqc_on_illumina_trimmed_reads:
 
 ### Parse and prepare HiC data
 # Define rule for running FastQC on HiC reads (if they exist)
-rule fastqc_on_hic:
-    input:
-        read = path_reads_prefix + "/{species}_{sex}_HIFI_None.fq.gz"
-    output:
-        fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_HIFI_None/"
-    conda:
-        "envs/quality_control_reads.yaml"
-    shell:
-        """
-        mkdir -p {output.fastqc_out} && \
-        fastqc {input.read} -t {threads} -o {output.fastqc_out}
-        """
+#rule fastqc_on_hic:
+#    input:
+#        read = path_reads_prefix + "/{species}_{sex}_HIFI_None.fq.gz"
+#    output:
+#        fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_HIFI_None/"
+#    conda:
+#        "envs/quality_control_reads.yaml"
+#    shell:
+#        """
+#        mkdir -p {output.fastqc_out} && \
+#        fastqc {input.read} -t {threads} -o {output.fastqc_out}
+#        """
 
 
 ### Parse and prepare HiFi data
