@@ -82,6 +82,15 @@ def get_sample(wildcards): #Get_sample_prefix
     # corresponds to a prefix without a file extension
     return f"{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}"
 
+
+def get_existing_reads_files():
+    reads_files = []
+    for read_file in glob.glob(f"{path_reads_prefix}/*_trimmed.fq.gz"):
+        if os.path.isfile(read_file):
+            reads_files.append(read_file)
+    return reads_files
+
+
 ##### load init rules #####
 
 rule all:
@@ -91,7 +100,10 @@ rule all:
         "logs/file_log.txt",
         "debug_config_output.txt",
         "expand.keys.txt",
-        expand("{path_reads_prefix}/{sample}_trimmed.fq.gz", path_reads_prefix=path_reads_prefix, sample=get_combined_samples()) #line 82
+        expand("{path_reads_prefix}/{sample}_trimmed.fq.gz",
+               path_reads_prefix=path_reads_prefix,
+               sample=get_existing_reads_files())
+        #expand("{path_reads_prefix}/{sample}_trimmed.fq.gz", path_reads_prefix=path_reads_prefix, sample=get_combined_samples()) #line 82
     
         # Add additional lines for other output files as needed
 
