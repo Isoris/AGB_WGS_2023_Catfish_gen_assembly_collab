@@ -1,5 +1,4 @@
 # Define variables
-
 rule adapter_removal:
     input:
         read1 = "{path_reads_prefix}/{species}_{sex}_{method}_FWD.fq.gz",

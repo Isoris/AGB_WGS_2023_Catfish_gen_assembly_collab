@@ -108,7 +108,7 @@ rule all:
                sex=SEX, 
                method=METHODS, 
                orientation=ORIENTATIONS),
-        expand("{path_reads_prefix}/{species}_{sex}_{method}_{orientation}_trimmed.log", 
+        expand("logs/{species}_{sex}_{method}_{orientation}_trimmed.log", 
                path_reads_prefix=path_reads_prefix, 
                species=SPECIES, 
                sex=SEX, 
