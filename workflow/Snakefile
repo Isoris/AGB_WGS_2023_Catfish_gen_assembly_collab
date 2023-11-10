@@ -80,14 +80,14 @@ rule all:
         "logs/file_log.txt",
         "debug_config_output.txt",
         expand("{path_out_prefix}/00-FASTQC/CG_F_ILLUMINA_{orientation}/",
-               path_reads_prefix=path_reads_prefix, 
+               path_out_prefix=path_out_prefix, 
                orientation=ORIENTATIONS_PE),
         expand("{path_out_prefix}/00-FASTQC/CM_F_ILLUMINA_{orientation}/", 
-               path_reads_prefix=path_reads_prefix, 
+               path_out_prefix=path_out_prefix, 
                orientation=ORIENTATIONS_PE),
         expand("{path_out_prefix}/00-FASTQC/CM_M_ILLUMINA_{orientation}/", 
-               path_reads_prefix=path_reads_prefix, 
-               orientation=ORIENTATIONS_PE)
+               path_out_prefix=path_out_prefix, 
+               orientation=ORIENTATIONS_PE),
         expand("{path_reads_prefix}/CG_F_ILLUMINA_{orientation}_trimmed.fq.gz",
                path_reads_prefix=path_reads_prefix, 
                orientation=ORIENTATIONS_PE),
@@ -96,15 +96,15 @@ rule all:
                orientation=ORIENTATIONS_PE),
         expand("{path_reads_prefix}/CM_M_ILLUMINA_{orientation}_trimmed.fq.gz", 
                path_reads_prefix=path_reads_prefix, 
-               orientation=ORIENTATIONS_PE)
+               orientation=ORIENTATIONS_PE),
         expand("{path_out_prefix}/00-FASTQC/CG_F_ILLUMINA_{orientation}_trimmed/",
-               path_reads_prefix=path_reads_prefix, 
+               path_out_prefix=path_out_prefix, 
                orientation=ORIENTATIONS_PE),
         expand("{path_out_prefix}/00-FASTQC/CM_F_ILLUMINA_{orientation}_trimmed/", 
-               path_reads_prefix=path_reads_prefix, 
+               path_out_prefix=path_out_prefix, 
                orientation=ORIENTATIONS_PE),
         expand("{path_out_prefix}/00-FASTQC/CM_M_ILLUMINA_{orientation}_trimmed/", 
-               path_reads_prefix=path_reads_prefix, 
+               path_out_prefix=path_out_prefix, 
                orientation=ORIENTATIONS_PE)
 
 
