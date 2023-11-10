@@ -79,7 +79,7 @@ rule all:
         "paths.sh",
         "logs/logs.txt",
         "logs/file_log.txt",
-        expand(lambda wildcards: f"{path_reads_prefix}/{wildcards.sample}_trimmed.fq.gz", sample=get_combined_samples())
+        expand("{path_reads_prefix}/{sample}_trimmed.fq.gz", path_reads_prefix=path_reads_prefix, sample=get_combined_samples()) #line 82
     
         # Add additional lines for other output files as needed
 
