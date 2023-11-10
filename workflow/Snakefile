@@ -102,18 +102,12 @@ rule all:
         "logs/file_log.txt",
         "debug_config_output.txt",
         "expand.keys.txt",
-        expand("{path_reads_prefix}/{species}_{sex}_{method}_{orientation}_trimmed.fq.gz", 
+        expand("{path_reads_prefix}/{species}_{sex}_{method}_FWD_trimmed.fq.gz", 
                path_reads_prefix=path_reads_prefix, 
                species=SPECIES, 
                sex=SEX, 
                method=METHODS, 
-               orientation=ORIENTATIONS),
-        expand("logs/{species}_{sex}_{method}_{orientation}_trimmed.log", 
-               path_reads_prefix=path_reads_prefix, 
-               species=SPECIES, 
-               sex=SEX, 
-               method=METHODS, 
-               orientation=ORIENTATIONS)          
+               orientation=ORIENTATIONS)
 
 # Rule to print function outputs
 rule print_function_outputs:
