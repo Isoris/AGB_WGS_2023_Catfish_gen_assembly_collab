@@ -4,10 +4,9 @@ rule mash_sketch:
     input:
         fastq_gz= path_reads_prefix +"/{species}_{sex}_{method}_{orientation}_reads.fastq.gz", 
     output:
-        sketch="{species}_{sex}_{method}_{orientation}.msh"    
+        sketch = path_data_prefix + "/00-MASH_DB/{species}_{sex}_{method}_{orientation}_sketch_reads.msh"    
     shell:
         "mash sketch -m 2 -o {output.sketch} {input.fastq_gz}"
-
 
 rule mash_screen: # Run on the reads against RefSeq minimal database 
     input:
@@ -25,7 +24,7 @@ rule mash_screen: # Run on the reads against RefSeq minimal database
 rule mash_dist: 
     input:
         ref_sketch = path_data_prefix + "/00-MASH_DB/combined.msh",
-        reads_sketch = path_reads_prefix + "/{species}_{sex}_{method}_{orientation}_reads.fastq.gz.msh"
+        reads_sketch = path_data_prefix + "/00-MASH_DB/{species}_{sex}_{method}_{orientation}_sketch_reads.msh"
     output:
         distances = path_out_prefix + "/00-MASH/{species}_{sex}_{method}_{orientation}_combined.tbl",
         key = path_out_prefix + "/00-MASH/{species}_{sex}_{method}_{orientation}_mash_dist_keyfile.txt"
