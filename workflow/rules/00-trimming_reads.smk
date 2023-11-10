@@ -1,24 +1,25 @@
 # Define variables
 rule adapter_removal:
     input:
-        "paths.sh",
-        read1 = "{path_prefix_reads}/{sample}_FWD.fq.gz",
-        read2 = "{path_prefix_reads}/{sample}_REV.fq.gz"
+        read1 = "{path_reads_prefix}/{sample}_FWD.fq.gz",
+        read2 = "{path_reads_prefix}/{sample}_REV.fq.gz"
     output:
-        out1 = "{path_prefix_reads}/{sample}_FWD.trimmed.fq.gz",
-        out2 = "{path_prefix_reads}/{sample}_REV.trimmed.fq.gz"
+        out1 = "{path_reads_prefix}/{sample}_FWD.trimmed.fq.gz",
+        out2 = "{path_reads_prefix}/{sample}_REV.trimmed.fq.gz"
+    log:
+        out1_log = "logs/{sample}_FWD.trimming.log",
+        out2_log = "logs/{sample}_REV.trimming.log"
     conda:
-        "quality_control_reads.yaml"  # Make sure this points to the correct Conda environment file
+        "rules/quality_control_reads.yaml"  # Make sure this points to the correct Conda environment file
     shell:
         """
-        source paths.sh
         AdapterRemoval \
             --file1 {input.read1} \
             --file2 {input.read2} \
             --gzip \
             --output1 {output.out1} \
             --output2 {output.out2} \
-            --threads {threads}
+            --threads {threads} > {log.out1_log} 2> {log.out2_log}
         """
 
 #rule all_adapter_removal:

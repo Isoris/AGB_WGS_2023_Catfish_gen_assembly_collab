@@ -125,6 +125,7 @@ rule print_function_outputs:
                 get_method,
                 get_orientation,
                 get_combined_samples,
+                get_existing_reads_files
             ]
             # Iterate over the functions and print their output
             for func in functions_to_run:
@@ -219,7 +220,7 @@ rule log_experiments_directory:
         source paths.sh
         echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in EXPERIMENTS directory:" > {output.log}
         find $path_exp_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
-        echo "" >> {output.log}
+        echo "" >> {output.log}p
         """
 
 rule log_programs_directory:
