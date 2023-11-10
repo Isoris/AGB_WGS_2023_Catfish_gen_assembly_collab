@@ -24,6 +24,48 @@ configfile: f"{current_path}/config/config.yaml" #report: "report/workflow.rst"
 
 ##### Definition of functions
 
+
+def get_unique_values(key):
+    values = set()
+    for species in config["samples"].values():
+        for sample in species.values():
+            value = sample.get(key)
+            if value is not None:
+                values.add(value)
+    return list(values)
+
+def get_unique_values_references(key):
+    values = set()
+    for sample in config["references"]["references"].values():
+        values.update(sample.get(key, []))
+    return list(values)
+
+def get_sample_ids():
+    return get_unique_values('sample_id')
+
+def get_reference_accession():
+    return get_unique_values('assembly_accession')
+
+def get_species_file_prefix():
+    return get_unique_values('file_prefixes')
+
+def get_species_long():
+    return get_unique_values('species_long')
+
+def get_species():
+    return get_unique_values('species')
+
+def get_sex():
+    return get_unique_values('sex')
+
+def get_method():
+    return get_unique_values('method')
+
+def get_orientation():
+    return get_unique_values('orientation')
+
+##### Definition of DICTS
+ 
 SPECIES = ["CG", "CM"]
 SEX = ["F", "M"]
 METHODS = ["ILLUMINA", "HIFI"]
@@ -37,7 +79,6 @@ rule all:
         "logs/logs.txt",
         "logs/file_log.txt",
         "debug_config_output.txt",
-        "expand.keys.txt",
         expand("{path_reads_prefix}/CG_F_ILLUMINA_{orientation}_trimmed.fq.gz",
                path_reads_prefix=path_reads_prefix, 
                orientation=ORIENTATIONS_PE),
