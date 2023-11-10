@@ -230,7 +230,12 @@ rule adapter_removal:
             --threads {threads}
         """
 
-
+        expand("{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png",
+               path_out_prefix=path_out_prefix,
+               sample=["CM_M_HIFI_None", "CG_F_HIFI_None"] +
+                      ["CG_F_ILLUMINA_" + o for o in ORIENTATIONS_PE] +
+                      ["CM_F_ILLUMINA_" + o for o in ORIENTATIONS_PE] +
+                      ["CM_M_ILLUMINA_" + o for o in ORIENTATIONS_PE])
 
 
 def get_unique_values(key):

@@ -132,7 +132,7 @@ rule all:
      #          orientation=ORIENTATIONS_PE)
 
 # Snakefile
-
+#https://stackoverflow.com/questions/46506784/how-do-the-terms-job-task-and-step-relate-to-each-other/46532581#46532581
 
 #SPECIES_IN = [""]
 #SEX_IN = [""]
