@@ -7,14 +7,15 @@ rule fastqc_on_illumina_raw_reads:
         read_FWD = path_reads_prefix + "/{species}_{sex}_ILLUMINA_FWD.fq.gz",
         read_REV = path_reads_prefix + "/{species}_{sex}_ILLUMINA_REV.fq.gz"
     output:
-        fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_{orientation_pe}/"
+        fastqc_out_FWD = path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_FWD/",
+        fastqc_out_REV = path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_REV/"
     conda:
         "envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:
         """
-        mkdir {output.fastqc_out} && \
-        fastqc {input.read_FWD} -t {threads} -o {output.fastqc_out} && \
-        fastqc {input.read_REV} -t {threads} -o {output.fastqc_out}
+        mkdir -p {output.fastqc_out} && \
+        fastqc {input.read_FWD} -t {threads} -o {output.fastqc_out_FWD} && \
+        fastqc {input.read_REV} -t {threads} -o {output.fastqc_out_REV}
         """
 
 # Define rule for running AdapterRemoval on raw illumina reads to trim them and remove adapters
@@ -41,9 +42,9 @@ rule adapter_removal_on_illumina:
 # Define rule for running FastQC on trimmed reads (if they exist)
 rule fastqc_on_illumina_trimmed_reads:
     input:
-        read = path_reads_prefix + "/{species}_{sex}_ILLUMINA_{orientation}_trimmed.fq.gz",
+        read = path_reads_prefix + "/{species}_{sex}_{method}_{orientation_pe}_trimmed.fq.gz",
     output:
-        fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_{orientation}_trimmed/"
+        fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_{method}_{orientation_pe}_trimmed/"
     conda:
         "envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:
