@@ -38,12 +38,12 @@ rule all:
         "logs/file_log.txt",
         "debug_config_output.txt",
         "expand.keys.txt",
-        expand("{path_reads_prefix}/CG_F_ILLUMINA_{orientation}_trimmed.fq.gz", 
+        expand("{path_reads_prefix}/CG_F_ILLUMINA_{orientation}_trimmed.fq.gz",
                path_reads_prefix=path_reads_prefix, 
-               orientation=ORIENTATIONS)
+               orientation=ORIENTATIONS),
         expand("{path_reads_prefix}/CM_F_ILLUMINA_{orientation}_trimmed.fq.gz", 
                path_reads_prefix=path_reads_prefix, 
-               orientation=ORIENTATIONS)
+               orientation=ORIENTATIONS),
         expand("{path_reads_prefix}/CM_M_ILLUMINA_{orientation}_trimmed.fq.gz", 
                path_reads_prefix=path_reads_prefix, 
                orientation=ORIENTATIONS)
