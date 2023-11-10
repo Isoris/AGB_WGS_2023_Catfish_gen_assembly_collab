@@ -3,7 +3,8 @@
 # Define rule for running FastQC on raw reads
 rule fastqc_on_illumina_raw_reads:
     input:
-        read = path_reads_prefix + "/{species}_{sex}_{method}_{orientation}.fq.gz",
+        read_FWD = path_reads_prefix + "/{species}_{sex}_{method}_FWD.fq.gz",
+        read_REV = path_reads_prefix + "/{species}_{sex}_{method}_REV.fq.gz"
     output:
         fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_{method}_{orientation}/"
     conda:
@@ -11,7 +12,8 @@ rule fastqc_on_illumina_raw_reads:
     shell:
         """
         mkdir {output.fastqc_out} && \
-        fastqc {input.read} -t {threads} -o {output.fastqc_out}
+        fastqc {input.read_FWD} -t {threads} -o {output.fastqc_out}
+        fastqc {input.read_REV} -t {threads} -o {output.fastqc_out}
         """
 
 rule adapter_removal_on_illumina:
