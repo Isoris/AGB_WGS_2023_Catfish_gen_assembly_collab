@@ -4,10 +4,10 @@
 # Define rule for running FastQC on raw illumina reads
 rule fastqc_on_illumina_raw_reads:
     input:
-        read_FWD = path_reads_prefix + "/{species}_{sex}_{method}_FWD.fq.gz",
-        read_REV = path_reads_prefix + "/{species}_{sex}_{method}_REV.fq.gz"
+        read_FWD = path_reads_prefix + "/{species}_{sex}_ILLUMINA_FWD.fq.gz",
+        read_REV = path_reads_prefix + "/{species}_{sex}_ILLUMINA_REV.fq.gz"
     output:
-        fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_{method}_{orientation}/"
+        fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_{orientation}/"
     conda:
         "envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:
@@ -41,9 +41,9 @@ rule adapter_removal_on_illumina:
 # Define rule for running FastQC on trimmed reads (if they exist)
 rule fastqc_on_illumina_trimmed_reads:
     input:
-        read = path_reads_prefix + "/{species}_{sex}_{method}_{orientation}_trimmed.fq.gz",
+        read = path_reads_prefix + "/{species}_{sex}_ILLUMINA_{orientation}_trimmed.fq.gz",
     output:
-        fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_{method}_{orientation}_trimmed/"
+        fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_{orientation}_trimmed/"
     conda:
         "envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:
@@ -52,20 +52,6 @@ rule fastqc_on_illumina_trimmed_reads:
         fastqc {input.read} -t {threads} -o {output.fastqc_out}
         """        
 
-### Parse and prepare HiC data
-# Define rule for running FastQC on HiC reads (if they exist)
-#rule fastqc_on_hic:
-#    input:
-#        read = path_reads_prefix + "/{species}_{sex}_HIFI_None.fq.gz"
-#    output:
-#        fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_HIFI_None/"
-#    conda:
-#        "envs/quality_control_reads.yaml"
-#    shell:
-#        """
-#        mkdir -p {output.fastqc_out} && \
-#        fastqc {input.read} -t {threads} -o {output.fastqc_out}
-#        """
 
 
 ### Parse and prepare HiFi data
@@ -109,3 +95,26 @@ rule gzip_hifi_fastq:
 
 ### Parse and prepare ONT nanopore data
 
+
+
+
+
+
+
+
+### Parse and prepare HiC data
+
+
+# Define rule for running FastQC on HiC reads (if they exist)
+#rule fastqc_on_hic:
+#    input:
+#        read = path_reads_prefix + "/{species}_{sex}_HIFI_None.fq.gz"
+#    output:
+#        fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_HIFI_None/"
+#    conda:
+#        "envs/quality_control_reads.yaml"
+#    shell:
+#        """
+#        mkdir -p {output.fastqc_out} && \
+#        fastqc {input.read} -t {threads} -o {output.fastqc_out}
+#        """
