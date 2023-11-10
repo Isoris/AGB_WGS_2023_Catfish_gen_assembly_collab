@@ -249,7 +249,7 @@ rule concatenate_logs:
 
 ##### load rules #####
 include: "rules/00-trimming_reads.smk"
-include: "rules/01-quality_control_reads.smk" 
+#include: "rules/01-quality_control_reads.smk" 
 
 
 
