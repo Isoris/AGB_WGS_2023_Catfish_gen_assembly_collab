@@ -79,10 +79,37 @@ rule all:
         "paths.sh",
         "logs/logs.txt",
         "logs/file_log.txt",
+        "expand.keys.txt",
         expand("{path_reads_prefix}/{sample}_trimmed.fq.gz", path_reads_prefix=path_reads_prefix, sample=get_combined_samples()) #line 82
     
         # Add additional lines for other output files as needed
 
+
+# Rule to print function outputs
+rule print_function_outputs:
+    output:
+        "function_outputs.txt"
+    run:
+        with open(output[0], 'w') as f_out:
+            # List of functions to display output from
+            functions_to_run = [
+                get_sample_ids,
+                get_reference_accession,
+                get_species_file_prefix,
+                get_species_long,
+                get_species,
+                get_sex,
+                get_method,
+                get_orientation,
+                get_combined_samples,
+            ]
+            # Iterate over the functions and print their output
+            for func in functions_to_run:
+                func_name = func.__name__
+                func_output = func()
+                print(f"Output of {func_name}: {func_output}")
+                f_out.write(f"Output of {func_name}: {func_output}\n")
+                
 ##### Main rule to orchestrate the workflow #####
 rule create_log_folder:
     output:
