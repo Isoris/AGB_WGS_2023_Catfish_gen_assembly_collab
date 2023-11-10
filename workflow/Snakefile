@@ -32,9 +32,13 @@ print (config['samples'])
 
 def get_unique_values(key):
     values = set()
-    for sample in config["samples"].values():
-        values.update(sample.get(key, []))
+    for species in config["samples"].values():
+        for sample in species.values():
+            value = sample.get(key)
+            if value is not None:
+                values.add(value)
     return list(values)
+
 
 def get_unique_values_references(key):
     values = set()
