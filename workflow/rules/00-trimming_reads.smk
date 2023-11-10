@@ -8,8 +8,8 @@ rule adapter_removal:
         out1 = "{path_reads_prefix}/{species}_{sex}_{method}_FWD_trimmed.fq.gz",
         out2 = "{path_reads_prefix}/{species}_{sex}_{method}_REV_trimmed.fq.gz"
     log:
-        out1_log = "logs/{species}_{sex}_{method}_FWD_trimming.log",
-        out2_log = "logs/{species}_{sex}_{method}_REV_trimming.log"
+        out1_log = "logs/{species}_{sex}_{method}_FWD_trimmed.log",
+        out2_log = "logs/{species}_{sex}_{method}_REV_trimmed.log"
     conda:
         "rules/quality_control_reads.yaml"  # Make sure this points to the correct Conda environment file
     shell:

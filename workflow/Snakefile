@@ -107,7 +107,13 @@ rule all:
                species=SPECIES, 
                sex=SEX, 
                method=METHODS, 
-               orientation=ORIENTATIONS)        
+               orientation=ORIENTATIONS),
+        expand("{path_reads_prefix}/{species}_{sex}_{method}_{orientation}_trimmed.log", 
+               path_reads_prefix=path_reads_prefix, 
+               species=SPECIES, 
+               sex=SEX, 
+               method=METHODS, 
+               orientation=ORIENTATIONS)          
 
 # Rule to print function outputs
 rule print_function_outputs:
