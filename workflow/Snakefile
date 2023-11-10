@@ -145,14 +145,8 @@ rule debug_config:
 rule create_log_folder:
     output:
         log="logs/logs.txt"
-    shell:cts this, and your fastqc_on_illumina_raw_reads rule should reference these files correctly:
-        with open(str(output), "w") as f:
-            f.write(f"export path_reads_prefix='{params.path_reads_prefix}'\n")
-            f.write(f"export path_data_prefix='{params.path_data_prefix}'\n")
-            f.write(f"export path_prog_prefix='{params.path_prog_prefix}'\n")
-            f.write(f"export path_exp_prefix='{params.path_exp_prefix}'\n")
-            f.write(f"export path_out_prefix='{params.path_out_prefix}'\n")
-            f.write(f"export path_tmp_prefix='{params.path_tmp_prefix}'\n")
+    shell: 
+    "touch {output.log}"
 
 rule log_reads_directory:
     input:
