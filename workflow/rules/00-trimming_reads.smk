@@ -13,7 +13,8 @@ rule fastqc_on_illumina_raw_reads:
         "envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:
         """
-        mkdir -p {output.fastqc_out} && \
+        mkdir -p {output.fastqc_out_FWD} && \
+        mkdir -p {output.fastqc_out_REV} && \
         fastqc {input.read_FWD} -t {threads} -o {output.fastqc_out_FWD} && \
         fastqc {input.read_REV} -t {threads} -o {output.fastqc_out_REV}
         """
