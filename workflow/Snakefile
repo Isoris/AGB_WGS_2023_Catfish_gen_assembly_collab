@@ -27,8 +27,8 @@ configfile: f"{current_path}/config/config.yaml" #report: "report/workflow.rst"
 SPECIES = ["CG", "CM"]
 SEX = ["F", "M"]
 METHODS = ["ILLUMINA", "HIFI"]
-ORIENTATIONS = ["FWD", "REV", "None"]  # "None" is used for files without orientation like HIFI
-
+ORIENTATIONS_PE = ["FWD", "REV"]  # "None" is used for files without orientation like HIFI
+ORIENTATIONS_SE = ["None"]  # "None" is used for files without orientation like HIFI
 ##### load init rules #####
 
 rule all:
@@ -40,13 +40,13 @@ rule all:
         "expand.keys.txt",
         expand("{path_reads_prefix}/CG_F_ILLUMINA_{orientation}_trimmed.fq.gz",
                path_reads_prefix=path_reads_prefix, 
-               orientation=ORIENTATIONS),
+               orientation=ORIENTATIONS_PE),
         expand("{path_reads_prefix}/CM_F_ILLUMINA_{orientation}_trimmed.fq.gz", 
                path_reads_prefix=path_reads_prefix, 
-               orientation=ORIENTATIONS),
+               orientation=ORIENTATIONS_PE),
         expand("{path_reads_prefix}/CM_M_ILLUMINA_{orientation}_trimmed.fq.gz", 
                path_reads_prefix=path_reads_prefix, 
-               orientation=ORIENTATIONS)
+               orientation=ORIENTATIONS_PE)
 
 
 
