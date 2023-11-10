@@ -106,12 +106,8 @@ rule all:
         expand("{path_out_prefix}/00-FASTQC/CM_M_ILLUMINA_{orientation_pe}_trimmed/",
                path_out_prefix=path_out_prefix, 
                orientation_pe=ORIENTATIONS_PE),
-        expand("{path_out_prefix}/00-FASTQC/CM_M_HIFI_None/",
-               path_out_prefix=path_out_prefix),
         expand("{path_reads_prefix}/CM_M_HIFI_None_reads.fastq.gz",
                path_reads_prefix=path_reads_prefix),
-        expand("{path_out_prefix}/00-FASTQC/CG_F_HIFI_None/",
-               path_out_prefix=path_out_prefix),
         expand("{path_reads_prefix}/CG_F_HIFI_None_reads.fastq.gz",
                path_reads_prefix=path_reads_prefix)
 

@@ -42,7 +42,7 @@ rule adapter_removal_on_illumina:
 # Define rule for running FastQC on trimmed reads (if they exist)
 rule fastqc_on_illumina_trimmed_reads:
     input:
-        read = path_reads_prefix + "/{species}_{sex}_{method}_{orientation_pe}_trimmed.fq.gz",
+        read = path_reads_prefix + "/{species}_{sex}_{method}_{orientation_pe}_trimmed.fq.gz"
     output:
         fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_{method}_{orientation_pe}_trimmed/"
     conda:
@@ -54,9 +54,7 @@ rule fastqc_on_illumina_trimmed_reads:
         """        
 
 
-
 ### Parse and prepare HiFi data
-
 rule bam_to_fastq:
     input:
         bam = path_reads_prefix + "/{species}_{sex}_HIFI_None.bam"
