@@ -2,7 +2,8 @@ import subprocess
 import os
 import sys
 import glob
-import yaml 
+import yaml
+import re 
 from snakemake.io import expand
 from snakemake.io import Wildcards
 
@@ -26,7 +27,9 @@ print (config['samples'])
 # The following is equivalent to what snakemake does with the configuration file:
 #config = yaml.load(config_text)
 #config
-
+# Manually load an additional configuration file
+with open("config_active.yaml") as f:
+    config_active = yaml.safe_load(f)
 
 ##### Definition of functions
 
@@ -38,7 +41,6 @@ def get_unique_values(key):
             if value is not None:
                 values.add(value)
     return list(values)
-
 
 def get_unique_values_references(key):
     values = set()
@@ -70,28 +72,35 @@ def get_method():
 def get_orientation():
     return get_unique_values('orientation')
 
-def get_combined_samples():
-    species = get_species()
-    sex = get_sex()
-    method = get_method()
-    orientation = get_orientation()
-    return ["{}_{}_{}_{}".format(s, sx, m, o) for s in species for sx in sex for m in method for o in orientation]
+def populate_wildcard_lists():
+    species_list = set()
+    sex_list = set()
+    method_list = set()
+    orientation_list = set()
 
-def get_sample(wildcards): #Get_sample_prefix
-    # This function now assumes each sample is a key in the config that 
-    # corresponds to a prefix without a file extension
-    return f"{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}"
+    pattern = re.compile(r'(\w+)_(\w+)_(\w+)_(\w+).fq.gz$')
+    for filename in os.listdir(path_reads_prefix):
+        match = pattern.match(filename)
+        if match:
+            species, sex, method, orientation = match.groups()
+            species_list.add(species)
+            sex_list.add(sex)
+            method_list.add(method)
+            orientation_list.add(orientation)
 
+    return {
+        'species': list(species_list),
+        'sex': list(sex_list),
+        'method': list(method_list),
+        'orientation': list(orientation_list)
+    }
 
-def get_existing_reads_files():
-    reads_files = []
-    for read_file in glob.glob(f"{path_reads_prefix}/*.fq.gz"):
-        if os.path.isfile(read_file):
-            # Remove the .fq.gz extension and append the _trimmed.fq.gz extension
-            trimmed_base = read_file.rsplit('.fq.gz', 1)[0]
-            trimmed_file = f"{trimmed_base}_trimmed.fq.gz"
-            reads_files.append(trimmed_file)
-    return reads_files
+# Call the function and store the results in variables
+wildcards = populate_wildcard_lists()
+SPECIES = wildcards['species']
+SEX = wildcards['sex']
+METHODS = wildcards['method']
+ORIENTATIONS = wildcards['orientation']
 
 ##### load init rules #####
 
@@ -102,10 +111,15 @@ rule all:
         "logs/file_log.txt",
         "debug_config_output.txt",
         "expand.keys.txt",
-        get_existing_reads_files()
-        #expand("{path_reads_prefix}/{sample}_trimmed.fq.gz", path_reads_prefix=path_reads_prefix, sample=get_combined_samples()) #line 82
-    
-        # Add additional lines for other output files as needed
+        expand("{path_reads_prefix}/{species}_{sex}_{method}_{orientation}_trimmed.fq.gz", 
+               path_reads_prefix=path_reads_prefix, 
+               species=SPECIES, 
+               sex=SEX, 
+               method=METHODS, 
+               orientation=ORIENTATIONS)        
+       #expand("{path_reads_prefix}/{sample}_trimmed.fq.gz", path_reads_prefix=path_reads_prefix) #line 82
+       #get_existing_reads_files()
+    # Add additional lines for other output files as needed
 
 
 # Rule to print function outputs
@@ -318,3 +332,44 @@ include: "rules/00-trimming_reads.smk"
 
 
 # End
+def get_combined_samples():
+    species = get_species()
+    sex = get_sex()
+    method = get_method()
+    orientation = get_orientation()
+    return ["{}_{}_{}_{}".format(s, sx, m, o) for s in species for sx in sex for m in method for o in orientation]
+
+def get_sample(wildcards): #Get_sample_prefix
+    # This function now assumes each sample is a key in the config that 
+    # corresponds to a prefix without a file extension
+    return f"{wildcards.species}_{wildcards.sex}_{wildcards.method}_{wildcards.orientation}"
+
+
+def get_available_wildcards():
+    species_set = set()
+    sex_set = set()
+    method_set = set()
+    orientation_set = set()
+    pattern = re.compile(r'(\w+)_(\w+)_(\w+)_(\w+).fq.gz$')
+
+    for filename in os.listdir(path_reads_prefix):
+        match = pattern.match(filename)
+        if match:
+            species, sex, method, orientation = match.groups()
+            species_set.add(species)
+            sex_set.add(sex)
+            method_set.add(method)
+            orientation_set.add(orientation)
+
+    return species_set, sex_set, method_set, orientation_set
+
+
+def get_existing_reads_files():
+    reads_files = []
+    for read_file in glob.glob(f"{path_reads_prefix}/*.fq.gz"):
+        if os.path.isfile(read_file):
+            # Remove the .fq.gz extension and append the _trimmed.fq.gz extension
+            trimmed_base = read_file.rsplit('.fq.gz', 1)[0]
+            trimmed_file = f"{trimmed_base}_trimmed.fq.gz"
+            reads_files.append(trimmed_file)
+    return reads_files

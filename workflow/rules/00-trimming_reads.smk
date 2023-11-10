@@ -1,14 +1,15 @@
 # Define variables
+
 rule adapter_removal:
     input:
-        read1 = "{path_reads_prefix}/{sample}_FWD.fq.gz",
-        read2 = "{path_reads_prefix}/{sample}_REV.fq.gz"
+        read1 = "{path_reads_prefix}/{species}_{sex}_{method}_FWD.fq.gz",
+        read2 = "{path_reads_prefix}/{species}_{sex}_{method}_REV.fq.gz"
     output:
-        out1 = "{path_reads_prefix}/{sample}_FWD.trimmed.fq.gz",
-        out2 = "{path_reads_prefix}/{sample}_REV.trimmed.fq.gz"
+        out1 = "{path_reads_prefix}/{species}_{sex}_{method}_FWD.trimmed.fq.gz",
+        out2 = "{path_reads_prefix}/{species}_{sex}_{method}_REV.trimmed.fq.gz"
     log:
-        out1_log = "logs/{sample}_FWD.trimming.log",
-        out2_log = "logs/{sample}_REV.trimming.log"
+        out1_log = "logs/{species}_{sex}_{method}_FWD.trimming.log",
+        out2_log = "logs/{species}_{sex}_{method}_REV.trimming.log"
     conda:
         "rules/quality_control_reads.yaml"  # Make sure this points to the correct Conda environment file
     shell:
