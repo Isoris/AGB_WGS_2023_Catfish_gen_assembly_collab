@@ -3,7 +3,7 @@
 # Define rule for running FastQC on raw reads
 rule fastqc_on_illumina_raw_reads:
     input:
-        read = path_reads_prefix + "{species}_{sex}_{method}_{orientation}.fq.gz",
+        read = path_reads_prefix + "/{species}_{sex}_{method}_{orientation}.fq.gz",
     output:
         fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_{method}_{orientation}/"
     conda:
