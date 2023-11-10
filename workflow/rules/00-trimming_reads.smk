@@ -46,4 +46,4 @@ rule fastqc_on_illumina_trimmed_reads:
         """
         mkdir -p {output.fastqc_out} && \
         fastqc {input.read} -t {threads} -o {output.fastqc_out}
-
+        """        
