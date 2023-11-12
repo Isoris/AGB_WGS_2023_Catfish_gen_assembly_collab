@@ -10,7 +10,7 @@ rule fastqc_on_illumina_raw_reads:
         fastqc_out_FWD = path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_FWD/",
         fastqc_out_REV = path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_REV/"
     conda:
-        "envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
+        "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:
         """
         mkdir -p {output.fastqc_out_FWD} && \
@@ -28,7 +28,7 @@ rule adapter_removal_on_illumina:
         out1 = "{path_reads_prefix}/{species}_{sex}_{method}_FWD_trimmed_reads.fastq.gz",
         out2 = "{path_reads_prefix}/{species}_{sex}_{method}_REV_trimmed_reads.fastq.gz"
     conda:
-        "envs/quality_control_reads.yaml"
+        "../envs/quality_control_reads.yaml"
     shell:
         """
         AdapterRemoval \
@@ -47,7 +47,7 @@ rule fastqc_on_illumina_trimmed_reads:
     output:
         fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_{method}_{orientation_pe}_trimmed/"
     conda:
-        "envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
+        "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:
         """
         mkdir -p {output.fastqc_out} && \
@@ -62,7 +62,7 @@ rule bam_to_fastq:
     output:
         fastq = path_reads_prefix + "/{species}_{sex}_HIFI_None_rawreads.fastq"
     conda:
-        "envs/quality_control_reads.yaml"
+        "../envs/quality_control_reads.yaml"
     shell:
         """
         bam2fastq -o {output.fastq} {input.bam} 
@@ -74,7 +74,7 @@ rule remove_hifi_adapters:
     output:
         trimmed_hifi_reads = path_reads_prefix + "/{species}_{sex}_HIFI_None_reads.fastq"
     conda:
-        "envs/quality_control_reads.yaml"
+        "../envs/quality_control_reads.yaml"
     shell:
         """ 
         seqtk trimfq -b 20 -e 20 {input.raw_read_hifi} > {output.trimmed_hifi_reads} 
@@ -86,7 +86,7 @@ rule gzip_hifi_fastq:
     output:
         fastq = path_reads_prefix + "/{species}_{sex}_HIFI_None_reads.fastq.gz"
     conda:
-        "envs/quality_control_reads.yaml"
+        "../envs/quality_control_reads.yaml"
     shell:
         """ 
         gzip -5 {input.trimmed_hifi_reads} && \
