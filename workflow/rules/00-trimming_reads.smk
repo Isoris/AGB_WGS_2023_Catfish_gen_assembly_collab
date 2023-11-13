@@ -86,7 +86,6 @@ rule gzip_hifi_trimmed_reads:
     shell:
         """ 
         gzip -c -5 {input.trimmed_hifi_reads} > {output.fastq}
-
         """
 
 
@@ -94,7 +93,7 @@ rule gzip_hifi_trimmed_reads:
 
 rule longqc_on_hifi_trimmed_reads:
     input:
-        fastq = path_reads_prefix + "/{sample}_HIFI_None_reads.fastq.gz"
+        fastq = path_reads_prefix + "/{sample}_HIFI_None_trimmed_reads.fastq.gz"
     output:
         longqc_out = directory(path_out_prefix + "/00-LONGQC/{sample}_HIFI/")
     params:
