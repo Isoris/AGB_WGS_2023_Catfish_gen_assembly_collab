@@ -66,9 +66,9 @@ rule mash_screen: # Run on the reads against RefSeq minimal database
 
 rule run_jellyfish_count_hifi:
     input:
-        reads = path_reads_prefix + "/{sample}_HIFI_None_reads.fastq.gz"
+        reads = path_reads_prefix + "/{sample}_HIFI_None_trimmed_reads.fastq.gz"
     output:
-        jellyfish_count= path_out_prefix + "/{sample}_HIFI_None_reads_jellyfish_count.jf"
+        jellyfish_count= path_out_prefix + "/{sample}_HIFI_None_trimmed_reads_jellyfish_count.jf"
     params:
         jellyfish_path = path_prog_prefix + "/jellyfish-2.3.0/bin/jellyfish",
         kmer_size = 21
@@ -82,9 +82,9 @@ rule run_jellyfish_count_hifi:
 
 rule run_jellyfish_histo:
     input:
-        jellyfish_count = path_out_prefix + "/{sample}_HIFI_None_reads_jellyfish_count.jf"
+        jellyfish_count = path_out_prefix + "/{sample}_HIFI_None_trimmed_reads_jellyfish_count.jf"
     output:
-        jellyfish_histo = path_out_prefix + "/{sample}_HIFI_None_reads_jellyfish_histo.histo"
+        jellyfish_histo = path_out_prefix + "/{sample}_HIFI_None_trimmed_reads_jellyfish_histo.histo"
     params:
         jellyfish_path = path_prog_prefix + "/jellyfish-2.3.0/bin/jellyfish"
     conda:
@@ -98,7 +98,7 @@ rule run_jellyfish_histo:
 # Role: Genomescope is used for genome profiling based on k-mer analysis
 rule run_genomescope:
     input:
-        jellyfish_histo = path_out_prefix + "/{sample}_HIFI_None_reads_jellyfish_histo.histo"
+        jellyfish_histo = path_out_prefix + "/{sample}_HIFI_None_trimmed_reads_jellyfish_histo.histo"
     output:
         directory(path_out_prefix + "/{sample}_HIFI_None_genomescope_output/")
     params:

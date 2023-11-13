@@ -80,7 +80,7 @@ rule gzip_hifi_trimmed_reads:
     input:
         trimmed_hifi_reads = path_reads_prefix + "/{species}_{sex}_HIFI_None_reads.fastq"
     output:
-        fastq = path_reads_prefix + "/{species}_{sex}_HIFI_None_reads.fastq.gz"
+        fastq = path_reads_prefix + "/{species}_{sex}_HIFI_None_trimmed_reads.fastq.gz"
     conda:
         "../envs/quality_control_reads.yaml"
     shell:
