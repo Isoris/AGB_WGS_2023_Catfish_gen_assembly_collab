@@ -85,7 +85,8 @@ rule gzip_hifi_trimmed_reads:
         "../envs/quality_control_reads.yaml"
     shell:
         """ 
-        gzip -5 {input.trimmed_hifi_reads}
+        gzip -c -5 {input.trimmed_hifi_reads} > {output.fastq}
+
         """
 
 

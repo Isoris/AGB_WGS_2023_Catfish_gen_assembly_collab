@@ -1,7 +1,7 @@
 ### Mash
 rule mash_sketch:
     input:
-        fastq_gz = path_reads_prefix + "/{sample}_trimmed_reads.fastq.gz", 
+        fastq_gz = path_reads_prefix + "/{sample}_reads.fastq.gz", 
     output:
         sketch = path_data_prefix + "/01-MASH_DB/{sample}_sketch_reads.msh"
     conda:
@@ -64,16 +64,16 @@ rule mash_screen: # Run on the reads against RefSeq minimal database
 # Role: Used for the quality control of reads by fast, memory-efficient counting of k-mers in DNA https://genome.umd.edu/jellyfish.html 
 # https://genome.umd.edu/docs/JellyfishUserGuide.pdf
 
-rule run_jellyfish_count:
+rule run_jellyfish_count_hifi:
     input:
-        reads=f"{path_reads_prefix}/{{sample}}_rawreads.fastq.gz"
+        reads = path_reads_prefix + "/{sample}_HIFI_None_reads.fastq.gz"
     output:
-        jellyfish_count=f"{path_out_prefix}/{{sample}}_jellyfishcount.jf"
+        jellyfish_count= path_out_prefix + "/{sample}_HIFI_None_reads_jellyfish_count.jf"
     params:
-        jellyfish_path = "/tarafs/data/home/qandres/catfish/catfish/01-PROGRAMS/jellyfish-2.3.0/bin/jellyfish",
+        jellyfish_path = path_prog_prefix + "/jellyfish-2.3.0/bin/jellyfish",
         kmer_size = 21
     conda:
-        "quality_control.yml"  # Replace with the path to your 'quality_control' environment file
+        "../envs/quality_control_reads.yaml"    # Replace with the path to your conda environment file
     shell:
         """
         zcat {input.reads} | {params.jellyfish_path} count -m {params.kmer_size} -s 100M -t {threads} \
@@ -82,24 +82,25 @@ rule run_jellyfish_count:
 
 rule run_jellyfish_histo:
     input:
-        jellyfish_count=f"{path_out_prefix}/{{sample}}_jellyfishcount.jf"
+        jellyfish_count = path_out_prefix + "/{sample}_HIFI_None_reads_jellyfish_count.jf"
     output:
-        histo=f"{path_out_prefix}/{{sample}}_jellyfish_histo.histo"
+        jellyfish_histo = path_out_prefix + "/{sample}_HIFI_None_reads_jellyfish_histo.histo"
     params:
-         jellyfish_path = "/tarafs/data/home/qandres/catfish/catfish/01-PROGRAMS/jellyfish-2.3.0/bin/jellyfish"
+        jellyfish_path = path_prog_prefix + "/jellyfish-2.3.0/bin/jellyfish"
     conda:
-        "quality_control.yml"  # Replace with the path to your 'quality_control' environment file
+        "../envs/quality_control_reads.yaml"    # Replace with the path to your conda environment file
     shell:
-        "{params.jellyfish_path} histo -t {threads} {input.jellyfish_count} > {output.histo}"
-
+        """
+        {params.jellyfish_path} histo -t {threads} {input.jellyfish_count} > {output.jellyfish_histo}
+        """
 
 ### GenomeScope
 # Role: Genomescope is used for genome profiling based on k-mer analysis
 rule run_genomescope:
     input:
-        jellyfish_histo=f"{path_out_prefix}/{{sample}}_jellyfish_histo.histo"
+        jellyfish_histo = path_out_prefix + "/{sample}_HIFI_None_reads_jellyfish_histo.histo"
     output:
-        directory(f"{path_out_prefix}/{{sample}}_genomescope_output/")
+        directory(path_out_prefix + "/{sample}_HIFI_None_genomescope_output/")
     params:
         genomescope_script="scripts/genomescope.R",  # adjust this to your genomescope script path
         kmer_length=21,  # adjust as needed
@@ -107,7 +108,7 @@ rule run_genomescope:
         kmer_max=None,  # optional, set a value if required
         verbose=False  # set to True if verbose output is needed
     conda:
-        "quality_control_reads.yaml"  # Replace with the path to your 'quality_control' environment file
+        "../envs/quality_control_reads.yaml"    # Replace with the path to your conda environment file
     shell:
         """
         Rscript {params.genomescope_script} {input.jellyfish_histo} {params.kmer_length} {params.read_length} {output} {params.kmer_max if params.kmer_max else ''} {'--verbose' if params.verbose else ''}

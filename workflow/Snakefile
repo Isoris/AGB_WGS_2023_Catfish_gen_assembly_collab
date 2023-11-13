@@ -120,9 +120,9 @@ rule all:
         expand("{path_reads_prefix}/CG_F_HIFI_None_reads.fastq.gz",
                path_reads_prefix=path_reads_prefix),
         ####### LONGQC HIFI READS
-        #expand("{path_out_prefix}/00-LONGQC/{sample}_HIFI/",
-        #       path_out_prefix=path_out_prefix, 
-        #       sample=["CM_M", "CG_F"]),
+        expand("{path_out_prefix}/00-LONGQC/{sample}_HIFI/",
+               path_out_prefix=path_out_prefix, 
+               sample=["CM_M", "CG_F"]),
         ####### MASH FOR READ CONTAMINATION
         expand("{path_out_prefix}/01-MASH/CG_F_ILLUMINA_{orientation}_mash_plot.png",
                path_out_prefix=path_out_prefix,
@@ -132,12 +132,21 @@ rule all:
                orientation=ORIENTATIONS_PE),
         expand("{path_out_prefix}/01-MASH/CM_M_ILLUMINA_{orientation}_mash_plot.png",
                path_out_prefix=path_out_prefix,
-               orientation=ORIENTATIONS_PE)
-       # expand("{path_out_prefix}/01-MASH/CM_M_HIFI_None_mash_plot.png",
-       #        path_out_prefix=path_out_prefix),
-       # expand("{path_out_prefix}/01-MASH/CG_F_HIFI_None_mash_plot.png",
-       #        path_out_prefix=path_out_prefix),
-
+               orientation=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/01-MASH/CM_M_HIFI_None_mash_plot.png",
+               path_out_prefix=path_out_prefix),
+        expand("{path_out_prefix}/01-MASH/CG_F_HIFI_None_mash_plot.png",
+               path_out_prefix=path_out_prefix),
+        ####### JELLYFISH AND GENOMESCOPE FOR  HIFI DATASET
+        expand(path_out_prefix + "/{sample}_HIFI_None_reads_jellyfish_count.jf",
+               path_out_prefix=path_out_prefix, 
+               sample=["CM_M", "CG_F"]),
+        expand(path_out_prefix + "/{sample}_HIFI_None_reads_jellyfish_histo.histo",
+               path_out_prefix=path_out_prefix, 
+               sample=["CM_M", "CG_F"]),
+        expand(path_out_prefix + "/{sample}_HIFI_None_genomescope_output/",
+               path_out_prefix=path_out_prefix, 
+               sample=["CM_M", "CG_F"])
 
 # Snakefile
 #https://stackoverflow.com/questions/46506784/how-do-the-terms-job-task-and-step-relate-to-each-other/46532581#46532581

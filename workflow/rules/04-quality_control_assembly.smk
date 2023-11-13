@@ -31,5 +31,3 @@ rule quast_quast_control:
 
         echo "QUAST Quality control step finished for {wildcards.species} {wildcards.sex} {wildcards.version}"
         """
-
-rule 
