@@ -1,0 +1,6 @@
+export path_reads_prefix='/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS'
+export path_data_prefix='/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS'
+export path_prog_prefix='/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../01-PROGRAMS'
+export path_exp_prefix='/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../02-EXPERIMENTS'
+export path_out_prefix='/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS'
+export path_tmp_prefix='/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../04-TEMPORARY_FILES'
