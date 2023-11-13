@@ -2,7 +2,6 @@ name: quality_control
 channels:
   - bioconda
   - conda-forge
-  - defaults
 dependencies:
   - _libgcc_mutex=0.1=conda_forge
   - _openmp_mutex=4.5=2_gnu
@@ -34,10 +33,12 @@ dependencies:
   - bedtools=2.31.0=hf5e1c6e_3
   - billiard=3.6.4.0=py39hb9d737c_3
   - binutils_impl_linux-64=2.40=hf600244_0
+  - biopython=1.81=py39hd1e30aa_1
   - blasr=5.3.5=0
   - blast=2.2.31=1
   - bleach=6.1.0=pyhd8ed1ab_0
   - blinker=1.7.0=pyhd8ed1ab_0
+  - bokeh=2.4.3=pyhd8ed1ab_3
   - boost=1.82.0=h8003fee_6
   - boto3=1.26.83=pyhd8ed1ab_0
   - botocore=1.29.165=pyhd8ed1ab_0
@@ -104,6 +105,7 @@ dependencies:
   - fastcore=1.5.29=pyhd8ed1ab_0
   - fastqc=0.12.1=hdfd78af_0
   - filechunkio=1.8=py_2
+  - filtlong=0.2.1=hdcf5f25_3
   - findutils=4.6.0=h166bdaf_1001
   - font-ttf-dejavu-sans-mono=2.37=hab24e00_0
   - font-ttf-inconsolata=3.000=h77eed37_0
@@ -275,6 +277,7 @@ dependencies:
   - munkres=1.0.7=py_1
   - mysql-common=8.0.33=hf1915f5_5
   - mysql-libs=8.0.33=hca2cd23_5
+  - nanoqc=0.9.4=py_0
   - nbclient=0.8.0=pyhd8ed1ab_0
   - nbconvert=7.10.0=pyhd8ed1ab_0
   - nbconvert-core=7.10.0=pyhd8ed1ab_0
