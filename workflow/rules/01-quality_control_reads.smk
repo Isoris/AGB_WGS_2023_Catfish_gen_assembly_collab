@@ -136,3 +136,7 @@ rule run_genomescope:
 # Define rule for running LongQC on raw reads (longCQ is under catfish/01-PROGRAMS/) should run within mamba quality_control environment 
 # Role: For the QC of long reads from HiFi
 
+# https://github.com/VGP/vgp-assembly/tree/master/pipeline/meryl
+
+# https://github.com/marbl/merqury
+# https://github.com/cnag-aat/assembly_pipeline/tree/v2.1.0#1--ont-reads
