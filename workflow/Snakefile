@@ -167,7 +167,11 @@ rule all:
        # expand(path_reads_prefix + "/{sample}_NANOPORE_trimmed_reads.fastq.gz",
        #        path_reads_prefix=path_reads_prefix, 
        #        sample=["CM_M", "CG_F"])
-
+        ####### ASSEMBLE GENOMES FROM ONT HIFI AND HI IN HIFASM
+        expand("{sample}.p_ctg.fa", path_reads_prefix=path_reads_prefix, sample=["CM_M", "CG_F"]),
+        expand("{sample}.a_ctg.fa", path_reads_prefix=path_reads_prefix, sample=["CM_M", "CG_F"]),
+        expand("{sample}.hap1.p_ctg.fa", path_reads_prefix=path_reads_prefix, sample=["CM_M", "CG_F"]),
+        expand("{sample}.hap2.p_ctg.fa", path_reads_prefix=path_reads_prefix, sample=["CM_M", "CG_F"])
 # Snakefile
 #https://stackoverflow.com/questions/46506784/how-do-the-terms-job-task-and-step-relate-to-each-other/46532581#46532581
 
@@ -269,3 +273,4 @@ rule concatenate_logs:
 ##### load rules #####
 include: "rules/00-trimming_reads.smk"
 include: "rules/01-quality_control_reads.smk" 
+include: "rules/02-denovo.smk" 

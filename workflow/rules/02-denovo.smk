@@ -3,72 +3,48 @@
 
 rule run_hifasm_hifi_UL_hic:
     input:
-        compressed_hifi_raw_reads = lambda wildcards: f"{path_reads_prefix}/{get_sample(wildcards)}.fastq.gz",
-        ont_reads = "path/to/ONT_reads.fastq",
-        hic1_reads = "path/to/HiC1.fastq",
-        hic2_reads = "path/to/HiC2.fastq"
+        hifi_reads = path_reads_prefix + "/{sample}_HIFI_None_trimmed_reads.fastq.gz",
+        ont_reads = path_reads_prefix + "/{sample}_NANOPORE_trimmed_reads.fastq.gz",
+        hic1_reads = path_reads_prefix + "/{sample}_HIC_FWD.fastq.gz",
+        hic2_reads = path_reads_prefix + "/{sample}_HIC_REV.fastq.gz" # Assuming REV is the reverse read
     output:
-        primary_ctg = "path/to/output/{sample}.p_ctg.gfa",
-        alternate_ctg = "path/to/output/{sample}.a_ctg.gfa",
-        hap1_ctg = "path/to/output/{sample}.hap1.p_ctg.gfa",
-        hap2_ctg = "path/to/output/{sample}.hap2.p_ctg.gfa"
+        primary_ctg = path_reads_prefix + "/{sample}.p_ctg.gfa",
+        alternate_ctg = path_reads_prefix + "/{sample}.a_ctg.gfa",
+        hap1_ctg = path_reads_prefix + "/{sample}.hap1.p_ctg.gfa",
+        hap2_ctg = path_reads_prefix + "/{sample}.hap2.p_ctg.gfa"
     params:
-        hifiasm_path = "/tarafs/data/home/qandres/catfish/catfish/01-PROGRAMS/hifiasm-0.19.7/hifiasm",
-        z = "{tri}"  # This assumes 'tri' is defined somewhere else in your workflow
-    log:
-        "logs/hifiasm/{sample}.log"
+        hifiasm_path = path_prog_prefix + "/hifiasm-0.19.7/hifiasm",
+        out_prefix = "{sample}"
     shell:
         """
-        # Trim the HiFi reads
-        seqtk trimfq \
-        -b 20 \
-        -e 20 \
-        {input.compressed_hifi_raw_reads} > {input.compressed_hifi_raw_reads}.trimmed.fastq
-
-        # Run hifiasm with --dual-scaf and --primary
         {params.hifiasm_path} \
         --dual-scaf \
         --primary \
         --h1 {input.hic1_reads} \
         --h2 {input.hic2_reads} \
         --ul {input.ont_reads} \
-        {input.compressed_hifi_raw_reads}.trimmed.fastq \
-        -z {params.z} \
-        -o path/to/output/{wildcards.sample}
-        # Note: This assumes the output prefix is the same as {wildcards.sample}
+        {input.hifi_reads} \
+        -o {params.out_prefix}
         """
 
+rule gfa_to_fasta_after_hifasm:
+    input:
+        primary_ctg = path_reads_prefix + "/{sample}.p_ctg.gfa",
+        alternate_ctg = path_reads_prefix + "/{sample}.a_ctg.gfa",
+        hap1_ctg = path_reads_prefix + "/{sample}.hap1.p_ctg.gfa",
+        hap2_ctg = path_reads_prefix + "/{sample}.hap2.p_ctg.gfa"
+    output:
+        primary_ctg_fa = path_reads_prefix + "/{sample}.p_ctg.fa",
+        alternate_ctg_fa = path_reads_prefix + "/{sample}.a_ctg.fa",
+        hap1_ctg_fa = path_reads_prefix + "/{sample}.hap1.p_ctg.fa",
+        hap2_ctg_fa = path_reads_prefix + "/{sample}.hap2.p_ctg.fa"
+    shell:
+        """
+        awk '/^S/{print ">"$2;print $3}' {input.primary_ctg} > {output.primary_ctg_fa} && \ 
+        awk '/^S/{print ">"$2;print $3}' {input.alternate_ctg} > {output.alternate_ctg_fa} && \ 
+        awk '/^S/{print ">"$2;print $3}' {input.hap1_ctg} > {output.hap1_ctg_fa} && \ 
+        awk '/^S/{print ">"$2;print $3}' {input.hap2_ctg} > {output.hap2_ctg_fa}
+        """
 
-
-
-#rule run_spades_short_reads_only:    # https://github.com/chhylp123/hifiasm/releases
-#    input:
-#       compressed_hifi_raw_reads = 
-#   # output:
-#       #
-#    params: 
-#       z = {tri}
-#    shell:
-#    "hifiasm -o {output}.asm -z20 --dual-scaf --primary -t {threads} {input}.fq.gz \ "
-
-
-
-
-
-#rule run_falcon:
-#    output:
-#        haplotype1 = "path/to/haplotype1",
-#        haplotype2 = "path/to/haplotype2"
-#    run:
-#        # Run falcon and generate outputs using subprocess
-#        subprocess.run("""
-#        # Your shell commands here
-#        """, shell=True)
-#
-#
-#        # Update config dynamically after the rule execution
-#        sample = "Sample1"  # replace with actual sample name
-#        config['samples'][sample]['outputs']['falcon_haplotype1'] = "path/to/haplotype1"
-#        config['samples'][sample]['outputs']['falcon_haplotype2'] = "path/to/haplotype2"
-#        
-# More rules ...
+# Run hifiasm with --dual-scaf and --primary   
+# Note: This assumes the output prefix is the same as {wildcards.sample}

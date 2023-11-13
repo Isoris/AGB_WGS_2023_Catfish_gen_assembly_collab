@@ -10,7 +10,7 @@ rule quast_quast_control:
     threads: config['CPUS']
     shell:
 	"""
-	echo "Start of QUAST quality control of the Spades de-novo assemblies for the illumina data"
+	echo "Start of QUAST quality control of the Spades de-novo assemblies for the data"
         echo "Run QUAST with Busco and silva and gridss and rna+gene finding, report all metrics, create circos"
         echo "QUAST Quality control step starting for {wildcards.sex} {wildcards.species}"
 
