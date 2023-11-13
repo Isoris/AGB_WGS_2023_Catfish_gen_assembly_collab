@@ -116,20 +116,24 @@ rule all:
                path_reads_prefix=path_reads_prefix),
         expand("{path_reads_prefix}/CG_F_HIFI_None_reads.fastq.gz",
                path_reads_prefix=path_reads_prefix),
+        ####### LONGQC HIFI READS
+        expand("{path_out_prefix}/00-LONGQC/{sample}_HIFI/",
+               path_out_prefix=path_out_prefix, 
+               sample=["CM_M", "CG_F"]),
         ####### MASH FOR READ CONTAMINATION
-    #    expand("{path_out_prefix}/00-MASH/CM_M_HIFI_None_mash_plot.png",
-    #           path_out_prefix=path_out_prefix),
-    #   expand("{path_out_prefix}/00-MASH/CG_F_HIFI_None_mash_plot.png",
-    #           path_out_prefix=path_out_prefix),
-    #    expand("{path_out_prefix}/00-MASH/CG_F_ILLUMINA_{orientation}_mash_plot.png",
-    #           path_out_prefix=path_out_prefix,
-     #          orientation=ORIENTATIONS_PE),
-     #   expand("{path_out_prefix}/00-MASH/CM_F_ILLUMINA_{orientation}_mash_plot.png",
-     #          path_out_prefix=path_out_prefix,
-     #          orientation=ORIENTATIONS_PE),
-     #   expand("{path_out_prefix}/00-MASH/CM_M_ILLUMINA_{orientation}_mash_plot.png",
-     #          path_out_prefix=path_out_prefix,
-     #          orientation=ORIENTATIONS_PE)
+        expand("{path_out_prefix}/00-MASH/CM_M_HIFI_None_mash_plot.png",
+               path_out_prefix=path_out_prefix),
+       expand("{path_out_prefix}/00-MASH/CG_F_HIFI_None_mash_plot.png",
+               path_out_prefix=path_out_prefix),
+        expand("{path_out_prefix}/00-MASH/CG_F_ILLUMINA_{orientation}_mash_plot.png",
+               path_out_prefix=path_out_prefix,
+               orientation=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/00-MASH/CM_F_ILLUMINA_{orientation}_mash_plot.png",
+               path_out_prefix=path_out_prefix,
+               orientation=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/00-MASH/CM_M_ILLUMINA_{orientation}_mash_plot.png",
+               path_out_prefix=path_out_prefix,
+               orientation=ORIENTATIONS_PE)
 
 # Snakefile
 #https://stackoverflow.com/questions/46506784/how-do-the-terms-job-task-and-step-relate-to-each-other/46532581#46532581

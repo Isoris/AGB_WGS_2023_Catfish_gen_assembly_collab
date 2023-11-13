@@ -7,14 +7,12 @@ rule fastqc_on_illumina_raw_reads:
         read_FWD = path_reads_prefix + "/{species}_{sex}_ILLUMINA_FWD.fq.gz",
         read_REV = path_reads_prefix + "/{species}_{sex}_ILLUMINA_REV.fq.gz"
     output:
-        fastqc_out_FWD = path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_FWD/",
-        fastqc_out_REV = path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_REV/"
+        fastqc_out_FWD = directory(path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_FWD/"),
+        fastqc_out_REV = directory(path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_REV/")
     conda:
         "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:
         """
-        mkdir -p {output.fastqc_out_FWD} && \
-        mkdir -p {output.fastqc_out_REV} && \
         fastqc {input.read_FWD} -t {threads} -o {output.fastqc_out_FWD} && \
         fastqc {input.read_REV} -t {threads} -o {output.fastqc_out_REV}
         """
@@ -45,16 +43,14 @@ rule fastqc_on_illumina_trimmed_reads:
     input:
         read = path_reads_prefix + "/{species}_{sex}_{method}_{orientation_pe}_trimmed_reads.fastq.gz"
     output:
-        fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_{method}_{orientation_pe}_trimmed/"
+        fastqc_out = directory(path_out_prefix + "/00-FASTQC/{species}_{sex}_{method}_{orientation_pe}_trimmed/")
     conda:
-        "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
+        "../envs/quality_control_reads.yaml"
     shell:
         """
-        mkdir -p {output.fastqc_out} && \
         fastqc {input.read} -t {threads} -o {output.fastqc_out}
-        """        
-
-
+        """
+        
 ### Parse and prepare HiFi data
 rule bam_to_fastq:
     input:
@@ -84,13 +80,30 @@ rule gzip_hifi_fastq:
     input:
         trimmed_hifi_reads = path_reads_prefix + "/{species}_{sex}_HIFI_None_reads.fastq"
     output:
-        fastq = path_reads_prefix + "/{species}_{sex}_HIFI_None_reads.fastq.gz"
+        fastq = path_reads_prefix + "/{species}_{sex}_HIFI_None_reads.fastq"
     conda:
         "../envs/quality_control_reads.yaml"
     shell:
         """ 
-        gzip -5 {input.trimmed_hifi_reads} && \
-        mv {input.trimmed_hifi_reads}.gz {output.fastq}
+        gzip -5 {input.trimmed_hifi_reads}
+        """
+
+
+# Define rule for running LongQC on HIFI trimmed reads (if they exist)
+
+rule longqc_on_hifi_reads:
+    input:
+        fastq = path_reads_prefix + "/{sample}_HIFI_None_reads.fastq.gz"
+    output:
+        longqc_out = directory(path_out_prefix + "/00-LONGQC/{sample}_HIFI/")
+    params:
+        longqc_path = "/tarafs/data/home/qandres/catfish/01-PROGRAMS/LongQC-1.2.0c/"
+    conda:
+        "../envs/quality_control_reads.yaml"
+    shell:
+        """
+        python {params.longqc_path}longQC.py sampleqc \
+            -x pb-hifi -o {output.longqc_out} {input.fastq}
         """
 
 ### Parse and prepare ONT nanopore data

@@ -4,7 +4,7 @@ rule mash_sketch:
     input:
         fastq_gz = path_reads_prefix + "/{species}_{sex}_{method}_{orientation}_reads.fastq.gz", 
     output:
-        sketch = path_data_prefix + "/00-MASH_DB/{species}_{sex}_{method}_{orientation}_sketch_reads.msh"
+        sketch = path_data_prefix + "/01-MASH_DB/{species}_{sex}_{method}_{orientation}_sketch_reads.msh"
     conda:
         "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file    
     shell:
@@ -12,13 +12,13 @@ rule mash_sketch:
 
 rule mash_dist: 
     input:
-        ref_sketch = path_data_prefix + "/00-MASH_DB/combined.msh",
-        reads_sketch = path_data_prefix + "/00-MASH_DB/{species}_{sex}_{method}_{orientation}_sketch_reads.msh"
+        ref_sketch = path_data_prefix + "/01-MASH_DB/combined.msh",
+        reads_sketch = path_data_prefix + "/01-MASH_DB/{species}_{sex}_{method}_{orientation}_sketch_reads.msh"
     conda:
         "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     output:
-        distances = path_out_prefix + "/00-MASH/{species}_{sex}_{method}_{orientation}_combined.tbl",
-        key = path_out_prefix + "/00-MASH/{species}_{sex}_{method}_{orientation}_mash_dist_keyfile.txt"
+        distances = path_out_prefix + "/01-MASH/{species}_{sex}_{method}_{orientation}_combined.tbl",
+        key = path_out_prefix + "/01-MASH/{species}_{sex}_{method}_{orientation}_mash_dist_keyfile.txt"
     shell:
         """
         mash dist -p {threads} {input.ref_sketch} {input.reads_sketch} > {output.distances} && \
@@ -33,10 +33,10 @@ rule mash_dist:
 
 rule mash_dist_plot:
     input:
-        distance_file = path_out_prefix + "/00-MASH/{species}_{sex}_{method}_{orientation}_combined.tbl",
-        key_file = path_out_prefix +"/00-MASH/{species}_{sex}_{method}_{orientation}_mash_dist_keyfile.txt"
+        distance_file = path_out_prefix + "/01-MASH/{species}_{sex}_{method}_{orientation}_combined.tbl",
+        key_file = path_out_prefix +"/01-MASH/{species}_{sex}_{method}_{orientation}_mash_dist_keyfile.txt"
     output:
-        plot = path_out_prefix + "/00-MASH/{species}_{sex}_{method}_{orientation}_mash_plot.png"
+        plot = path_out_prefix + "/01-MASH/{species}_{sex}_{method}_{orientation}_mash_plot.png"
     params:
         plot_mash_script = "workflow/scripts/plot_mash.R"  # Adjust this to your script path
     conda:
@@ -48,10 +48,10 @@ rule mash_dist_plot:
 
 rule mash_screen: # Run on the reads against RefSeq minimal database 
     input:
-        ref_sketch = path_data_prefix + "/01-MASHDB/combined.msh", # The RefSeq database of mash indexes.
+        ref_sketch = path_data_prefix + "/01-MASH_DB/combined.msh", # The RefSeq database of mash indexes.
         reads = path_reads_prefix + "/{species}_{sex}_{method}_{orientation}_reads.fastq.gz"
     output:
-        screen = path_out_prefix + "/00-MASH/{species}_{sex}_{method}_{orientation}_screen.tab"
+        screen = path_out_prefix + "/01-MASH/{species}_{sex}_{method}_{orientation}_screen.tab"
     conda:
         "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:
