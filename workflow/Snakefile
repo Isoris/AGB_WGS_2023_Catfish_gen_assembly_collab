@@ -159,7 +159,20 @@ rule all:
         expand("{path_out_prefix}/{sample}_HIFI_None_genomescope_output/",
                path_out_prefix=path_out_prefix, 
                sample=["CM_M", "CG_F"])
-       # Expand for nanoQC on ONT reads
+ #       expand("{path_reads_prefix}/{sample}.p_ctg.fa",
+ #              path_reads_prefix=path_reads_prefix,
+ #              sample=["CM_M", "CG_F"]),
+ #       expand("{path_reads_prefix}/{sample}.a_ctg.fa",
+ #              path_reads_prefix=path_reads_prefix,
+ #              sample=["CM_M", "CG_F"]),
+ #       expand("{path_reads_prefix}/{sample}.hap1.p_ctg.fa",
+ #              path_reads_prefix=path_reads_prefix,
+ #              sample=["CM_M", "CG_F"]),
+ #       expand("{path_reads_prefix}/{sample}.hap2.p_ctg.fa",
+ #              path_reads_prefix=path_reads_prefix,
+ #              sample=["CM_M", "CG_F"])
+
+                       # Expand for nanoQC on ONT reads
         #expand(path_out_prefix + "/00-NANOQC/{sample}_NANOPORE/",           
        #        path_out_prefix=path_out_prefix, 
        #        sample=["CM_M", "CG_F"]),
@@ -168,10 +181,6 @@ rule all:
        #        path_reads_prefix=path_reads_prefix, 
        #        sample=["CM_M", "CG_F"])
         ####### ASSEMBLE GENOMES FROM ONT HIFI AND HI IN HIFASM
-        expand("{sample}.p_ctg.fa", path_reads_prefix=path_reads_prefix, sample=["CM_M", "CG_F"]),
-        expand("{sample}.a_ctg.fa", path_reads_prefix=path_reads_prefix, sample=["CM_M", "CG_F"]),
-        expand("{sample}.hap1.p_ctg.fa", path_reads_prefix=path_reads_prefix, sample=["CM_M", "CG_F"]),
-        expand("{sample}.hap2.p_ctg.fa", path_reads_prefix=path_reads_prefix, sample=["CM_M", "CG_F"])
 # Snakefile
 #https://stackoverflow.com/questions/46506784/how-do-the-terms-job-task-and-step-relate-to-each-other/46532581#46532581
 
