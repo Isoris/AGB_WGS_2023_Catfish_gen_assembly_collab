@@ -146,7 +146,7 @@ rule all:
                sample=["CM_M", "CG_F"]),
         expand(path_out_prefix + "/{sample}_HIFI_None_genomescope_output/",
                path_out_prefix=path_out_prefix, 
-               sample=["CM_M", "CG_F"]),
+               sample=["CM_M", "CG_F"])
        # Expand for nanoQC on ONT reads
         #expand(path_out_prefix + "/00-NANOQC/{sample}_NANOPORE/",           
        #        path_out_prefix=path_out_prefix, 
