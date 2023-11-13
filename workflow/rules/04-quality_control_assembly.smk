@@ -1,4 +1,4 @@
-rule quast_quality_control:
+rule quast_quast_control:
     input:
 	spades_assembly = "{path_prefix_step2_spades}/output_spades_{species}_{sex}_{version}/XXX_spades.fasta",
         ref_genome = "{path_prefix_ref_genomes}/{species}_ref.fasta",
@@ -32,4 +32,4 @@ rule quast_quality_control:
         echo "QUAST Quality control step finished for {wildcards.species} {wildcards.sex} {wildcards.version}"
         """
 
-
+rule 

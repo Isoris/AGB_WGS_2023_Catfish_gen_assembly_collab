@@ -38,6 +38,9 @@ rule run_hifasm_hifi_UL_hic:
         # Note: This assumes the output prefix is the same as {wildcards.sample}
         """
 
+
+
+
 #rule run_spades_short_reads_only:    # https://github.com/chhylp123/hifiasm/releases
 #    input:
 #       compressed_hifi_raw_reads = 
@@ -47,6 +50,9 @@ rule run_hifasm_hifi_UL_hic:
 #       z = {tri}
 #    shell:
 #    "hifiasm -o {output}.asm -z20 --dual-scaf --primary -t {threads} {input}.fq.gz \ "
+
+
+
 
 
 #rule run_falcon:

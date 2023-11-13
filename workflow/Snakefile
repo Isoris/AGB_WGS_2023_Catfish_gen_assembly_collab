@@ -126,7 +126,7 @@ rule all:
         ####### MASH FOR READ CONTAMINATION
         expand("{path_out_prefix}/00-MASH/CM_M_HIFI_None_mash_plot.png",
                path_out_prefix=path_out_prefix),
-       expand("{path_out_prefix}/00-MASH/CG_F_HIFI_None_mash_plot.png",
+        expand("{path_out_prefix}/00-MASH/CG_F_HIFI_None_mash_plot.png",
                path_out_prefix=path_out_prefix),
         expand("{path_out_prefix}/00-MASH/CG_F_ILLUMINA_{orientation}_mash_plot.png",
                path_out_prefix=path_out_prefix,
