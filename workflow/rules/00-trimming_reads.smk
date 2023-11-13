@@ -123,11 +123,11 @@ rule nanoqc_on_nanopore_reads:
 #Define rule for running FastQC on HiC reads (if they exist)
 rule fastqc_on_hic_raw_reads:
     input:
-        read_FWD = path_reads_prefix + "/{species}_{sex}_ILLUMINA_FWD.fq.gz",
-        read_REV = path_reads_prefix + "/{species}_{sex}_ILLUMINA_REV.fq.gz"
+        read_FWD = path_reads_prefix + "/{species}_{sex}_HIC_FWD.fq.gz",
+        read_REV = path_reads_prefix + "/{species}_{sex}_HIC_REV.fq.gz"
     output:
-        fastqc_out_FWD = directory(path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_FWD/"),
-        fastqc_out_REV = directory(path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_REV/")
+        fastqc_out_FWD = directory(path_out_prefix + "/00-FASTQC/{species}_{sex}_HIC_FWD/"),
+        fastqc_out_REV = directory(path_out_prefix + "/00-FASTQC/{species}_{sex}_HIC_REV/")
     conda:
         "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:

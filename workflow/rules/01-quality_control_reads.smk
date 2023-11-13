@@ -7,7 +7,7 @@ rule mash_sketch:
     conda:
         "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file    
     shell:
-        "mash sketch -m 2 -o {output.sketch} {input.fastq_gz}"
+        "mash sketch -k 21 -s 10000 -r -m 2 -o {output.sketch} {input.fastq_gz}"
 
 
 # Rule mash_dist: calculates the pairwise Mash distances between a reference sketch and read sketches, 
