@@ -93,7 +93,7 @@ rule gzip_hifi_trimmed_reads:
 
 rule longqc_on_hifi_trimmed_reads:
     input:
-        fastq = path_reads_prefix + "/{sample}_HIFI_None_reads.fastq.gz"
+        fastq = path_reads_prefix + "/{sample}_HIFI_None_reads.fastq"
     output:
         longqc_out = directory(path_out_prefix + "/00-LONGQC/{sample}_HIFI/")
     params:
@@ -102,7 +102,7 @@ rule longqc_on_hifi_trimmed_reads:
         "../envs/quality_control_reads.yaml"
     shell:
         """
-        python {params.longqc_path}longQC.py sampleqc -x pb-hifi -o {output.longqc_out} {input.fastq}
+        python {params.longqc_path}longQC.py sampleqc -x pb-hifi -o {output.longqc_out} {input.fastq}.gz
         """
 
 ### Parse and prepare ONT nanopore data
