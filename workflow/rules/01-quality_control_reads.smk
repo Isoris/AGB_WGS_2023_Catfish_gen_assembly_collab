@@ -52,7 +52,7 @@ rule mash_dist_plot:
 rule mash_screen: # Run on the reads against RefSeq minimal database 
     input:
         ref_sketch = path_data_prefix + "/01-MASH_DB/combined.msh", # The RefSeq database of mash indexes.
-        reads = path_reads_prefix + "/{species}_{sex}_{method}_{orientation}__trimmed_reads.fastq.gz"
+        reads = path_reads_prefix + "/{species}_{sex}_{method}_{orientation}_trimmed_reads.fastq.gz"
     output:
         screen = path_out_prefix + "/01-MASH/{species}_{sex}_{method}_{orientation}_screen.tab"
     conda:
