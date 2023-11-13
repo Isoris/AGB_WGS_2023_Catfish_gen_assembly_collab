@@ -129,6 +129,6 @@ rule filtlong_on_nanopore_reads:
     conda:
         "../envs/quality_control_reads.yaml"
     shell:
-    """
-    filtlong --min_length {params.min_length}  {input.fastq} | gzip > {output.trimmed_ont_reads}
-    """
+        """
+        filtlong --min_length {params.min_length}  {input.fastq} | gzip > {output.trimmed_ont_reads}
+        """
