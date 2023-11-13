@@ -112,9 +112,11 @@ rule run_genomescope:
         "../envs/quality_control_reads.yaml"    # Replace with the path to your conda environment file
     shell:
         """
-        Rscript {params.genomescope_script} {input.jellyfish_histo} {params.kmer_length} {params.read_length} {output} {params.kmer_max if params.kmer_max else ''} {'--verbose' if params.verbose else ''}
+        Rscript {params.genomescope_script} {input.jellyfish_histo} {params.kmer_length} {params.read_length} {output} 
         """
 
+
+#{params.kmer_max if params.kmer_max else ''} {'--verbose' if params.verbose else ''}
 # Role: 
 #rule run_genomescope:
 #    input:
