@@ -1,7 +1,7 @@
 ### Mash
 rule mash_sketch:
     input:
-        fastq_gz = path_reads_prefix + "/{sample}__trimmed_reads.fastq.gz", 
+        fastq_gz = path_reads_prefix + "/{sample}_trimmed_reads.fastq.gz", 
     output:
         sketch = path_data_prefix + "/01-MASH_DB/{sample}_sketch_reads.msh"
     conda:
