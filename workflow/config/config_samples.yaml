@@ -1,0 +1,238 @@
+samples:
+  Clarias_gariepinus:
+    ID1:
+      coverage: '90'
+      description: 'Forward read files from illumina seq for Clarias gariepinus male
+        with a coverage of 90X '
+      file_prefix: CGAM
+      method: ILLUMINA_PE
+      orientation: FWD
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID1
+      sex: M
+      species: Clarias_gariepinus
+      species_long: Clarias_gariepinus
+    ID15:
+      coverage: '30'
+      description: Forward read files from illumina seq for Clarias gariepinus female
+        with a 30X coverage
+      file_prefix: CGAF
+      method: ILLUMINA_PE
+      orientation: FWD
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID15
+      sex: F
+      species: Clarias_gariepinus
+      species_long: Clarias_gariepinus
+    ID16:
+      coverage: '30'
+      description: Reverse read files from illumina seq for Clarias gariepinus female
+        with a 30X coverage
+      file_prefix: CGAF
+      method: ILLUMINA_PE
+      orientation: REV
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID16
+      sex: F
+      species: Clarias_gariepinus
+      species_long: Clarias_gariepinus
+    ID2:
+      coverage: '90'
+      description: 'Reverse read files from illumina seq for Clarias gariepinus male
+        with a coverage of 90X '
+      file_prefix: CGAM
+      method: ILLUMINA_PE
+      orientation: REV
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID2
+      sex: M
+      species: Clarias_gariepinus
+      species_long: Clarias_gariepinus
+    ID3:
+      coverage: '25'
+      description: nanopore reads for Clarias gariepinus male with a coverage of 25X
+      file_prefix: CGAM
+      method: NANOPORE
+      orientation: None
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID3
+      sex: M
+      species: Clarias_gariepinus
+      species_long: Clarias_gariepinus
+    ID4:
+      coverage: ''
+      description: 'HiC reads for Clarias gariepinus male '
+      file_prefix: CGAM
+      method: HIC
+      orientation: FWD
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID4
+      sex: M
+      species: Clarias_gariepinus
+      species_long: Clarias_gariepinus
+    ID5:
+      coverage: ''
+      description: 'HiC reads for Clarias gariepinus male '
+      file_prefix: CGAM
+      method: HIC
+      orientation: REV
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID5
+      sex: M
+      species: Clarias_gariepinus
+      species_long: Clarias_gariepinus
+    ID6:
+      coverage: '40'
+      description: pacbio reads for Clarias gariepinus male with a coverage of 40X
+      file_prefix: CGAM
+      method: HIFI
+      orientation: None
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID6
+      sex: M
+      species: Clarias_gariepinus
+      species_long: Clarias_gariepinus
+  Clarias_hybrid:
+    ID17:
+      coverage: '30'
+      description: Forward read files from illumina seq for Clarias hybrid male with
+        a coverage of 30X
+      file_prefix: CHAM
+      method: ILLUMINA_PE
+      orientation: FWD
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID17
+      sex: M
+      species: Clarias_hybrid
+      species_long: Clarias_hybrid
+    ID18:
+      coverage: '30'
+      description: Reverse read files from illumina seq for Clarias hybrid male with
+        a coverage of 30X
+      file_prefix: CHAM
+      method: ILLUMINA_PE
+      orientation: REV
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID18
+      sex: M
+      species: Clarias_hybrid
+      species_long: Clarias_hybrid
+    ID19:
+      coverage: '30'
+      description: Forward read files from illumina seq for Clarias hybrid female
+        with a coverage of 30X
+      file_prefix: CHAF
+      method: ILLUMINA_PE
+      orientation: FWD
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID19
+      sex: F
+      species: Clarias_hybrid
+      species_long: Clarias_hybrid
+    ID20:
+      coverage: '30'
+      description: Reverse read files from illumina seq for Claris hybrid female with
+        a coverage of 30X
+      file_prefix: CHAF
+      method: ILLUMINA_PE
+      orientation: REV
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID20
+      sex: F
+      species: Clarias_hybrid
+      species_long: Clarias_hybrid
+  Clarias_macrocephalus:
+    ID10:
+      coverage: ''
+      description: 'HiC reads for Clarias macrocephalus male '
+      file_prefix: CMAM
+      method: HIC
+      orientation: FWD
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID10
+      sex: M
+      species: Clarias_macrocephalus
+      species_long: Clarias_macrocephalus
+    ID11:
+      coverage: ''
+      description: 'HiC reads for Clarias macrocephalus male '
+      file_prefix: CMAM
+      method: HIC
+      orientation: REV
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID11
+      sex: M
+      species: Clarias_macrocephalus
+      species_long: Clarias_macrocephalus
+    ID12:
+      coverage: '40'
+      description: pacbio reads for Clarias macrocephalus male with a coverage of
+        40X
+      file_prefix: CMAM
+      method: HIFI
+      orientation: None
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID12
+      sex: M
+      species: Clarias_macrocephalus
+      species_long: Clarias_macrocephalus
+    ID13:
+      coverage: '30'
+      description: Forward read files from illumina seq for Clarias macrocephalus
+        femaile with a coverage of 30X
+      file_prefix: CMAF
+      method: ILLUMINA_PE
+      orientation: FWD
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID13
+      sex: F
+      species: Clarias_macrocephalus
+      species_long: Clarias_macrocephalus
+    ID14:
+      coverage: '30'
+      description: Reverse read files from illumina seq for  Clarias macrocephalus
+        femaile with a coverage of 30X
+      file_prefix: CMAF
+      method: ILLUMINA_PE
+      orientation: REV
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID14
+      sex: F
+      species: Clarias_macrocephalus
+      species_long: Clarias_macrocephalus
+    ID7:
+      coverage: '90'
+      description: Forward read files from illumina seq for Clarias macrocephalus
+        male with a 90X coverage
+      file_prefix: CMAM
+      method: ILLUMINA_PE
+      orientation: FWD
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID7
+      sex: M
+      species: Clarias_macrocephalus
+      species_long: Clarias_macrocephalus
+    ID8:
+      coverage: '90'
+      description: Reverse read files from illumina seq for Clarias macrocephalus
+        male with a 90X coverage
+      file_prefix: CMAM
+      method: ILLUMINA_PE
+      orientation: REV
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID8
+      sex: M
+      species: Clarias_macrocephalus
+      species_long: Clarias_macrocephalus
+    ID9:
+      coverage: '25'
+      description: nanopore reads for Clarias macrocephalus male with a coverage of
+        25X
+      file_prefix: CMAM
+      method: NANOPORE
+      orientation: None
+      path_prefix: ~/scratch/catfish/00-INPUTS/00-READS/
+      sample_id: ID9
+      sex: M
+      species: Clarias_macrocephalus
+      species_long: Clarias_macrocephalus

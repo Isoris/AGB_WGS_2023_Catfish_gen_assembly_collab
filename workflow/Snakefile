@@ -2,166 +2,241 @@ import subprocess
 import os
 import sys
 import glob
+import yaml
+import re 
+from snakemake.io import expand
+from snakemake.io import Wildcards
 
 ##### load paths #####
-path_folder_prefix = "/tarafs/scratch/proj5034-AGBKU/catfish"
-###
-path_reads_prefix = f"{path_folder_prefix}/00-DATA/00-READS"
-path_prog_prefix = f"{path_folder_prefix}/01-PROGRAMS"
+current_path=os.getcwd() 
+path_folder_prefix=f"{current_path}/../../.."   # path_folder_prefix=f"/tarafs/scratch/proj5034-AGBKU/catfish" # =  ../../..
+##### load specific paths #####
+path_reads_prefix=f"{path_folder_prefix}/00-INPUTS/00-READS"
+path_data_prefix=f"{path_folder_prefix}/00-INPUTS"
+path_prog_prefix=f"{path_folder_prefix}/01-PROGRAMS"
 path_exp_prefix=f"{path_folder_prefix}/02-EXPERIMENTS"
-path_out_prefix = f"{path_folder_prefix}/03-OUTPUTS"
-path_tmp_prefix = f"{path_folder_prefix}/04-TEMPORARY"  
+path_out_prefix=f"{path_folder_prefix}/03-OUTPUTS"
+path_tmp_prefix=f"{path_folder_prefix}/04-TEMPORARY_FILES"  
 
 ##### setup config and report #####
-configfile: "../config/config.yaml"
-report: "report/workflow.rst"
-
+threads = 12
+configfile: f"{current_path}/config/config.yaml" #report: "report/workflow.rst"
 
 ##### Definition of functions
 
+
 def get_unique_values(key):
     values = set()
-    for sample in config["samples"].values():
+    for species in config["samples"].values():
+        for sample in species.values():
+            value = sample.get(key)
+            if value is not None:
+                values.add(value)
+    return list(values)
+
+def get_unique_values_references(key):
+    values = set()
+    for sample in config["references"]["references"].values():
         values.update(sample.get(key, []))
     return list(values)
 
-def get_species():
-    return get_unique_values('species_long')
-
-def get_sexes():
-    return get_unique_values('sexes')
-
-def get_methods():
-    return get_unique_values('methods')
-
-def get_orientations():
-    return get_unique_values('orientations')
+def get_sample_ids():
+    return get_unique_values('sample_id')
 
 def get_reference_accession():
-    return get_unique_values('')
+    return get_unique_values('assembly_accession')
 
-def get_combined_samples():
-    species = get_species()
-    sex = get_sexes()
-    method = get_methods()
-    orientation = get_orientations()
-    return ["{}_{}_{}_{}".format(s, sx, m, o) for s in species for sx in sex for m in method for o in orientation]
+def get_species_file_prefix():
+    return get_unique_values('file_prefixes')
+
+def get_species_long():
+    return get_unique_values('species_long')
+
+def get_species():
+    return get_unique_values('species')
+
+def get_sex():
+    return get_unique_values('sex')
+
+def get_method():
+    return get_unique_values('method')
+
+def get_orientation():
+    return get_unique_values('orientation')
+
+##### Definition of DICTS
+ 
+SPECIES = ["CG", "CM"]
+SEX = ["F", "M"]
+METHODS = ["ILLUMINA", "HIFI"]
+ORIENTATIONS_PE = ["FWD", "REV"]  # "None" is used for files without orientation like HIFI
+ORIENTATIONS_SE = ["None"]  # "None" is used for files without orientation like HIFI
+
+#nohup snakemake --use-conda --conda-frontend mamba 
+#  --cluster "sbatch -A proj5034 -t 24:00:00 -p compute -J snakemake_quentin -n 1 -c 24" 
+#--jobs 100 --rerun-incomplete > nohup.snakemake.cluster.slurm.log &
+
+
 ##### load init rules #####
-
-# Snakemake rules to generate and combine the YAML files
-
-# Rule to generate config_samples.yaml
-rule generate_config_samples:
-    output:
-        "../config/config_samples.yaml"
-    shell:
-        """
-        cd workflow/scripts && python generate_config_samples.py
-        """
-
-# Rule to generate config_references.yaml
-rule generate_config_references:
-    output:
-        "../config/config_references.yaml"
-    shell:
-        """
-        cd workflow/scripts && python generate_config_references.py
-        """
-
-# Rule to concatenate the yaml files
-rule combine_yaml_configs:
-    input:
-        samples = rules.generate_config_samples.output,
-        references = rules.generate_config_references.output,
-        params = "../config/params.yaml"
-    output:
-        "../config/config.yaml"
-    shell:
-        """
-        cat {input.samples} {input.references} {input.params} > {output}
-        """
-
 rule all:
     input:
-        #Parse metadata outputs
-        rules.combine_yaml_configs.output,
-        #Mash outputs
-        expand(f"{path_out_prefix}/00-MASH/{{sample}}_combined.tbl", 
-                sample=get_combined_samples()),
-        expand(f"{path_out_prefix}/00-MASH/{{sample}}_screen.out", 
-                sample=get_combined_samples()),
-        expand(f"{path_out_prefix}/00-MASH/{{sample}}_mash_plot.png", 
-                sample=get_combined_samples())
-        #FastQC outputs
+        "paths.sh",
+        "logs/logs.txt",
+        "logs/file_log.txt",
+        "debug_config_output.txt",
+        ####### FASTQC ILLUM READS
+        expand("{path_out_prefix}/00-FASTQC/CG_F_ILLUMINA_{orientation_pe}/",
+               path_out_prefix=path_out_prefix, 
+               orientation_pe=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/00-FASTQC/CM_F_ILLUMINA_{orientation_pe}/", 
+               path_out_prefix=path_out_prefix, 
+               orientation_pe=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/00-FASTQC/CM_M_ILLUMINA_{orientation_pe}/", 
+               path_out_prefix=path_out_prefix, 
+               orientation_pe=ORIENTATIONS_PE),
+        ####### ADAPTERREMOVAL
+        expand("{path_reads_prefix}/CG_F_ILLUMINA_{orientation_pe}_trimmed_reads.fastq.gz",
+               path_reads_prefix=path_reads_prefix, 
+               orientation_pe=ORIENTATIONS_PE),
+        expand("{path_reads_prefix}/CM_F_ILLUMINA_{orientation_pe}_trimmed_reads.fastq.gz", 
+               path_reads_prefix=path_reads_prefix, 
+               orientation_pe=ORIENTATIONS_PE),
+        expand("{path_reads_prefix}/CM_M_ILLUMINA_{orientation_pe}_trimmed_reads.fastq.gz",
+               path_reads_prefix=path_reads_prefix, 
+               orientation_pe=ORIENTATIONS_PE),
+        ####### FASTQC ILLUM TRIMMED READS
+        expand("{path_out_prefix}/00-FASTQC/CG_F_ILLUMINA_{orientation_pe}_trimmed/",
+               path_out_prefix=path_out_prefix, 
+               orientation_pe=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/00-FASTQC/CM_F_ILLUMINA_{orientation_pe}_trimmed/",
+               path_out_prefix=path_out_prefix, 
+               orientation_pe=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/00-FASTQC/CM_M_ILLUMINA_{orientation_pe}_trimmed/",
+               path_out_prefix=path_out_prefix, 
+               orientation_pe=ORIENTATIONS_PE),
+        ####### PROCESS HIFI READS
+        expand("{path_reads_prefix}/CM_M_HIFI_None_reads.fastq.gz",
+               path_reads_prefix=path_reads_prefix),
+        expand("{path_reads_prefix}/CG_F_HIFI_None_reads.fastq.gz",
+               path_reads_prefix=path_reads_prefix),
+        ####### LONGQC HIFI READS
+        #expand("{path_out_prefix}/00-LONGQC/{sample}_HIFI/",
+        #       path_out_prefix=path_out_prefix, 
+        #       sample=["CM_M", "CG_F"]),
+        ####### MASH FOR READ CONTAMINATION
+        expand("{path_out_prefix}/01-MASH/CG_F_ILLUMINA_{orientation}_mash_plot.png",
+               path_out_prefix=path_out_prefix,
+               orientation=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/01-MASH/CM_F_ILLUMINA_{orientation}_mash_plot.png",
+               path_out_prefix=path_out_prefix,
+               orientation=ORIENTATIONS_PE),
+        expand("{path_out_prefix}/01-MASH/CM_M_ILLUMINA_{orientation}_mash_plot.png",
+               path_out_prefix=path_out_prefix,
+               orientation=ORIENTATIONS_PE)
+       # expand("{path_out_prefix}/01-MASH/CM_M_HIFI_None_mash_plot.png",
+       #        path_out_prefix=path_out_prefix),
+       # expand("{path_out_prefix}/01-MASH/CG_F_HIFI_None_mash_plot.png",
+       #        path_out_prefix=path_out_prefix),
 
-        #LongQC outputs
-        
-        #NanoQC outputs
 
-        #Jellyfish histo and genomescope outputs
-        expand(f"{path_out_prefix}/00-JELLYFISH/{{sample}}_jellyfishcount.jf", 
-                sample=get_combined_samples())
-        expand(f"{path_out_prefix}/00-JELLYFISH/{{sample}}_jellyfish_histo.histo", 
-                sample=get_combined_samples())
-        expand(f"{path_out_prefix}/00-GENOMESCOPE/{{sample}}_plot.png", 
-                sample=get_combined_samples())
-        #Hifasm outputs
-        
-        #Greenhill outputs
-        
-        #mitoVGP assembly pipeline outputs   
+# Snakefile
+#https://stackoverflow.com/questions/46506784/how-do-the-terms-job-task-and-step-relate-to-each-other/46532581#46532581
+
+#SPECIES_IN = [""]
+#SEX_IN = [""]
+#METHODS_IN = [""]
+#ORIENTATIONS_ALL = [""]
+
+
+# ... [Other parts of your Snakefile] ...
+
+# Rule to write config contents to a file
+rule debug_config:
+    output:
+        debug_config_output="debug_config_output.txt"
+    run:
+        with open(output.debug_config_output, 'w') as f:
+            # Iterate over samples and extract the information
+            for species, samples_dict in config['samples'].items():
+                for sample_id, sample_info in samples_dict.items():
+                    # Write out the details you're interested in
+                    f.write(f"Species: {species}, Sample ID: {sample_id}\n")
+                    f.write(f"Coverage: {sample_info['coverage']}\n")
+                    f.write(f"Description: {sample_info['description']}\n")
+                    f.write(f"File Prefix: {sample_info['file_prefix']}\n")
+                    f.write(f"Method: {sample_info['method']}\n")
+                    f.write(f"Orientation: {sample_info['orientation']}\n")
+                    f.write(f"Path Prefix: {sample_info['path_prefix']}\n")
+                    f.write(f"Sex: {sample_info['sex']}\n")
+                    f.write(f"Species Long: {sample_info['species_long']}\n")
+                    f.write("\n")
+
 ##### Main rule to orchestrate the workflow #####
+rule create_log_folder:
+    output:
+        log="logs/logs.txt"
+    shell: "touch {output.log}"
+
+rule log_reads_directory:
+    input:
+        "paths.sh"
+    output:
+        log="logs/reads_log.txt"
+    shell:
+        """
+        source paths.sh
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in READS directory:" > {output.log}
+        find $path_reads_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        echo "" >> {output.log}
+        """
+
+rule log_data_directory:
+    input:
+        "paths.sh"
+    output:
+        log="logs/data_log.txt"
+    shell:
+        """
+        source paths.sh
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in DATA directory:" > {output.log}
+        find $path_data_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        echo "" >> {output.log}
+        """
+
+rule log_experiments_directory:
+    output:
+        log="logs/experiments_log.txt"
+    shell:
+        """
+        source paths.sh
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in EXPERIMENTS directory:" > {output.log}
+        find $path_exp_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        echo "" >> {output.log}
+        """
+
+rule log_programs_directory:
+    output:
+        log="logs/programs_log.txt"
+    shell:
+        """
+        source paths.sh
+        echo "Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in PROGRAMS directory:" > {output.log}
+        find path_prog_prefix -type f | grep -E '(\.fq|\.fastq|\.sam|\.bam|\.bed|\.msh|\.fasta|\.gfa)$' >> {output.log}
+        echo "" >> {output.log}
+        """
+
+rule concatenate_logs:
+    input:
+        reads="logs/reads_log.txt",
+        data="logs/data_log.txt"
+        #outputs="logs/outputs_log.txt"
+    output:
+        log="logs/file_log.txt"
+    shell:
+        """
+        cat {input.reads} {input.data} > {output.log}
+        """
+
 ##### load rules #####
-#include: "rules/plots.smk"
-#include: "rules/reference.smk"
-include: "rules/quality_control_reads.smk"
-#include: "rules/quality_control_assembly.smk" 
-#include: "rules/trimming.smk"
-#include: "rules/denovo.smk"
-
-#rule create_assembly_metadata:
-#    input:
-#        expand("path/to/assemblies/{sample}_assembly.fasta", sample=SAMPLES)
-#    output:
-#        "assemblies_metadata.yaml"
-#    run:
-#        import yaml
-#
-#        assembly_data = {}
-#        for sample in SAMPLES:
-#            assembly_data[sample] = {"assembly": f"path/to/assemblies/{sample}_assembly.fasta"}
-#        
-#        with open(output[0], 'w') as outfile:
-#            yaml.dump(assembly_data, outfile, default_flow_style=False)
-
-
-
-#include: "rules/mapping_illumina.smk"
-#include: "rules/variant_calling.smk"
-
-#include: "rules/pangenomes_plots.smk"
-
-#include: "rules/mitoVGP_conda_env_ONT.smk"
-#include: "rules/mitoVG_conda_env_pacbio.smk"
-
-
-#include: "rules/annotations.smk"
-#include: "rules/pangenomes_annotations.smk"
-
-#rule create_annotations_metadata:
-#    input:
-#        expand("path/to/assemblies/{sample}_assembly.fasta", sample=SAMPLES)
-#    output:
-#        "annotations_metadata.yaml"
-#    run:
-#        import yaml
-#
-#        annotation_data = {}
-#        for sample in SAMPLES:
-#            annotation_data[sample] = {"assembly": f"path/to/assemblies/{sample}_assembly.fasta"}
-#        
-#        with open(output[0], 'w') as outfile:
-#            yaml.dump(annotation_data, outfile, default_flow_style=False)
-#
-#
-# End
+include: "rules/00-trimming_reads.smk"
+include: "rules/01-quality_control_reads.smk" 

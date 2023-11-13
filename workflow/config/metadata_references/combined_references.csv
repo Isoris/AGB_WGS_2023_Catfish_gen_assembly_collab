@@ -1,0 +1,6 @@
+Organism Scientific Name,Organism Common Name,Organism Qualifier,Taxonomy id,Assembly Name,Assembly Accession,Source,Annotation,Level,Contig N50,Size,Submission Date,Gene Count,BioProject,BioSample
+Clarias macrocephalus,bighead catfish,isolate: CM_001, sex: female,35657,DU_Cmac_1.0,GCA_011419295.1,GenBank,,Scaffold,47837,883399353,2020-03-18,,PRJNA604477,SAMN13972449
+Organism Scientific Name,Organism Common Name,Organism Qualifier,Taxonomy id,Assembly Name,Assembly Accession,Source,Annotation,Level,Contig N50,Size,Submission Date,Gene Count,BioProject,BioSample
+Clarias gariepinus,North African catfish,ecotype: Netherlands, isolate: MV-2021, sex: male,13013,CGAR_prim_01v2,GCA_024256425.2,GenBank,,Chromosome,33715535,969604269,2022-07-13,,PRJNA818990,SAMN27021044
+Clarias gariepinus,North African catfish,isolate: AMNH 255334,13013,ASM3001423v1,GCA_030014235.1,GenBank,,Scaffold,9577,924137414,2023-05-15,,PRJNA917279,SAMN32534528
+Clarias gariepinus,North African catfish,ecotype: Netherlands, isolate: MV-2021, sex: male,13013,CGAR_prim_01v2,GCF_024256425.1,RefSeq,GCF_024256425.1-RS_2023_03,Chromosome,33715535,969604269,2022-07-13,40491,PRJNA818990,SAMN27021044

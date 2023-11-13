@@ -1,1 +1,0 @@
-rule plot_mash
