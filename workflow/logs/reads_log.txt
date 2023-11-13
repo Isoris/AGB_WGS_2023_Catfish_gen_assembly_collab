@@ -1,0 +1,7 @@
+Listing .fq, .fastq, .gz, .sam, .bam, .bed, .msh, .fasta, .gfa files in READS directory:
+/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_HIFI_None_rawreads.fastq
+/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_rawreads.fastq
+/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CMAM1_pool_m64165_220531_160130.hifi.bam.fastq.fastq
+/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CGAF_162459.bam.fastq.fastq
+/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CGAF_094648.bam.fastq.fastq
+

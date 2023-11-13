@@ -1,0 +1,197 @@
+Building DAG of jobs...
+Your conda installation is not configured to use strict channel priorities. This is however crucial for having robust and correct environments (for details, see https://conda-forge.org/docs/user/tipsandtricks.html). Please consider to configure strict priorities by executing 'conda config --set channel_priority strict'.
+Using shell: /usr/bin/bash
+Provided cluster nodes: 100
+Job stats:
+job                                 count
+--------------------------------  -------
+adapter_removal_on_illumina             3
+all                                     1
+fastqc_on_illumina_raw_reads            3
+fastqc_on_illumina_trimmed_reads        6
+gzip_hifi_fastq                         2
+total                                  15
+
+Select jobs to execute...
+
+[Sun Nov 12 20:28:47 2023]
+rule fastqc_on_illumina_raw_reads:
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_ILLUMINA_FWD.fq.gz, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_ILLUMINA_REV.fq.gz
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_M_ILLUMINA_FWD, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_M_ILLUMINA_REV
+    jobid: 8
+    reason: Forced execution
+    wildcards: species=CM, sex=M
+    resources: mem_mb=91205, mem_mib=86980, disk_mb=91205, disk_mib=86980, tmpdir=<TBD>
+
+Submitted job 8 with external jobid 'Submitted batch job 3297942'.
+
+[Sun Nov 12 20:28:47 2023]
+rule gzip_hifi_fastq:
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_HIFI_None_reads.fastq
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_HIFI_None_reads.fastq.gz
+    jobid: 18
+    reason: Missing output files: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_HIFI_None_reads.fastq.gz
+    wildcards: species=CM, sex=M
+    resources: mem_mb=40596, mem_mib=38716, disk_mb=40596, disk_mib=38716, tmpdir=<TBD>
+
+Submitted job 18 with external jobid 'Submitted batch job 3297943'.
+
+[Sun Nov 12 20:28:47 2023]
+rule fastqc_on_illumina_raw_reads:
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_F_ILLUMINA_FWD.fq.gz, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_F_ILLUMINA_REV.fq.gz
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_F_ILLUMINA_FWD, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_F_ILLUMINA_REV
+    jobid: 7
+    reason: Forced execution
+    wildcards: species=CM, sex=F
+    resources: mem_mb=31045, mem_mib=29607, disk_mb=31045, disk_mib=29607, tmpdir=<TBD>
+
+Submitted job 7 with external jobid 'Submitted batch job 3297944'.
+
+[Sun Nov 12 20:28:47 2023]
+rule adapter_removal_on_illumina:
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_ILLUMINA_FWD.fq.gz, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_ILLUMINA_REV.fq.gz
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_ILLUMINA_FWD_trimmed_reads.fastq.gz, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_ILLUMINA_REV_trimmed_reads.fastq.gz
+    jobid: 9
+    reason: Forced execution
+    wildcards: path_reads_prefix=/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS, species=CG, sex=F, method=ILLUMINA
+    resources: mem_mb=92439, mem_mib=88157, disk_mb=92439, disk_mib=88157, tmpdir=<TBD>
+
+Submitted job 9 with external jobid 'Submitted batch job 3297945'.
+
+[Sun Nov 12 20:28:47 2023]
+rule adapter_removal_on_illumina:
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_ILLUMINA_FWD.fq.gz, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_ILLUMINA_REV.fq.gz
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_ILLUMINA_FWD_trimmed_reads.fastq.gz, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_ILLUMINA_REV_trimmed_reads.fastq.gz
+    jobid: 11
+    reason: Forced execution
+    wildcards: path_reads_prefix=/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS, species=CM, sex=M, method=ILLUMINA
+    resources: mem_mb=91205, mem_mib=86980, disk_mb=91205, disk_mib=86980, tmpdir=<TBD>
+
+Submitted job 11 with external jobid 'Submitted batch job 3297946'.
+
+[Sun Nov 12 20:28:47 2023]
+rule fastqc_on_illumina_raw_reads:
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_ILLUMINA_FWD.fq.gz, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_ILLUMINA_REV.fq.gz
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_FWD, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_REV
+    jobid: 6
+    reason: Forced execution
+    wildcards: species=CG, sex=F
+    resources: mem_mb=92439, mem_mib=88157, disk_mb=92439, disk_mib=88157, tmpdir=<TBD>
+
+Submitted job 6 with external jobid 'Submitted batch job 3297947'.
+
+[Sun Nov 12 20:28:47 2023]
+rule gzip_hifi_fastq:
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq.gz
+    jobid: 20
+    reason: Missing output files: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq.gz
+    wildcards: species=CG, sex=F
+    resources: mem_mb=75631, mem_mib=72128, disk_mb=75631, disk_mib=72128, tmpdir=<TBD>
+
+Submitted job 20 with external jobid 'Submitted batch job 3297948'.
+
+[Sun Nov 12 20:28:47 2023]
+rule adapter_removal_on_illumina:
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_F_ILLUMINA_FWD.fq.gz, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_F_ILLUMINA_REV.fq.gz
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_F_ILLUMINA_FWD_trimmed_reads.fastq.gz, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_F_ILLUMINA_REV_trimmed_reads.fastq.gz
+    jobid: 10
+    reason: Forced execution
+    wildcards: path_reads_prefix=/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS, species=CM, sex=F, method=ILLUMINA
+    resources: mem_mb=31045, mem_mib=29607, disk_mb=31045, disk_mib=29607, tmpdir=<TBD>
+
+Submitted job 10 with external jobid 'Submitted batch job 3297949'.
+[Sun Nov 12 20:49:18 2023]
+Error in rule gzip_hifi_fastq:
+    jobid: 18
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_HIFI_None_reads.fastq
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_HIFI_None_reads.fastq.gz
+    conda-env: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/.snakemake/conda/be11992d5dddcd3f0617abe34c77ea51_
+    shell:
+         
+        gzip -5 /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_HIFI_None_reads.fastq &&         mv /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_HIFI_None_reads.fastq.gz /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_HIFI_None_reads.fastq.gz
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 3297943
+
+Error executing rule gzip_hifi_fastq on cluster (jobid: 18, external: Submitted batch job 3297943, jobscript: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/.snakemake/tmp.iyfeh3u2/snakejob.gzip_hifi_fastq.18.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Sun Nov 12 20:54:29 2023]
+Error in rule fastqc_on_illumina_raw_reads:
+    jobid: 7
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_F_ILLUMINA_FWD.fq.gz, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_F_ILLUMINA_REV.fq.gz
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_F_ILLUMINA_FWD, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_F_ILLUMINA_REV
+    conda-env: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/.snakemake/conda/be11992d5dddcd3f0617abe34c77ea51_
+    shell:
+        
+        mkdir -p /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_F_ILLUMINA_FWD &&         mkdir -p /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_F_ILLUMINA_REV &&         fastqc /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_F_ILLUMINA_FWD.fq.gz -t 1 -o /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_F_ILLUMINA_FWD &&         fastqc /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_F_ILLUMINA_REV.fq.gz -t 1 -o /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_F_ILLUMINA_REV
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 3297944
+
+Error executing rule fastqc_on_illumina_raw_reads on cluster (jobid: 7, external: Submitted batch job 3297944, jobscript: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/.snakemake/tmp.iyfeh3u2/snakejob.fastqc_on_illumina_raw_reads.7.sh). For error details see the cluster log and the log files of the involved rule(s).
+Removing output files of failed job fastqc_on_illumina_raw_reads since they might be corrupted:
+/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_F_ILLUMINA_FWD, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_F_ILLUMINA_REV
+Skipped removing non-empty directory /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_F_ILLUMINA_FWD
+Skipped removing non-empty directory /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_F_ILLUMINA_REV
+[Sun Nov 12 21:08:19 2023]
+Error in rule gzip_hifi_fastq:
+    jobid: 20
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq.gz
+    conda-env: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/.snakemake/conda/be11992d5dddcd3f0617abe34c77ea51_
+    shell:
+         
+        gzip -5 /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq &&         mv /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq.gz /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq.gz
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 3297948
+
+Error executing rule gzip_hifi_fastq on cluster (jobid: 20, external: Submitted batch job 3297948, jobscript: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/.snakemake/tmp.iyfeh3u2/snakejob.gzip_hifi_fastq.20.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Sun Nov 12 21:43:32 2023]
+Error in rule fastqc_on_illumina_raw_reads:
+    jobid: 8
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_ILLUMINA_FWD.fq.gz, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_ILLUMINA_REV.fq.gz
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_M_ILLUMINA_FWD, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_M_ILLUMINA_REV
+    conda-env: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/.snakemake/conda/be11992d5dddcd3f0617abe34c77ea51_
+    shell:
+        
+        mkdir -p /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_M_ILLUMINA_FWD &&         mkdir -p /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_M_ILLUMINA_REV &&         fastqc /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_ILLUMINA_FWD.fq.gz -t 1 -o /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_M_ILLUMINA_FWD &&         fastqc /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CM_M_ILLUMINA_REV.fq.gz -t 1 -o /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_M_ILLUMINA_REV
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 3297942
+
+Error executing rule fastqc_on_illumina_raw_reads on cluster (jobid: 8, external: Submitted batch job 3297942, jobscript: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/.snakemake/tmp.iyfeh3u2/snakejob.fastqc_on_illumina_raw_reads.8.sh). For error details see the cluster log and the log files of the involved rule(s).
+Removing output files of failed job fastqc_on_illumina_raw_reads since they might be corrupted:
+/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_M_ILLUMINA_FWD, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_M_ILLUMINA_REV
+Skipped removing non-empty directory /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_M_ILLUMINA_FWD
+Skipped removing non-empty directory /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CM_M_ILLUMINA_REV
+[Sun Nov 12 21:43:52 2023]
+Error in rule fastqc_on_illumina_raw_reads:
+    jobid: 6
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_ILLUMINA_FWD.fq.gz, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_ILLUMINA_REV.fq.gz
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_FWD, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_REV
+    conda-env: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/.snakemake/conda/be11992d5dddcd3f0617abe34c77ea51_
+    shell:
+        
+        mkdir -p /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_FWD &&         mkdir -p /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_REV &&         fastqc /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_ILLUMINA_FWD.fq.gz -t 1 -o /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_FWD &&         fastqc /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_ILLUMINA_REV.fq.gz -t 1 -o /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_REV
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 3297947
+
+Error executing rule fastqc_on_illumina_raw_reads on cluster (jobid: 6, external: Submitted batch job 3297947, jobscript: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/.snakemake/tmp.iyfeh3u2/snakejob.fastqc_on_illumina_raw_reads.6.sh). For error details see the cluster log and the log files of the involved rule(s).
+Removing output files of failed job fastqc_on_illumina_raw_reads since they might be corrupted:
+/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_FWD, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_REV
+Skipped removing non-empty directory /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_FWD
+Skipped removing non-empty directory /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_REV
+[Sun Nov 12 23:31:49 2023]
+Finished job 10.
+1 of 15 steps (7%) done
+[Mon Nov 13 05:27:46 2023]
+Finished job 11.
+2 of 15 steps (13%) done
+[Mon Nov 13 05:36:26 2023]
+Finished job 9.
+3 of 15 steps (20%) done
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-11-12T202843.666592.snakemake.log

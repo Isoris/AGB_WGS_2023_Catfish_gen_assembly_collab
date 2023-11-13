@@ -1,0 +1,74 @@
+Building DAG of jobs...
+Your conda installation is not configured to use strict channel priorities. This is however crucial for having robust and correct environments (for details, see https://conda-forge.org/docs/user/tipsandtricks.html). Please consider to configure strict priorities by executing 'conda config --set channel_priority strict'.
+Using shell: /usr/bin/bash
+Provided cores: 24
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=92439, mem_mib=88157, disk_mb=92439, disk_mib=88157
+Select jobs to execute...
+
+[Sun Nov 12 20:28:54 2023]
+rule fastqc_on_illumina_raw_reads:
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_ILLUMINA_FWD.fq.gz, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_ILLUMINA_REV.fq.gz
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_FWD, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_REV
+    jobid: 0
+    reason: Forced execution
+    wildcards: species=CG, sex=F
+    resources: mem_mb=92439, mem_mib=88157, disk_mb=92439, disk_mib=88157, tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/be11992d5dddcd3f0617abe34c77ea51_
+application/gzip
+Started analysis of CG_F_ILLUMINA_FWD.fq.gz
+Approx 5% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 10% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 15% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 20% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 25% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 30% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 35% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 40% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 45% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 50% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 55% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 60% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 65% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 70% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 75% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 80% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 85% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 90% complete for CG_F_ILLUMINA_FWD.fq.gz
+Approx 95% complete for CG_F_ILLUMINA_FWD.fq.gz
+Analysis complete for CG_F_ILLUMINA_FWD.fq.gz
+application/gzip
+Started analysis of CG_F_ILLUMINA_REV.fq.gz
+Approx 5% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 10% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 15% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 20% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 25% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 30% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 35% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 40% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 45% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 50% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 55% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 60% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 65% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 70% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 75% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 80% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 85% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 90% complete for CG_F_ILLUMINA_REV.fq.gz
+Approx 95% complete for CG_F_ILLUMINA_REV.fq.gz
+Analysis complete for CG_F_ILLUMINA_REV.fq.gz
+ImproperOutputException in rule fastqc_on_illumina_raw_reads in file /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/rules/00-trimming_reads.smk, line 5:
+Outputs of incorrect type (directories when expecting files or vice versa). Output directories must be flagged with directory(). for rule fastqc_on_illumina_raw_reads:
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_FWD, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_REV
+    wildcards: species=CG, sex=F
+    affected files:
+        /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_FWD
+Removing output files of failed job fastqc_on_illumina_raw_reads since they might be corrupted:
+/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_FWD, /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_REV
+Skipped removing non-empty directory /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_FWD
+Skipped removing non-empty directory /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../03-OUTPUTS/00-FASTQC/CG_F_ILLUMINA_REV
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message

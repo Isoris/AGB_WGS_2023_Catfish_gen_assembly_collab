@@ -1,0 +1,35 @@
+Building DAG of jobs...
+Your conda installation is not configured to use strict channel priorities. This is however crucial for having robust and correct environments (for details, see https://conda-forge.org/docs/user/tipsandtricks.html). Please consider to configure strict priorities by executing 'conda config --set channel_priority strict'.
+Using shell: /usr/bin/bash
+Provided cores: 24
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=75631, mem_mib=72128, disk_mb=75631, disk_mib=72128
+Select jobs to execute...
+
+[Sun Nov 12 20:28:54 2023]
+rule gzip_hifi_fastq:
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq.gz
+    jobid: 0
+    reason: Forced execution
+    wildcards: species=CG, sex=F
+    resources: mem_mb=75631, mem_mib=72128, disk_mb=75631, disk_mib=72128, tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/be11992d5dddcd3f0617abe34c77ea51_
+mv: ‘/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq.gz’ and ‘/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq.gz’ are the same file
+[Sun Nov 12 21:08:16 2023]
+Error in rule gzip_hifi_fastq:
+    jobid: 0
+    input: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq
+    output: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq.gz
+    conda-env: /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/.snakemake/conda/be11992d5dddcd3f0617abe34c77ea51_
+    shell:
+         
+        gzip -5 /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq &&         mv /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq.gz /tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq.gz
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Removing output files of failed job gzip_hifi_fastq since they might be corrupted:
+/tarafs/scratch/proj5034-AGBKU/catfish/QUENTIN_GIT/AGB_WGS_2023_Catfish_gen_assembly_collab/workflow/../../../00-INPUTS/00-READS/CG_F_HIFI_None_reads.fastq.gz
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
