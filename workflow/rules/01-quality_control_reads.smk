@@ -1,9 +1,9 @@
 ### Mash
 rule mash_sketch:
     input:
-        fastq_gz = path_reads_prefix + "/{species}_{sex}_{method}_{orientation}_reads.fastq.gz", 
+        fastq_gz = path_reads_prefix + "/{sample}_reads.fastq.gz", 
     output:
-        sketch = path_data_prefix + "/01-MASH_DB/{species}_{sex}_{method}_{orientation}_sketch_reads.msh"
+        sketch = path_data_prefix + "/01-MASH_DB/{sample}_sketch_reads.msh"
     conda:
         "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file    
     shell:
