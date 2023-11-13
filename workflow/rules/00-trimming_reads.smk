@@ -80,7 +80,7 @@ rule gzip_hifi_trimmed_reads:
     input:
         trimmed_hifi_reads = path_reads_prefix + "/{species}_{sex}_HIFI_None_reads.fastq"
     output:
-        fastq = path_reads_prefix + "/{species}_{sex}_HIFI_None_reads.fastq"
+        fastq = path_reads_prefix + "/{species}_{sex}_HIFI_None_reads.fastq.gz"
     conda:
         "../envs/quality_control_reads.yaml"
     shell:
@@ -93,7 +93,7 @@ rule gzip_hifi_trimmed_reads:
 
 rule longqc_on_hifi_trimmed_reads:
     input:
-        fastq = path_reads_prefix + "/{sample}_HIFI_None_reads.fastq"
+        fastq = path_reads_prefix + "/{sample}_HIFI_None_reads.fastq.gz"
     output:
         longqc_out = directory(path_out_prefix + "/00-LONGQC/{sample}_HIFI/")
     params:
