@@ -72,9 +72,12 @@ METHODS = ["ILLUMINA", "HIFI"]
 ORIENTATIONS_PE = ["FWD", "REV"]  # "None" is used for files without orientation like HIFI
 ORIENTATIONS_SE = ["None"]  # "None" is used for files without orientation like HIFI
 
+#nohup snakemake --use-conda --conda-frontend mamba 
+#  --cluster "sbatch -A proj5034 -t 24:00:00 -p compute -J snakemake_quentin -n 1 -c 24" 
+#--jobs 100 --rerun-incomplete > nohup.snakemake.cluster.slurm.log &
+
 
 ##### load init rules #####
-
 rule all:
     input:
         "paths.sh",

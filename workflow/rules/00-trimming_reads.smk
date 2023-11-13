@@ -102,32 +102,15 @@ rule longqc_on_hifi_reads:
         "../envs/quality_control_reads.yaml"
     shell:
         """
-        python {params.longqc_path}longQC.py sampleqc \
-            -x pb-hifi -o {output.longqc_out} {input.fastq}
+        python {params.longqc_path}longQC.py sampleqc -x pb-hifi -o {output.longqc_out} {input.fastq}
         """
-
+    
 ### Parse and prepare ONT nanopore data
-
-
-
-
-
+# Define rule for running nanoQC on ONT reads (if they exist)
+#rule nanoqc_on_nanopore:
 
 
 
 ### Parse and prepare HiC data
-
-
 # Define rule for running FastQC on HiC reads (if they exist)
 #rule fastqc_on_hic:
-#    input:
-#        read = path_reads_prefix + "/{species}_{sex}_HIFI_None.fq.gz"
-#    output:
-#        fastqc_out = path_out_prefix + "/00-FASTQC/{species}_{sex}_HIFI_None/"
-#    conda:
-#        "envs/quality_control_reads.yaml"
-#    shell:
-#        """
-#        mkdir -p {output.fastqc_out} && \
-#        fastqc {input.read} -t {threads} -o {output.fastqc_out}
-#        """

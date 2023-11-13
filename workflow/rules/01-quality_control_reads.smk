@@ -10,6 +10,11 @@ rule mash_sketch:
     shell:
         "mash sketch -m 2 -o {output.sketch} {input.fastq_gz}"
 
+
+# Rule mash_dist: calculates the pairwise Mash distances between a reference sketch and read sketches, 
+#  saving the output in a table, 
+#  generates a key file that strips away extraneous filename components to produce a clean label for each sample.
+
 rule mash_dist: 
     input:
         ref_sketch = path_data_prefix + "/01-MASH_DB/combined.msh",
@@ -57,6 +62,3 @@ rule mash_screen: # Run on the reads against RefSeq minimal database
     shell:
         "mash screen {input.ref_sketch} {input.reads} > {output.screen}"
 
-# Rule mash_dist: calculates the pairwise Mash distances between a reference sketch and read sketches, 
-#  saving the output in a table, 
-#  generates a key file that strips away extraneous filename components to produce a clean label for each sample.
