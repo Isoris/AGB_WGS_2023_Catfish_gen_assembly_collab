@@ -120,9 +120,9 @@ rule all:
         expand("{path_reads_prefix}/CG_F_HIFI_None_reads.fastq.gz",
                path_reads_prefix=path_reads_prefix),
         ####### LONGQC HIFI READS
-        expand("{path_out_prefix}/00-LONGQC/{sample}_HIFI/",
-               path_out_prefix=path_out_prefix, 
-               sample=["CM_M", "CG_F"]),
+        #expand("{path_out_prefix}/00-LONGQC/{sample}_HIFI/",
+        #       path_out_prefix=path_out_prefix, 
+        #       sample=["CM_M", "CG_F"]),
         ####### MASH FOR READ CONTAMINATION
         expand("{path_out_prefix}/01-MASH/CG_F_ILLUMINA_{orientation}_mash_plot.png",
                path_out_prefix=path_out_prefix,
