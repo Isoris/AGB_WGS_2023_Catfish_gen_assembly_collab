@@ -4,8 +4,8 @@
 # Define rule for running FastQC on raw illumina reads
 rule fastqc_on_illumina_raw_reads:
     input:
-        read_FWD = path_reads_prefix + "/{sample}_ILLUMINA_FWD.fastq.gz",
-        read_REV = path_reads_prefix + "/{sample}_ILLUMINA_REV.fastq.gz"
+        read_FWD = path_reads_prefix + "/{sample}_ILLUMINA_FWD.fq.gz",
+        read_REV = path_reads_prefix + "/{sample}_ILLUMINA_REV.fq.gz"
     output:
         fastqc_out_FWD_html = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_FWD/{sample}_ILLUMINA_FWD_fastqc.html",
         fastqc_out_FWD_zip = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_FWD/{sample}_ILLUMINA_FWD_fastqc.zip",
