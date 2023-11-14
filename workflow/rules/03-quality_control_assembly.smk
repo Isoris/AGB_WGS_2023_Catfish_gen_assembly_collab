@@ -1,4 +1,5 @@
-rule quast_quast_control:
+# Define rules for running quast lg --large on gfa assemblies from 02-
+rule quast_lg_assess_assembly:
     input:
 	spades_assembly = "{path_prefix_step2_spades}/output_spades_{species}_{sex}_{version}/XXX_spades.fasta",
         ref_genome = "{path_prefix_ref_genomes}/{species}_ref.fasta",
@@ -31,3 +32,89 @@ rule quast_quast_control:
 
         echo "QUAST Quality control step finished for {wildcards.species} {wildcards.sex} {wildcards.version}"
         """
+
+
+rule read_genomescope_summary_illum_out:
+    input:
+        species_summary_genomescope = path_out_prefix + "/01-GENOMESCOPE/{sample}_ILLUMINA/summary.txt"
+    output:
+        haploid_length = path_out_prefix + "/01-GENOMESCOPE/{sample}_ILLUMINA/{sample}_haploid_length.txt"
+    shell: 
+    """
+    grep 'Genome Haploid Length' {input.summary_file} | cut -d ' ' -f 3 > {output.haploid_length}
+    """
+
+rule read_genomescope_summary_hifi_out:
+    input:
+        species_summary_genomescope = path_out_prefix + "/01-GENOMESCOPE/{sample}_HIFI/summary.txt"
+    output:
+        haploid_length = path_out_prefix + "/01-GENOMESCOPE/{sample}_HIFI/{sample}_haploid_length.txt"
+    shell: 
+    """
+    grep 'Genome Haploid Length' {input.summary_file} | cut -d ' ' -f 3 > {output.haploid_length}
+    """
+
+def get_haploid_length_path(wildcards):
+    hifi_path = path_out_prefix + f"/01-GENOMESCOPE/{wildcards.sample}_HIFI/summary.txt"
+    illumina_path = path_out_prefix + f"/01-GENOMESCOPE/{wildcards.sample}_ILLUMINA/summary.txt"
+
+    if os.path.exists(hifi_path):
+        return hifi_path
+    elif os.path.exists(illumina_path):
+        return illumina_path
+    else:
+        raise ValueError(f"No Genomescope data found for {wildcards.sample}")
+
+
+
+rule meryl_build_k:
+    input:
+        haploid_length = path_out_prefix + "/01-GENOMESCOPE/{sample}_ILLUMINA/{sample}_haploid_length.txt"
+    output:
+        kmer_val = path_out_prefix + "/{sample}_meryl_kmer_val.txt"
+    params:
+        path_build_k = path_prog_prefix + "merqury-1.3/best_k.sh",
+    shell:
+        """
+        # Use the haploid length in the build_k step
+        haploid_length=$(cat {input.haploid_length})
+        {params.path_build_k} $haploid_length > {output.kmer_val}
+        """
+
+
+rule meryl_to_find_kmersize:
+    output: "{species}_meryl_kmer_val.txt"
+    params:
+        path_build_k = path_prog_prefix + "merqury-1.3/best_k.sh",
+        estimated_genome_size_bp = 980000000
+        species = config["samples"]["species"]
+    shell: 
+        """
+        {params.path_build_k} {params.estimated_genome_size_bp}" > {output}
+        """
+
+
+rule meryl_build_db:
+    input:
+    output:
+    params:
+    shell:
+
+
+rule :
+    input:
+    output:
+    params:
+    shell:
+
+rule :
+    input:
+    output:
+    params:
+    shell:
+
+rule :
+    input:
+    output:
+    params:
+    shell:

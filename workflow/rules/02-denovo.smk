@@ -46,5 +46,9 @@ rule gfa_to_fasta_after_hifasm:
         awk '/^S/{print ">"$2;print $3}' {input.hap2_ctg} > {output.hap2_ctg_fa}
         """
 
+
+
+
+
 # Run hifiasm with --dual-scaf and --primary   
 # Note: This assumes the output prefix is the same as {wildcards.sample}

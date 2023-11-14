@@ -65,11 +65,44 @@ rule mash_screen: # Run on the reads against RefSeq minimal database
 # Role: Used for the quality control of reads by fast, memory-efficient counting of k-mers in DNA https://genome.umd.edu/jellyfish.html 
 # https://genome.umd.edu/docs/JellyfishUserGuide.pdf
 
+
+rule run_jellyfish_count_illumina_pe:
+    input:
+        read_fwd = path_reads_prefix + "/{sample}_FWD_trimmed_reads.fastq.gz",
+        read_rev = path_reads_prefix + "/{sample}_REV_trimmed_reads.fastq.gz"
+    output:
+        jellyfish_count = path_out_prefix + "/01-JELLYFISH/{sample}_ILLUMINA/{sample}_ILLUMINA_trimmed_reads_jellyfish_count.jf"
+    params:
+        jellyfish_path = path_prog_prefix + "/jellyfish-2.3.0/bin/jellyfish",
+        kmer_size = 21
+    conda:
+        "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
+    shell:
+        """
+        {params.jellyfish_path} count -m {params.kmer_size} -s 100M -t {threads} -C \
+        -o {output.jellyfish_count} <(zcat {input.read_fwd}) <(zcat {input.read_rev})
+        """
+
+rule run_jellyfish_histo_illum_pe:
+    input:
+        jellyfish_count = path_out_prefix + "/01-JELLYFISH/{sample}_ILLUMINA/{sample}_ILLUMINA_trimmed_reads_jellyfish_count.jf"
+    output:
+        jellyfish_histo = path_out_prefix + "/01-JELLYFISH/{sample}_ILLUMINA/{sample}_ILLUMINA_trimmed_reads_jellyfish_histo.histo"
+    params:
+        jellyfish_path = path_prog_prefix + "/jellyfish-2.3.0/bin/jellyfish"
+    conda:
+        "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
+    shell:
+        """
+        {params.jellyfish_path} histo -t {threads} {input.jellyfish_count} > {output.jellyfish_histo}
+        """
+
+
 rule run_jellyfish_count_hifi:
     input:
         reads = path_reads_prefix + "/{sample}_HIFI_None_trimmed_reads.fastq.gz"
     output:
-        jellyfish_count= path_out_prefix + "/{sample}_HIFI_None_trimmed_reads_jellyfish_count.jf"
+        jellyfish_count= path_out_prefix + "/01-JELLYFISH/{sample}_HIFI/{sample}_HIFI_None_trimmed_reads_jellyfish_count.jf"
     params:
         jellyfish_path = path_prog_prefix + "/jellyfish-2.3.0/bin/jellyfish",
         kmer_size = 21
@@ -81,11 +114,11 @@ rule run_jellyfish_count_hifi:
         -C -o {output.jellyfish_count} /dev/stdin
         """
 
-rule run_jellyfish_histo:
+rule run_jellyfish_histo_hifi:
     input:
-        jellyfish_count = path_out_prefix + "/{sample}_HIFI_None_trimmed_reads_jellyfish_count.jf"
+        jellyfish_count = path_out_prefix + "/01-JELLYFISH/{sample}_HIFI/{sample}_HIFI_None_trimmed_reads_jellyfish_count.jf"
     output:
-        jellyfish_histo = path_out_prefix + "/{sample}_HIFI_None_trimmed_reads_jellyfish_histo.histo"
+        jellyfish_histo = path_out_prefix + "/01-JELLYFISH/{sample}_HIFI/{sample}_HIFI_None_trimmed_reads_jellyfish_histo.histo"
     params:
         jellyfish_path = path_prog_prefix + "/jellyfish-2.3.0/bin/jellyfish"
     conda:
@@ -97,23 +130,64 @@ rule run_jellyfish_histo:
 
 ### GenomeScope
 # Role: Genomescope is used for genome profiling based on k-mer analysis
-rule run_genomescope:
+rule run_genomescope_hifi:
     input:
-        jellyfish_histo = path_out_prefix + "/{sample}_HIFI_None_trimmed_reads_jellyfish_histo.histo"
+        jellyfish_histo = path_out_prefix + "/01-JELLYFISH/{sample}_HIFI/{sample}_HIFI_None_trimmed_reads_jellyfish_histo.histo"
     output:
-        directory(path_out_prefix + "/{sample}_HIFI_None_genomescope_output/")
+        directory(path_out_prefix + "/01-GENOMESCOPE/{sample}_HIFI/")
     params:
         genomescope_script="scripts/genomescope.R",  # adjust this to your genomescope script path
         kmer_length=21,  # adjust as needed
-        read_length=100,  # adjust based on your read length
-        kmer_max=None,  # optional, set a value if required
-        verbose=False  # set to True if verbose output is needed
+        read_length=100  # adjust based on your read length
     conda:
         "../envs/quality_control_reads.yaml"    # Replace with the path to your conda environment file
     shell:
         """
-        Rscript {params.genomescope_script} {input.jellyfish_histo} {params.kmer_length} {params.read_length} {output} 
+        Rscript {params.genomescope_script} {input.jellyfish_histo} {params.kmer_length} {params.read_length} {output}
         """
+
+rule run_genomescope_illum_pe:
+    input:
+        jellyfish_histo = path_out_prefix + "/01-GENOMESCOPE/{sample}_ILLUMINA_trimmed_reads_jellyfish_histo.histo"
+    output:
+        directory(path_out_prefix + "/01-GENOMESCOPE/{sample}_ILLUMINA/")
+    params:
+        genomescope_script="scripts/genomescope.R",  # adjust this to your genomescope script path
+        kmer_length=21,  # adjust as needed
+        read_length=100  # adjust based on your read length
+    conda:
+        "../envs/quality_control_reads.yaml"    # Replace with the path to your conda environment file
+    shell:
+        """
+        Rscript {params.genomescope_script} {input.jellyfish_histo} {params.kmer_length} {params.read_length} {output}
+        """
+
+
+
+
+
+
+rule parse_genomescope_output:
+    input:
+        genomescope_dir= path_out_prefix + "/{sample}_HIFI_/"
+    output:
+        "parsed_genomescope/{sample}_genome_size.json"
+    shell:
+        """
+        python parse_genomescope.py {input.genomescope_dir} {output}
+        """
+
+rule parse_genomescope_output:
+    input:
+        genomescope_dir= path_out_prefix + "/{sample}_HIFI_None_genomescope_output/"
+    output:
+        "parsed_genomescope/{sample}_genome_size.json"
+    shell:
+        """
+        python parse_genomescope.py {input.genomescope_dir} {output}
+        """
+
+
 
 
 #{params.kmer_max if params.kmer_max else ''} {'--verbose' if params.verbose else ''}

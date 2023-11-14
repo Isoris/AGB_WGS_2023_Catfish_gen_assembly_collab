@@ -20,11 +20,11 @@ rule fastqc_on_illumina_raw_reads:
 # Define rule for running AdapterRemoval on raw illumina reads to trim them and remove adapters
 rule adapter_removal_on_illumina_raw_reads:
     input:
-        read1 = "{path_reads_prefix}/{species}_{sex}_{method}_FWD.fq.gz",
-        read2 = "{path_reads_prefix}/{species}_{sex}_{method}_REV.fq.gz"
+        read1 = path_reads_prefix + "/{species}_{sex}_{method}_FWD.fq.gz",
+        read2 = path_reads_prefix + "/{species}_{sex}_{method}_REV.fq.gz"
     output:
-        out1 = "{path_reads_prefix}/{species}_{sex}_{method}_FWD_trimmed_reads.fastq.gz",
-        out2 = "{path_reads_prefix}/{species}_{sex}_{method}_REV_trimmed_reads.fastq.gz"
+        out1 = path_reads_prefix + "/{species}_{sex}_{method}_FWD_trimmed_reads.fastq.gz",
+        out2 = path_reads_prefix + "/{species}_{sex}_{method}_REV_trimmed_reads.fastq.gz"
     conda:
         "../envs/quality_control_reads.yaml"
     shell:
