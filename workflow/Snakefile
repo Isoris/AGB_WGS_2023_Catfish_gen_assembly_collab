@@ -27,7 +27,7 @@ threads = 12
 configfile: f"{current_path}/config/config.yaml" #report: "report/workflow.rst"
 
 ##### Definition of functions
-include: "fonctions.smk"
+include: "rules/fonctions.smk"
 
 
 
