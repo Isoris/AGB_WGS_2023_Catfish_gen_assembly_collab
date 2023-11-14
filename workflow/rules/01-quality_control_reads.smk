@@ -137,8 +137,7 @@ rule run_genomescope_hifi:
         directory(path_out_prefix + "/01-GENOMESCOPE/{sample}_HIFI/")
     params:
         genomescope_script="scripts/genomescope.R",  # adjust this to your genomescope script path
-        kmer_length=21,  # adjust as needed
-        read_length=100  # adjust based on your read length
+        kmer_length=25  # adjust as needed
     conda:
         "../envs/quality_control_reads.yaml"    # Replace with the path to your conda environment file
     shell:
@@ -153,38 +152,12 @@ rule run_genomescope_illum_pe:
         directory(path_out_prefix + "/01-GENOMESCOPE/{sample}_ILLUMINA/")
     params:
         genomescope_script="scripts/genomescope.R",  # adjust this to your genomescope script path
-        kmer_length=21,  # adjust as needed
-        read_length=100  # adjust based on your read length
+        kmer_length=21  # adjust as needed
     conda:
         "../envs/quality_control_reads.yaml"    # Replace with the path to your conda environment file
     shell:
         """
-        Rscript {params.genomescope_script} {input.jellyfish_histo} {params.kmer_length} {params.read_length} {output}
-        """
-
-
-
-
-
-
-rule parse_genomescope_output:
-    input:
-        genomescope_dir= path_out_prefix + "/{sample}_HIFI_/"
-    output:
-        "parsed_genomescope/{sample}_genome_size.json"
-    shell:
-        """
-        python parse_genomescope.py {input.genomescope_dir} {output}
-        """
-
-rule parse_genomescope_output:
-    input:
-        genomescope_dir= path_out_prefix + "/{sample}_HIFI_None_genomescope_output/"
-    output:
-        "parsed_genomescope/{sample}_genome_size.json"
-    shell:
-        """
-        python parse_genomescope.py {input.genomescope_dir} {output}
+        Rscript {params.genomescope_script} {input.jellyfish_histo} {params.kmer_length} {output}
         """
 
 
