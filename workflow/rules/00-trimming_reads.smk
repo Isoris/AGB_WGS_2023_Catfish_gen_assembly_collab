@@ -11,12 +11,14 @@ rule fastqc_on_illumina_raw_reads:
         fastqc_out_FWD_zip = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_FWD/{sample}_ILLUMINA_FWD_fastqc.zip",
         fastqc_out_REV_html = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_REV/{sample}_ILLUMINA_REV_fastqc.html",
         fastqc_out_REV_zip = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_REV/{sample}_ILLUMINA_REV_fastqc.zip"
+    params:
+        path_out_prefix = path_out_prefix
     conda:
         "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:
         """
-        fastqc {input.read_FWD} -t {threads} -o {wildcards.path_out_prefix}/00-FASTQC/{wildcards.sample}_ILLUMINA_FWD/ && \
-        fastqc {input.read_REV} -t {threads} -o {wildcards.path_out_prefix}/00-FASTQC/{wildcards.sample}_ILLUMINA_REV/
+        fastqc {input.read_FWD} -t {threads} -o {params.path_out_prefix}/00-FASTQC/{wildcards.sample}_ILLUMINA_FWD/ && \
+        fastqc {input.read_REV} -t {threads} -o {params.path_out_prefix}/00-FASTQC/{wildcards.sample}_ILLUMINA_REV/
         """
 
 # Define rule for running AdapterRemoval on raw illumina reads to trim them and remove adapters
@@ -49,12 +51,14 @@ rule fastqc_on_illumina_trimmed_reads:
         fastqc_out_FWD_zip = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_FWD_trim/{sample}_ILLUMINA_FWD_trimmed_reads_fastqc.zip",
         fastqc_out_REV_html = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_REV_trim/{sample}_ILLUMINA_REV_trimmed_reads_fastqc.html",
         fastqc_out_REV_zip = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_REV_trim/{sample}_ILLUMINA_REV_trimmed_reads_fastqc.zip"
+    params:
+        path_out_prefix = path_out_prefix
     conda:
         "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:
         """
-        fastqc {input.read_FWD} -t {threads} -o {wildcards.path_out_prefix}/00-FASTQC/{wildcards.sample}_ILLUMINA_FWD_trim/ && \
-        fastqc {input.read_REV} -t {threads} -o {wildcards.path_out_prefix}/00-FASTQC/{wildcards.sample}_ILLUMINA_REV_trim/
+        fastqc {input.read_FWD} -t {threads} -o {params.path_out_prefix}/00-FASTQC/{wildcards.sample}_ILLUMINA_FWD_trim/ && \
+        fastqc {input.read_REV} -t {threads} -o {params.path_out_prefix}/00-FASTQC/{wildcards.sample}_ILLUMINA_REV_trim/
         """
 
 ### Parse and prepare HiFi data
