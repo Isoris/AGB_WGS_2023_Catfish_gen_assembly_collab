@@ -161,7 +161,18 @@ rule all:
                sample=["CM_M", "CG_F"]),
         expand("{path_reads_prefix}/{sample}.p_ctg.fa",
                path_reads_prefix=path_reads_prefix,
-               sample=["CM_M", "CG_F"])
+               sample=["CM_M", "CG_F"]),
+        expand("{path_out_prefix}/{sample}_HIFI_None_trimmed_reads_jellyfish_histo.histo",
+               path_out_prefix=path_out_prefix,
+            sample=SAMPLES),
+        expand("{path_out_prefix}/{sample}_HIFI_None_trimmed_reads_jellyfish_count.jf",
+            path_out_prefix=path_out_prefix,
+            sample=SAMPLES),
+        expand("{path_reads_prefix}/{sample}.p_ctg.fa", sample=SAMPLES),
+        expand("{path_out_prefix}/{sample}_HIFI_None_genomescope_output",
+            path_out_prefix=path_out_prefix,
+            sample=SAMPLES)
+        # Add more expand functions as needed for each type of output file
  #       expand("{path_reads_prefix}/{sample}.a_ctg.fa",
  #              path_reads_prefix=path_reads_prefix,
  #              sample=["CM_M", "CG_F"]),
@@ -282,5 +293,5 @@ rule concatenate_logs:
 ##### load rules #####
 include: "rules/00-trimming_reads.smk"
 include: "rules/01-quality_control_reads.smk" 
-#include: "rules/02-denovo.smk"
+include: "rules/02-denovo.smk"
 include: "rules/03-quality_control_assembly.smk"
