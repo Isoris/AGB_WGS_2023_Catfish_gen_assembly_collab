@@ -134,7 +134,7 @@ rule run_genomescope_hifi:
     input:
         jellyfish_histo = path_out_prefix + "/01-JELLYFISH/{sample}_HIFI/{sample}_HIFI_None_trimmed_reads_jellyfish_histo.histo"
     output:
-        directory(path_out_prefix + "/01-GENOMESCOPE/{sample}_HIFI/")
+        jellyfish_out = directory(path_out_prefix + "/01-GENOMESCOPE/{sample}_HIFI/")
     params:
         genomescope_script="scripts/genomescope.R",  # adjust this to your genomescope script path
         kmer_length=25  # adjust as needed
@@ -142,14 +142,14 @@ rule run_genomescope_hifi:
         "../envs/quality_control_reads.yaml"    # Replace with the path to your conda environment file
     shell:
         """
-        Rscript {params.genomescope_script} {input.jellyfish_histo} {params.kmer_length} {params.read_length} {output}
+        Rscript {params.genomescope_script} {input.jellyfish_histo} {params.kmer_length} {params.read_length} {output.jellyfish_out}
         """
 
 rule run_genomescope_illum_pe:
     input:
         jellyfish_histo = path_out_prefix + "/01-GENOMESCOPE/{sample}_ILLUMINA_trimmed_reads_jellyfish_histo.histo"
     output:
-        directory(path_out_prefix + "/01-GENOMESCOPE/{sample}_ILLUMINA/")
+        jellyfish_out = directory(path_out_prefix + "/01-GENOMESCOPE/{sample}_ILLUMINA/")
     params:
         genomescope_script="scripts/genomescope.R",  # adjust this to your genomescope script path
         kmer_length=21  # adjust as needed
@@ -157,7 +157,7 @@ rule run_genomescope_illum_pe:
         "../envs/quality_control_reads.yaml"    # Replace with the path to your conda environment file
     shell:
         """
-        Rscript {params.genomescope_script} {input.jellyfish_histo} {params.kmer_length} {output}
+        Rscript {params.genomescope_script} {input.jellyfish_histo} {params.kmer_length} {output.jellyfish_out}
         """
 
 
