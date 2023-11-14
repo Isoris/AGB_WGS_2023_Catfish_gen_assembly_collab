@@ -161,7 +161,7 @@ rule all:
                sample=["CM_M", "CG_F"]),
         expand("{path_reads_prefix}/{sample}.p_ctg.fa",
                path_reads_prefix=path_reads_prefix,
-               sample=["CM_M", "CG_F"]),
+               sample=["CM_M", "CG_F"])
  #       expand("{path_reads_prefix}/{sample}.a_ctg.fa",
  #              path_reads_prefix=path_reads_prefix,
  #              sample=["CM_M", "CG_F"]),
