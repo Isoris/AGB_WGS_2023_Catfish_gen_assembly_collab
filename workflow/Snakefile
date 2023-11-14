@@ -90,13 +90,13 @@ rule all:
                sample=SAMPLES_HIFI),
 
         # JELLYFISH AND GENOMESCOPE FOR HIFI DATASET
-        expand("{path_out_prefix}/01-JELLYFISH/{sample}_HIFI_None_trimmed_reads_jellyfish_count.jf",
+        expand("{path_out_prefix}/01-JELLYFISH/{sample}_HIFI/{sample}_HIFI_None_trimmed_reads_jellyfish_count.jf",
                path_out_prefix=path_out_prefix, 
                sample=SAMPLES_HIFI),
         expand("{path_out_prefix}/01-JELLYFISH/{sample}_HIFI/{sample}_HIFI_None_trimmed_reads_jellyfish_histo.histo",
                path_out_prefix=path_out_prefix, 
                sample=SAMPLES_HIFI),
-        expand("{path_out_prefix}/01-GENOMESCOPE/{sample}_HIFI_None_genomescope_output/",
+        expand("{path_out_prefix}/01-GENOMESCOPE/{sample}_HIFI/",
                path_out_prefix=path_out_prefix, 
                sample=SAMPLES_HIFI),
 
@@ -112,7 +112,6 @@ rule all:
 
 
         ####### ASSEMBLE GENOMES FROM ONT HIFI AND HI IN HIFASM
-
 
 
 
