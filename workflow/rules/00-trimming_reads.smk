@@ -4,8 +4,8 @@
 # Define rule for running FastQC on raw illumina reads
 rule fastqc_on_illumina_raw_reads:
     input:
-        read_FWD = "{path_reads_prefix}/{sample}_ILLUMINA_FWD.fastq.gz",
-        read_REV = "{path_reads_prefix}/{sample}_ILLUMINA_REV.fastq.gz"
+        read_FWD = path_reads_prefix + "/{sample}_ILLUMINA_FWD.fastq.gz",
+        read_REV = path_reads_prefix + "/{sample}_ILLUMINA_REV.fastq.gz"
     output:
         fastqc_out_FWD_html = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_FWD/{sample}_ILLUMINA_FWD_fastqc.html",
         fastqc_out_FWD_zip = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_FWD/{sample}_ILLUMINA_FWD_fastqc.zip",
@@ -44,8 +44,8 @@ rule adapter_removal_on_illumina_raw_reads:
 
 rule fastqc_on_illumina_trimmed_reads:
     input:
-        read_FWD = "{path_reads_prefix}/{sample}_ILLUMINA_FWD_trimmed_reads.fastq.gz",
-        read_REV = "{path_reads_prefix}/{sample}_ILLUMINA_REV_trimmed_reads.fastq.gz"
+        read_FWD = path_reads_prefix + "/{sample}_ILLUMINA_FWD_trimmed_reads.fastq.gz",
+        read_REV = path_reads_prefix + "/{sample}_ILLUMINA_REV_trimmed_reads.fastq.gz"
     output:
         fastqc_out_FWD_html = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_FWD_trim/{sample}_ILLUMINA_FWD_trimmed_reads_fastqc.html",
         fastqc_out_FWD_zip = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_FWD_trim/{sample}_ILLUMINA_FWD_trimmed_reads_fastqc.zip",
