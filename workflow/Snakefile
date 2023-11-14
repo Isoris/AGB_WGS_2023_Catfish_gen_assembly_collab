@@ -58,7 +58,8 @@ rule all:
 
         # FASTQC ILLUM READS
         expand("{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_{orientation_pe}/{sample}_ILLUMINA_{orientation_pe}_{ext}",
-               path_out_prefix=path_out_prefix, 
+               path_out_prefix=path_out_prefix,
+               path_reads_prefix=path_reads_prefix, 
                sample=SAMPLES_ILLUMINA,
                ext=["fastqc.html", "fastqc.zip"],
                orientation_pe=ORIENTATIONS_PE),
@@ -72,6 +73,7 @@ rule all:
         # FASTQC ILLUM TRIMMED READS
         expand("{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_{orientation_pe}_trim/{sample}_ILLUMINA_{orientation_pe}_trimmed_{ext}",
                path_out_prefix=path_out_prefix, 
+               path_reads_prefix=path_reads_prefix,
                sample=SAMPLES_ILLUMINA,
                ext=["fastqc.html", "fastqc.zip"],
                orientation_pe=ORIENTATIONS_PE),
