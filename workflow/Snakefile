@@ -11,6 +11,10 @@ from snakemake.io import Wildcards
 #  --cluster "sbatch -A proj5034 -t 24:00:00 -p compute -J snakemake_quentin -n 1 -c 24" 
 #--jobs 100 --rerun-incomplete > nohup.snakemake.cluster.slurm.log &
 
+
+#      https://ncbiinsights.ncbi.nlm.nih.gov/event/comparative-genome-viewer-07-2023/
+
+
 ##### load paths #####
 current_path=os.getcwd() 
 path_folder_prefix=f"{current_path}/../../.."   # path_folder_prefix=f"/tarafs/scratch/proj5034-AGBKU/catfish" # =  ../../..

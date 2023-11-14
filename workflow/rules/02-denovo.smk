@@ -48,7 +48,5 @@ rule gfa_to_fasta_after_hifasm:
 
 
 
-
-
 # Run hifiasm with --dual-scaf and --primary   
 # Note: This assumes the output prefix is the same as {wildcards.sample}
