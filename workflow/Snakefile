@@ -70,7 +70,7 @@ rule all:
                orientation_pe=ORIENTATIONS_PE),
 
         # FASTQC ILLUM TRIMMED READS
-        expand("{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_{orientation_pe}_trimmed/{sample}_ILLUMINA_{orientation_pe}_trimmed_{ext}",
+        expand("{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_{orientation_pe}_trim/{sample}_ILLUMINA_{orientation_pe}_trimmed_{ext}",
                path_out_prefix=path_out_prefix, 
                sample=SAMPLES_ILLUMINA,
                ext=["fastqc.html", "fastqc.zip"],
@@ -117,9 +117,12 @@ rule all:
 
 
 
+
+
 ##### load rules #####
 include: "rules/00-logs.smk"
 include: "rules/00-trimming_reads.smk"
 include: "rules/01-quality_control_reads.smk" 
 include: "rules/02-denovo.smk"
 include: "rules/03-quality_control_assembly.smk"
+

@@ -4,17 +4,19 @@
 # Define rule for running FastQC on raw illumina reads
 rule fastqc_on_illumina_raw_reads:
     input:
-        read_FWD = path_reads_prefix + "/{species}_{sex}_ILLUMINA_FWD.fq.gz",
-        read_REV = path_reads_prefix + "/{species}_{sex}_ILLUMINA_REV.fq.gz"
+        read_FWD = "{path_reads_prefix}/{sample}_ILLUMINA_FWD.fastq.gz",
+        read_REV = "{path_reads_prefix}/{sample}_ILLUMINA_REV.fastq.gz"
     output:
-        fastqc_out_FWD = directory(path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_FWD/"),
-        fastqc_out_REV = directory(path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_REV/")
+        fastqc_out_FWD_html = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_FWD/{sample}_ILLUMINA_FWD_fastqc.html",
+        fastqc_out_FWD_zip = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_FWD/{sample}_ILLUMINA_FWD_fastqc.zip",
+        fastqc_out_REV_html = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_REV/{sample}_ILLUMINA_REV_fastqc.html",
+        fastqc_out_REV_zip = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_REV/{sample}_ILLUMINA_REV_fastqc.zip"
     conda:
         "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:
         """
-        fastqc {input.read_FWD} -t {threads} -o {output.fastqc_out_FWD} && \
-        fastqc {input.read_REV} -t {threads} -o {output.fastqc_out_REV}
+        fastqc {input.read_FWD} -t {threads} -o {wildcards.path_out_prefix}/00-FASTQC/{wildcards.sample}_ILLUMINA_FWD/ && \
+        fastqc {input.read_REV} -t {threads} -o {wildcards.path_out_prefix}/00-FASTQC/{wildcards.sample}_ILLUMINA_REV/
         """
 
 # Define rule for running AdapterRemoval on raw illumina reads to trim them and remove adapters
@@ -38,19 +40,23 @@ rule adapter_removal_on_illumina_raw_reads:
             --threads {threads} 
         """
 
-# Define rule for running FastQC on trimmed reads (if they exist)
 rule fastqc_on_illumina_trimmed_reads:
     input:
-        read = path_reads_prefix + "/{species}_{sex}_{method}_{orientation_pe}_trimmed_reads.fastq.gz"
+        read_FWD = "{path_reads_prefix}/{sample}_ILLUMINA_FWD_trimmed_reads.fastq.gz",
+        read_REV = "{path_reads_prefix}/{sample}_ILLUMINA_REV_trimmed_reads.fastq.gz"
     output:
-        fastqc_out = directory(path_out_prefix + "/00-FASTQC/{species}_{sex}_{method}_{orientation_pe}_trimmed/")
+        fastqc_out_FWD_html = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_FWD_trim/{sample}_ILLUMINA_FWD_trimmed_reads_fastqc.html",
+        fastqc_out_FWD_zip = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_FWD_trim/{sample}_ILLUMINA_FWD_trimmed_reads_fastqc.zip",
+        fastqc_out_REV_html = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_REV_trim/{sample}_ILLUMINA_REV_trimmed_reads_fastqc.html",
+        fastqc_out_REV_zip = "{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_REV_trim/{sample}_ILLUMINA_REV_trimmed_reads_fastqc.zip"
     conda:
-        "../envs/quality_control_reads.yaml"
+        "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
     shell:
         """
-        fastqc {input.read} -t {threads} -o {output.fastqc_out}
+        fastqc {input.read_FWD} -t {threads} -o {wildcards.path_out_prefix}/00-FASTQC/{wildcards.sample}_ILLUMINA_FWD_trim/ && \
+        fastqc {input.read_REV} -t {threads} -o {wildcards.path_out_prefix}/00-FASTQC/{wildcards.sample}_ILLUMINA_REV_trim/
         """
-        
+
 ### Parse and prepare HiFi data
 rule bam_to_fastq_on_hifi_raw_reads:
     input:

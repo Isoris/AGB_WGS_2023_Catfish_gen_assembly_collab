@@ -16,6 +16,24 @@ rule fastqc_on_hic_raw_reads:
         fastqc {input.read_REV} -t {threads} -o {output.fastqc_out_REV}
         """
 
+
+rule fastqc_on_illumina_raw_reads:
+    input:
+        read_FWD = path_reads_prefix + "/{species}_{sex}_ILLUMINA_FWD.fq.gz",
+        read_REV = path_reads_prefix + "/{species}_{sex}_ILLUMINA_REV.fq.gz"
+    output:
+        fastqc_out_FWD = directory(path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_FWD/"),
+        fastqc_out_REV = directory(path_out_prefix + "/00-FASTQC/{species}_{sex}_ILLUMINA_REV/")
+    conda:
+        "../envs/quality_control_reads.yaml"  # Replace with the path to your conda environment file
+    shell:
+        """
+        fastqc {input.read_FWD} -t {threads} -o {output.fastqc_out_FWD} && \
+        fastqc {input.read_REV} -t {threads} -o {output.fastqc_out_REV}
+        """
+
+
+
 # Define rule for running AdapterRemoval on raw HiC  reads to trim them and remove adapters
 rule adapter_removal_on_hic_raw_reads:
     input:
