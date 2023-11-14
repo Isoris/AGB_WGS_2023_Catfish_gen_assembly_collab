@@ -57,9 +57,10 @@ rule all:
         "debug_config_output.txt",
 
         # FASTQC ILLUM READS
-        expand("{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_{orientation_pe}/",
+        expand("{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_{orientation_pe}/{sample}_ILLUMINA_{orientation_pe}_{ext}",
                path_out_prefix=path_out_prefix, 
                sample=SAMPLES_ILLUMINA,
+               ext=["fastqc.html", "fastqc.zip"],
                orientation_pe=ORIENTATIONS_PE),
 
         # ADAPTERREMOVAL
@@ -69,9 +70,10 @@ rule all:
                orientation_pe=ORIENTATIONS_PE),
 
         # FASTQC ILLUM TRIMMED READS
-        expand("{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_{orientation_pe}_trimmed/",
+        expand("{path_out_prefix}/00-FASTQC/{sample}_ILLUMINA_{orientation_pe}_trimmed/{sample}_ILLUMINA_{orientation_pe}_trimmed_{ext}",
                path_out_prefix=path_out_prefix, 
                sample=SAMPLES_ILLUMINA,
+               ext=["fastqc.html", "fastqc.zip"],
                orientation_pe=ORIENTATIONS_PE),
 
         # PROCESS HIFI READS
