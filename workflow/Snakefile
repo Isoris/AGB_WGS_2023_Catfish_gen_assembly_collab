@@ -282,5 +282,5 @@ rule concatenate_logs:
 ##### load rules #####
 include: "rules/00-trimming_reads.smk"
 include: "rules/01-quality_control_reads.smk" 
-include: "rules/02-denovo.smk"
+#include: "rules/02-denovo.smk"
 include: "rules/03-quality_control_assembly.smk"
