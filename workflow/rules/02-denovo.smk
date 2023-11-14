@@ -4,7 +4,7 @@
 rule run_hifasm_hifi_UL_hic:
     input:
         hifi_reads = path_reads_prefix + "/{sample}_HIFI_None_trimmed_reads.fastq.gz",
-        ont_reads = path_reads_prefix + "/{sample}_NANOPORE_trimmed_reads.fastq.gz",
+        ont_reads = path_reads_prefix + "/{sample}_NANOPORE_None_trimmed_reads.fastq.gz",
         hic1_reads = path_reads_prefix + "/{sample}_HIC_FWD.fastq.gz",
         hic2_reads = path_reads_prefix + "/{sample}_HIC_REV.fastq.gz" # Assuming REV is the reverse read
     output:

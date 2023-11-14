@@ -36,8 +36,9 @@ rule meryl_build_k:
     params:
         path_build_k = path_prog_prefix + "/merqury-1.3/best_k.sh",
     shell:
-        "haploid_length=$(cat {input.haploid_length})\n" +
-        "{params.path_build_k} $haploid_length > {output.kmer_val}"
+        """
+        haploid_length=$(cat {input.haploid_length}) {params.path_build_k} $haploid_length > {output.kmer_val}
+        """
 
 # Building the Meryl database
 rule meryl_build_db:
