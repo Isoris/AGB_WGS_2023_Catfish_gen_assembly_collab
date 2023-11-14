@@ -128,20 +128,20 @@ rule all:
                sample=["CM_M", "CG_F"]),
         expand("{path_reads_prefix}/{sample}.hap2.p_ctg.fa",
                path_reads_prefix=path_reads_prefix,
-               sample=["CM_M", "CG_F"]),
+               sample=["CM_M", "CG_F"])
 
         # Outputs from 'read_genomescope_summary_illum_out' and 'read_genomescope_summary_hifi_out'
-        expand("{path_out_prefix}/01-GENOMESCOPE/{sample}_ILLUMINA/{sample}_haploid_length.txt",
-               path_out_prefix=path_out_prefix,
-               sample=["CM_M", "CG_F"]),
-        expand("{path_out_prefix}/01-GENOMESCOPE/{sample}_HIFI/{sample}_haploid_length.txt",
-               path_out_prefix=path_out_prefix,
-               sample=["CM_M", "CG_F"]),
+#        expand("{path_out_prefix}/01-GENOMESCOPE/{sample}_ILLUMINA/{sample}_haploid_length.txt",
+#               path_out_prefix=path_out_prefix,
+#               sample=["CM_M", "CG_F"]),
+#        expand("{path_out_prefix}/01-GENOMESCOPE/{sample}_HIFI/{sample}_haploid_length.txt",
+#               path_out_prefix=path_out_prefix,
+#               sample=["CM_M", "CG_F"]),
 
         # Output from 'meryl_build_db'
-        expand("{path_out_prefix}/03-MERYLMERCURY/{sample}_meryl_db",
-               path_out_prefix=path_out_prefix,
-               sample=["CM_M", "CG_F"])
+#        expand("{path_out_prefix}/03-MERYLMERCURY/{sample}_meryl_db",
+#               path_out_prefix=path_out_prefix,
+#               sample=["CM_M", "CG_F"])
 
 
 
