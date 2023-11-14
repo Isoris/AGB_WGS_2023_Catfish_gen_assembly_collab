@@ -173,11 +173,11 @@ rule all:
                path_reads_prefix=path_reads_prefix,
                sample=["CM_M", "CG_F"]),
         # Expand for nanoQC on ONT reads
-        expand(path_out_prefix + "/00-NANOQC/{sample}_NANOPORE/",           
+        expand("{path_out_prefix}/00-NANOQC/{sample}_NANOPORE/",           
                path_out_prefix=path_out_prefix, 
                sample=["CM_M", "CG_F"]),
         # Expand for filtlong on ONT reads
-        expand(path_reads_prefix + "/{sample}_NANOPORE_trimmed_reads.fastq.gz",
+        expand("{path_reads_prefix}/{sample}_NANOPORE_None_trimmed_reads.fastq.gz",
                path_reads_prefix=path_reads_prefix, 
                sample=["CM_M", "CG_F"])
         ####### ASSEMBLE GENOMES FROM ONT HIFI AND HI IN HIFASM
