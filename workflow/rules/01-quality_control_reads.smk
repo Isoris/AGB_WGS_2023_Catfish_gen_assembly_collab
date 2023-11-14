@@ -142,7 +142,7 @@ rule run_genomescope_hifi:
         "../envs/quality_control_reads.yaml"    # Replace with the path to your conda environment file
     shell:
         """
-        Rscript {params.genomescope_script} {input.jellyfish_histo} {params.kmer_length} {params.read_length} {output.jellyfish_out}
+        Rscript {params.genomescope_script} {input.jellyfish_histo} {params.kmer_length} {output.jellyfish_out}
         """
 
 rule run_genomescope_illum_pe:
