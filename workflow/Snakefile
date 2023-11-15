@@ -152,8 +152,14 @@ rule all:
 
 ##### load rules #####
 include: "rules/00-logs.smk"
-include: "rules/00-trimming_reads.smk"
+
+include: "rules/00-trimming_reads_illum_hic.smk"
+include: "rules/00-trimming_reads_hifi.smk"
+include: "rules/00-trimming_reads_ONT.smk"
+
 include: "rules/01-quality_control_reads.smk" 
+
 include: "rules/02-denovo.smk"
+
 include: "rules/03-quality_control_assembly.smk"
 

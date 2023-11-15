@@ -27,7 +27,7 @@ rule create_hic_contact_map:
         {params.juicer_tools_path} pre {input.mapped_reads} {output.hic_contact_map}
         """
 
-
+# Define rules for GreenHill https://github.com/ShunOuchi/GreenHill
 rule hic_scaffolding_phasing:
     input:
         combined_haplotypes = path_out_prefix + "/{sample}_combined_haplotypes.fa",
