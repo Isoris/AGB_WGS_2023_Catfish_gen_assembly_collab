@@ -1,14 +1,15 @@
 ### Parse and prepare HiFi data for phased assembly 
 rule hifi_adapter_filt:
     input:
-        bam = path_reads_prefix + "/{species}_{sex}_HIFI_None.bam"
+        bam = path_reads_prefix + "/{sample}_HIFI_None.bam"
     output:
-        fastq_clean = path_reads_prefix + "/{species}_{sex}_HIFI_None_reads.filt.fastq.gz",
-        blast_out = path_reads_prefix + "/{species}_{sex}_HIFI_None_reads.contaminant.blastout",
-        blocklist = path_reads_prefix + "/{species}_{sex}_HIFI_None_reads.blocklist",
-        stats = path_reads_prefix + "/{species}_{sex}_HIFI_None_reads.stats"
+        fastq_clean = path_reads_prefix + "/{sample}_HIFI_None_reads.filt.fastq.gz",
+        blast_out = path_reads_prefix + "/{sample}_HIFI_None_reads.contaminant.blastout",
+        blocklist = path_reads_prefix + "/{sample}_HIFI_None_reads.blocklist",
+        stats = path_reads_prefix + "/{sample}_HIFI_None_reads.stats"
     params:
-        prefix = "{species}_{sex}_HIFI_None_reads",
+        path_reads_prefix  = path_reads_prefix 
+        prefix = "{sample}_HIFI_None_reads",
         min_len = 44,  # default value
         min_match = 97,  # default value
         threads = 8,  # default value
@@ -17,8 +18,11 @@ rule hifi_adapter_filt:
         "../envs/hifiadapterfilt.yaml"  # Ensure you have all dependencies in this environment
     shell:
         """
+        currpwd = echo"pwd" && \ 
+        cd {input.path_reads_prefix}
         bash pbadapterfilt.sh -p {params.prefix} -l {params.min_len} -m {params.min_match} \
-            -t {params.threads} -o {params.outdir} {input.bam}
+            -t {params.threads} -o {params.outdir} {input.bam} && \ 
+        cd $currpwd
         """
 
 # Define rule for running LongQC on HIFI trimmed reads before phased assembly (if they exist)
