@@ -15,13 +15,13 @@ rule hifi_adapter_filt:
         threads = 8,  # default value
         outdir = path_reads_prefix
     conda:
-        "../envs/hifiadapterfilt.yaml"  # Ensure you have all dependencies in this environment
+        "../envs/quality_control_reads.yaml"  # Ensure you have all dependencies in this environment
     shell:
         """
-        currpwd = echo"pwd" && \ 
-        cd {input.path_reads_prefix}
+        currpwd=$(pwd) && \
+        cd {input.path_reads_prefix} && \
         bash pbadapterfilt.sh -p {params.prefix} -l {params.min_len} -m {params.min_match} \
-            -t {params.threads} -o {params.outdir} {input.bam} && \ 
+            -t {params.threads} -o {params.outdir} && \ 
         cd $currpwd
         """
 
